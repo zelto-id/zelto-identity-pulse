@@ -1,0 +1,38 @@
+{
+  "name": "zelto-identity-pulse",
+  "version": "0.1.0",
+  "description": "Local-first CLI for identity-security posture analysis (Auth0 MVP).",
+  "license": "Apache-2.0",
+  "type": "commonjs",
+  "main": "dist/cli/index.js",
+  "bin": {
+    "zelto-pulse": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/cli/index.js",
+    "dev": "ts-node src/cli/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" || true",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

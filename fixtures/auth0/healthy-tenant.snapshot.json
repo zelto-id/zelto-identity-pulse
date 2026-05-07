@@ -1,0 +1,142 @@
+{
+  "metadata": {
+    "provider": "auth0",
+    "domain": "healthy.us.auth0.com",
+    "collectedAt": "2026-05-01T10:00:00.000Z",
+    "connectorVersion": "0.1.0",
+    "partial": false,
+    "missingScopes": [],
+    "failedCollectors": []
+  },
+  "tenant": {
+    "friendly_name": "Healthy Co",
+    "support_email": "support@healthy.example",
+    "support_url": "https://healthy.example/support",
+    "picture_url": "https://healthy.example/logo.png",
+    "session_lifetime": 168,
+    "idle_session_lifetime": 72,
+    "flags": {
+      "disable_clickjack_protection_headers": false,
+      "no_disclose_enterprise_connections": true,
+      "revoke_refresh_token_grant": true
+    }
+  },
+  "clients": [
+    {
+      "client_id": "spa1",
+      "name": "Customer Portal",
+      "app_type": "spa",
+      "oidc_conformant": true,
+      "grant_types": ["authorization_code", "refresh_token"],
+      "callbacks": ["https://app.healthy.example/callback"],
+      "web_origins": ["https://app.healthy.example"],
+      "allowed_logout_urls": ["https://app.healthy.example/logout"],
+      "token_endpoint_auth_method": "none",
+      "refresh_token": {
+        "rotation_type": "rotating",
+        "expiration_type": "expiring",
+        "token_lifetime": 2592000,
+        "idle_token_lifetime": 1296000
+      }
+    },
+    {
+      "client_id": "m2m1",
+      "name": "Backend Worker",
+      "app_type": "non_interactive",
+      "oidc_conformant": true,
+      "grant_types": ["client_credentials"],
+      "token_endpoint_auth_method": "client_secret_post"
+    }
+  ],
+  "connections": [
+    {
+      "id": "con1",
+      "name": "Username-Password-Authentication",
+      "strategy": "auth0",
+      "options": {
+        "password_policy": "good",
+        "brute_force_protection": true,
+        "disable_signup": false
+      }
+    }
+  ],
+  "resourceServers": [
+    {
+      "id": "rs1",
+      "name": "Customer API",
+      "identifier": "https://api.healthy.example",
+      "signing_alg": "RS256",
+      "enforce_policies": true,
+      "token_lifetime": 86400,
+      "scopes": [{ "value": "read:profile" }, { "value": "write:profile" }]
+    }
+  ],
+  "clientGrants": [
+    {
+      "id": "cg1",
+      "client_id": "m2m1",
+      "audience": "https://api.healthy.example",
+      "scope": ["read:profile"]
+    }
+  ],
+  "roles": [
+    { "id": "r1", "name": "admin" },
+    { "id": "r2", "name": "user" }
+  ],
+  "permissions": [],
+  "actions": [
+    {
+      "id": "a1",
+      "name": "Add user metadata",
+      "runtime": "node22",
+      "deployed": true
+    }
+  ],
+  "rules": [],
+  "hooks": [],
+  "organizations": [],
+  "logStreams": [
+    {
+      "id": "ls1",
+      "name": "datadog",
+      "type": "datadog",
+      "status": "active"
+    }
+  ],
+  "attackProtection": {
+    "breached_password_detection": { "enabled": true, "shields": ["block", "admin_notification"] },
+    "brute_force_protection": { "enabled": true, "shields": ["block"] },
+    "suspicious_ip_throttling": { "enabled": true }
+  },
+  "branding": { "logo_url": "https://healthy.example/logo.png" },
+  "prompts": { "universal_login_experience": "new", "identifier_first": true },
+  "customDomains": [
+    {
+      "domain": "login.healthy.example",
+      "primary": true,
+      "status": "ready",
+      "type": "auth0_managed_certs",
+      "tls_policy": "recommended"
+    }
+  ],
+  "guardian": { "policy": "all-applications", "factors": [{ "name": "otp", "enabled": true }] },
+  "logs": [],
+  "coverage": [
+    { "collector": "tenant", "status": "success", "count": 1, "requiredScopes": ["read:tenant_settings"] },
+    { "collector": "clients", "status": "success", "count": 2, "requiredScopes": ["read:clients"] },
+    { "collector": "connections", "status": "success", "count": 1, "requiredScopes": ["read:connections"] },
+    { "collector": "resource_servers", "status": "success", "count": 1, "requiredScopes": ["read:resource_servers"] },
+    { "collector": "client_grants", "status": "success", "count": 1, "requiredScopes": ["read:client_grants"] },
+    { "collector": "roles", "status": "success", "count": 2, "requiredScopes": ["read:roles"] },
+    { "collector": "actions", "status": "success", "count": 1, "requiredScopes": ["read:actions"] },
+    { "collector": "rules", "status": "success", "count": 0, "requiredScopes": ["read:rules"] },
+    { "collector": "hooks", "status": "success", "count": 0, "requiredScopes": ["read:hooks"] },
+    { "collector": "organizations", "status": "success", "count": 0, "requiredScopes": ["read:organizations"] },
+    { "collector": "log_streams", "status": "success", "count": 1, "requiredScopes": ["read:log_streams"] },
+    { "collector": "attack_protection", "status": "success", "count": 3, "requiredScopes": ["read:attack_protection"] },
+    { "collector": "branding", "status": "success", "count": 1, "requiredScopes": ["read:branding"] },
+    { "collector": "prompts", "status": "success", "count": 1, "requiredScopes": ["read:prompts"] },
+    { "collector": "custom_domains", "status": "success", "count": 1, "requiredScopes": ["read:custom_domains"] },
+    { "collector": "guardian", "status": "success", "count": 1, "requiredScopes": ["read:guardian_factors"] }
+  ]
+}

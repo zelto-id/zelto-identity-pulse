@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "provider": "auth0",
+    "domain": "risky.us.auth0.com",
+    "collectedAt": "2026-05-01T10:00:00.000Z",
+    "connectorVersion": "0.1.0",
+    "partial": false,
+    "missingScopes": [],
+    "failedCollectors": []
+  },
+  "tenant": {
+    "session_lifetime": 8760,
+    "idle_session_lifetime": 720,
+    "flags": {
+      "disable_clickjack_protection_headers": true
+    }
+  },
+  "clients": [
+    {
+      "client_id": "spa-bad",
+      "name": "Legacy SPA",
+      "app_type": "spa",
+      "oidc_conformant": false,
+      "grant_types": ["implicit", "password", "refresh_token"],
+      "callbacks": [
+        "http://app1.risky.example/cb",
+        "https://app1.risky.example/cb",
+        "https://app2.risky.example/cb",
+        "https://app3.risky.example/cb",
+        "https://app4.risky.example/cb",
+        "https://app5.risky.example/cb",
+        "https://app6.risky.example/cb",
+        "https://app7.risky.example/cb",
+        "https://app8.risky.example/cb",
+        "https://app9.risky.example/cb",
+        "https://app10.risky.example/cb",
+        "https://app11.risky.example/cb",
+        "https://app12.risky.example/cb",
+        "https://app13.risky.example/cb",
+        "https://app14.risky.example/cb",
+        "https://app15.risky.example/cb",
+        "https://app16.risky.example/cb"
+      ],
+      "web_origins": ["http://app1.risky.example"],
+      "token_endpoint_auth_method": "none",
+      "refresh_token": {
+        "rotation_type": "non-rotating",
+        "expiration_type": "non-expiring"
+      }
+    },
+    {
+      "client_id": "confidential-bad",
+      "name": "Backend API",
+      "app_type": "regular_web",
+      "grant_types": ["authorization_code"],
+      "token_endpoint_auth_method": "none"
+    }
+  ],
+  "connections": [
+    {
+      "id": "con-bad",
+      "name": "Legacy DB",
+      "strategy": "auth0",
+      "options": {
+        "password_policy": "low",
+        "brute_force_protection": false,
+        "enabledDatabaseCustomization": true,
+        "customScripts": { "login": "function login(){ /* ... */ }" }
+      }
+    }
+  ],
+  "resourceServers": [
+    {
+      "id": "rs-bad",
+      "name": "Public API",
+      "identifier": "https://api.risky.example",
+      "signing_alg": "HS256",
+      "enforce_policies": false,
+      "token_lifetime": 2592000,
+      "scopes": [{ "value": "read:all" }, { "value": "write:all" }]
+    }
+  ],
+  "clientGrants": [
+    {
+      "id": "cg-bad",
+      "client_id": "m2m-bad",
+      "audience": "https://api.risky.example",
+      "scope": ["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","s12","s13","s14","s15","s16","s17","s18","s19","s20","s21","s22","s23","s24","s25","s26","s27","s28","s29","s30","s31","s32"],
+      "allow_any_organization": true
+    }
+  ],
+  "roles": [],
+  "permissions": [],
+  "actions": [
+    { "id": "a-old", "name": "Old action", "runtime": "node12", "deployed": true }
+  ],
+  "rules": [
+    { "id": "rule1", "name": "legacy enrich", "enabled": true, "stage": "login_success" }
+  ],
+  "hooks": [
+    { "id": "hook1", "name": "legacy hook", "enabled": true }
+  ],
+  "organizations": [],
+  "logStreams": [],
+  "attackProtection": {
+    "breached_password_detection": { "enabled": false },
+    "brute_force_protection": { "enabled": false },
+    "suspicious_ip_throttling": { "enabled": false }
+  },
+  "branding": {},
+  "prompts": { "universal_login_experience": "classic" },
+  "customDomains": [],
+  "guardian": { "policy": "never", "factors": [] },
+  "logs": [],
+  "coverage": [
+    { "collector": "tenant", "status": "success", "count": 1, "requiredScopes": ["read:tenant_settings"] },
+    { "collector": "clients", "status": "success", "count": 2, "requiredScopes": ["read:clients"] },
+    { "collector": "connections", "status": "success", "count": 1, "requiredScopes": ["read:connections"] },
+    { "collector": "resource_servers", "status": "success", "count": 1, "requiredScopes": ["read:resource_servers"] },
+    { "collector": "client_grants", "status": "success", "count": 1, "requiredScopes": ["read:client_grants"] },
+    { "collector": "roles", "status": "success", "count": 0, "requiredScopes": ["read:roles"] },
+    { "collector": "actions", "status": "success", "count": 1, "requiredScopes": ["read:actions"] },
+    { "collector": "rules", "status": "success", "count": 1, "requiredScopes": ["read:rules"] },
+    { "collector": "hooks", "status": "success", "count": 1, "requiredScopes": ["read:hooks"] },
+    { "collector": "organizations", "status": "success", "count": 0, "requiredScopes": ["read:organizations"] },
+    { "collector": "log_streams", "status": "success", "count": 0, "requiredScopes": ["read:log_streams"] },
+    { "collector": "attack_protection", "status": "success", "count": 3, "requiredScopes": ["read:attack_protection"] },
+    { "collector": "branding", "status": "success", "count": 1, "requiredScopes": ["read:branding"] },
+    { "collector": "prompts", "status": "success", "count": 1, "requiredScopes": ["read:prompts"] },
+    { "collector": "custom_domains", "status": "success", "count": 0, "requiredScopes": ["read:custom_domains"] },
+    { "collector": "guardian", "status": "success", "count": 1, "requiredScopes": ["read:guardian_factors"] }
+  ]
+}

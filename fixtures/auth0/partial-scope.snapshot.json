@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "provider": "auth0",
+    "domain": "partial.us.auth0.com",
+    "collectedAt": "2026-05-01T10:00:00.000Z",
+    "connectorVersion": "0.1.0",
+    "partial": true,
+    "missingScopes": ["read:rules", "read:hooks", "read:log_streams", "read:attack_protection"],
+    "failedCollectors": [
+      { "collector": "rules", "status": "skipped", "reason": "HTTP 403: missing scope", "missingScopes": ["read:rules"] },
+      { "collector": "hooks", "status": "skipped", "reason": "HTTP 403: missing scope", "missingScopes": ["read:hooks"] },
+      { "collector": "log_streams", "status": "skipped", "reason": "HTTP 403: missing scope", "missingScopes": ["read:log_streams"] },
+      { "collector": "attack_protection", "status": "skipped", "reason": "HTTP 403: missing scope", "missingScopes": ["read:attack_protection"] }
+    ]
+  },
+  "tenant": {
+    "friendly_name": "Partial Co",
+    "support_email": "support@partial.example",
+    "support_url": "https://partial.example/support",
+    "picture_url": "https://partial.example/logo.png",
+    "session_lifetime": 168,
+    "idle_session_lifetime": 72,
+    "flags": {}
+  },
+  "clients": [
+    {
+      "client_id": "spa1",
+      "name": "Partial SPA",
+      "app_type": "spa",
+      "grant_types": ["authorization_code", "refresh_token"],
+      "callbacks": ["https://app.partial.example/callback"],
+      "web_origins": ["https://app.partial.example"],
+      "token_endpoint_auth_method": "none",
+      "refresh_token": {
+        "rotation_type": "rotating",
+        "expiration_type": "expiring"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "con1",
+      "name": "DB",
+      "strategy": "auth0",
+      "options": { "password_policy": "good", "brute_force_protection": true }
+    }
+  ],
+  "resourceServers": [
+    {
+      "id": "rs1",
+      "name": "API",
+      "identifier": "https://api.partial.example",
+      "signing_alg": "RS256",
+      "enforce_policies": true,
+      "token_lifetime": 86400,
+      "scopes": [{ "value": "read" }]
+    }
+  ],
+  "clientGrants": [],
+  "roles": [{ "id": "r1", "name": "user" }],
+  "permissions": [],
+  "actions": [],
+  "organizations": [],
+  "branding": {},
+  "prompts": { "universal_login_experience": "new" },
+  "customDomains": [],
+  "guardian": { "policy": "all-applications", "factors": [{ "name": "otp", "enabled": true }] },
+  "logs": [],
+  "coverage": [
+    { "collector": "tenant", "status": "success", "count": 1, "requiredScopes": ["read:tenant_settings"] },
+    { "collector": "clients", "status": "success", "count": 1, "requiredScopes": ["read:clients"] },
+    { "collector": "connections", "status": "success", "count": 1, "requiredScopes": ["read:connections"] },
+    { "collector": "resource_servers", "status": "success", "count": 1, "requiredScopes": ["read:resource_servers"] },
+    { "collector": "client_grants", "status": "success", "count": 0, "requiredScopes": ["read:client_grants"] },
+    { "collector": "roles", "status": "success", "count": 1, "requiredScopes": ["read:roles"] },
+    { "collector": "actions", "status": "success", "count": 0, "requiredScopes": ["read:actions"] },
+    { "collector": "rules", "status": "skipped", "requiredScopes": ["read:rules"], "missingScopes": ["read:rules"] },
+    { "collector": "hooks", "status": "skipped", "requiredScopes": ["read:hooks"], "missingScopes": ["read:hooks"] },
+    { "collector": "organizations", "status": "success", "count": 0, "requiredScopes": ["read:organizations"] },
+    { "collector": "log_streams", "status": "skipped", "requiredScopes": ["read:log_streams"], "missingScopes": ["read:log_streams"] },
+    { "collector": "attack_protection", "status": "skipped", "requiredScopes": ["read:attack_protection"], "missingScopes": ["read:attack_protection"] },
+    { "collector": "branding", "status": "success", "count": 1, "requiredScopes": ["read:branding"] },
+    { "collector": "prompts", "status": "success", "count": 1, "requiredScopes": ["read:prompts"] },
+    { "collector": "custom_domains", "status": "success", "count": 0, "requiredScopes": ["read:custom_domains"] },
+    { "collector": "guardian", "status": "success", "count": 1, "requiredScopes": ["read:guardian_factors"] }
+  ]
+}
