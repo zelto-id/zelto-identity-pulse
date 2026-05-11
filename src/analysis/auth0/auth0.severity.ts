@@ -115,9 +115,8 @@ function computeAdjustedSeverity(f: Finding, env: Environment): Severity {
   // downshift one step (critical → high). Other Management API clients keep
   // production-equivalent severity because they likely automate real flows.
   if (f.id === "AUTH-API-007") {
-    const isApiExplorerEvidence = /client_name_matches_api_explorer/i.test(
-      f.evidence ?? ""
-    );
+    const isApiExplorerEvidence =
+      /client_name_matches_api_explorer|\[api-explorer\]/i.test(f.evidence ?? "");
     if (
       (env === "development" || env === "sandbox") &&
       isApiExplorerEvidence

@@ -235,10 +235,12 @@ export const rolePermissionsCollector = async (
 
 export const actionsCollector: CollectorFn<Auth0Action[]> = (ctx) =>
   safeCollect("actions", ["read:actions"], ctx, async () => {
-    // Actions endpoint returns { actions: [...], total }
+    // The /actions/actions endpoint does not support `include_totals`;
+    // omit the parameter entirely to avoid invalid_query_string errors.
     const data = await ctx.http.getAllPages<Auth0Action>("/actions/actions", {
-      perPage: 50,
-      itemsKey: "actions"
+      perPage: 100,
+      itemsKey: "actions",
+      omitIncludeTotals: true
     });
     return { data, count: data.length };
   });

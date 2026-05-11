@@ -142,6 +142,12 @@ export class Auth0Client {
       maxPages?: number;
       query?: Record<string, string | number | boolean | undefined>;
       itemsKey?: string; // when response is wrapped: { clients: [...], total }
+      /**
+       * When true, the `include_totals` query parameter is NOT sent at all.
+       * Use for endpoints (e.g. /actions/actions) that reject the parameter
+       * with `invalid_query_string`.
+       */
+      omitIncludeTotals?: boolean;
     } = {}
   ): Promise<T[]> {
     const perPage = options.perPage ?? 100;
@@ -149,12 +155,15 @@ export class Auth0Client {
     const items: T[] = [];
 
     for (let page = 0; page < maxPages; page++) {
-      const res = await this.get<unknown>(path, {
+      const pageQuery: Record<string, string | number | boolean | undefined> = {
         ...options.query,
         page,
-        per_page: perPage,
-        include_totals: false
-      });
+        per_page: perPage
+      };
+      if (!options.omitIncludeTotals) {
+        pageQuery.include_totals = false;
+      }
+      const res = await this.get<unknown>(path, pageQuery);
 
       const body = res.data;
       let pageItems: T[];

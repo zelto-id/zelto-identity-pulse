@@ -26,6 +26,13 @@ export interface RunAuth0ConnectorOptions {
   includeUsers?: boolean;
   /** When false, the logs collector is skipped. Default: true. */
   includeLogs?: boolean;
+  /**
+   * When true, collect Rules and Hooks (legacy extensibility) and report them
+   * as EOL migration risk if present. Rules and Hooks are NOT collected by
+   * default because they are excluded from the default Actions & Extensibility
+   * score and are expected to be absent on migrated tenants.
+   */
+  includeLegacyExtensibility?: boolean;
 }
 
 export async function runAuth0Connector(
@@ -42,6 +49,7 @@ export async function runAuth0Connector(
   const ctx = { http, logger };
   const includeUsers = options.includeUsers ?? true;
   const includeLogs = options.includeLogs ?? true;
+  const includeLegacyExtensibility = options.includeLegacyExtensibility ?? false;
 
   const allResults: CollectorResult[] = [];
   const failedCollectors: CollectorFailure[] = [];
@@ -106,13 +114,17 @@ export async function runAuth0Connector(
   const actionsRes = await collectors.actionsCollector(ctx);
   recordResult(actionsRes);
 
-  logger.info("Collecting rules (legacy)...");
-  const rulesRes = await collectors.rulesCollector(ctx);
-  recordResult(rulesRes);
+  let rulesRes: CollectorResult<unknown> | undefined;
+  let hooksRes: CollectorResult<unknown> | undefined;
+  if (includeLegacyExtensibility) {
+    logger.info("Collecting rules (legacy, --include-legacy-extensibility)...");
+    rulesRes = await collectors.rulesCollector(ctx);
+    recordResult(rulesRes);
 
-  logger.info("Collecting hooks (legacy)...");
-  const hooksRes = await collectors.hooksCollector(ctx);
-  recordResult(hooksRes);
+    logger.info("Collecting hooks (legacy, --include-legacy-extensibility)...");
+    hooksRes = await collectors.hooksCollector(ctx);
+    recordResult(hooksRes);
+  }
 
   logger.info("Collecting organizations...");
   const orgsRes = await collectors.organizationsCollector(ctx);
@@ -188,8 +200,8 @@ export async function runAuth0Connector(
     roles: pickArray(rolesRes),
     permissions: pickArray(permissionsRes),
     actions: pickArray(actionsRes),
-    rules: pickArray(rulesRes),
-    hooks: pickArray(hooksRes),
+    rules: rulesRes ? pickArray(rulesRes) : undefined,
+    hooks: hooksRes ? pickArray(hooksRes) : undefined,
     organizations: pickArray(orgsRes),
     logStreams: pickArray(logStreamsRes),
     attackProtection:

@@ -257,7 +257,7 @@ export const KEY_COLLECTORS_BY_CATEGORY: Record<CategoryId, string[]> = {
   connections: ["connections"],
   apis: ["resource_servers", "client_grants"],
   rbac: ["roles"],
-  actionsAndExtensibility: ["actions", "rules", "hooks"],
+  actionsAndExtensibility: ["actions"],
   attackProtection: ["attack_protection", "guardian"],
   monitoring: ["log_streams"],
   brandingAndLoginExperience: ["branding", "prompts", "custom_domains"],

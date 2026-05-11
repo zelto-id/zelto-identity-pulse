@@ -39,6 +39,7 @@ interface ScanAuth0Options {
   verbose?: boolean;
   fromSnapshot?: string;
   environment?: string;
+  includeLegacyExtensibility?: boolean;
 }
 
 export function registerScanAuth0Command(program: Command): void {
@@ -63,6 +64,11 @@ export function registerScanAuth0Command(program: Command): void {
     .option(
       "--environment <env>",
       `Tenant environment classification: ${VALID_ENVIRONMENTS.join("|")}. If omitted, you will be prompted in TTY mode (or 'unknown' is used).`
+    )
+    .option(
+      "--include-legacy-extensibility",
+      "Collect Rules and Hooks (legacy extensibility) and report them as EOL migration risk if present. Excluded from the default Actions & Extensibility score.",
+      false
     )
     .action(async (options: ScanAuth0Options) => {
       try {
@@ -111,7 +117,8 @@ async function runScanAuth0(options: ScanAuth0Options): Promise<void> {
     snapshot = await runAuth0Connector({
       domain,
       token,
-      logger
+      logger,
+      includeLegacyExtensibility: Boolean(options.includeLegacyExtensibility)
     });
   }
 

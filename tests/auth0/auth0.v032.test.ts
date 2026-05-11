@@ -105,3 +105,45 @@ describe("v0.3.2 — Auth0 collector failure diagnostics", () => {
     expect(out).toMatch(/Rate limited/);
   });
 });
+
+describe("v0.3.2 — Actions collector never sends include_totals", () => {
+  it("Actions collector does NOT include include_totals in the request URL", async () => {
+    const calls: string[] = [];
+    const fakeLogger = {
+      info: () => {},
+      warn: () => {},
+      error: () => {},
+      debug: () => {}
+    };
+
+    // Fake fetch: captures the URL and returns an empty actions list.
+    const fakeFetch = async (url: string): Promise<Response> => {
+      calls.push(url);
+      const body = JSON.stringify({ actions: [] });
+      return new Response(body, {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    };
+
+    // Import the collector and Auth0Client directly so we can test the
+    // request URL rather than the full connector pipeline.
+    const { Auth0Client } = await import("../../src/connectors/auth0/auth0.client");
+    const { actionsCollector } = await import("../../src/connectors/auth0/auth0.collectors");
+
+    const http = new Auth0Client({
+      domain: "test.auth0.com",
+      token: "fake-token",
+      logger: fakeLogger as any,
+      fetchImpl: fakeFetch as unknown as typeof fetch
+    });
+
+    await actionsCollector({ http, logger: fakeLogger as any });
+
+    // Every request URL must NOT contain include_totals.
+    for (const url of calls) {
+      expect(url).not.toMatch(/include_totals/);
+    }
+    expect(calls.length).toBeGreaterThan(0);
+  });
+});

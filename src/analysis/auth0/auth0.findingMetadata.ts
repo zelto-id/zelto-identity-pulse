@@ -124,9 +124,13 @@ export const FINDING_METADATA: Record<string, Metadata> = {
       "options.password_no_personal_info"
     ],
     validationSteps: [
-      "Set password_policy to `good` or `excellent`",
-      "Enable history, dictionary, and personal-info checks where supported",
-      "Verify new-user signup and password reset flows still succeed"
+      "Verify that advanced password-policy controls (history, dictionary, personal-info) are available on your Auth0 plan",
+      "Set password_policy to `good` or `excellent` when the feature is available",
+      "If advanced policy is unavailable or Early Access, document compensating controls: attack protection, breached-password detection, rate limiting, bot protection, MFA/step-up on sensitive flows",
+      "Verify new-user signup and password reset flows still succeed after any change"
+    ],
+    falsePositiveNotes: [
+      "Advanced password-policy options may be Early Access or plan-gated on some Auth0 tiers; validate availability before flagging as a gap."
     ]
   },
   "AUTH-CON-002": {
@@ -142,13 +146,18 @@ export const FINDING_METADATA: Record<string, Metadata> = {
     auth0Area: "Authentication → Database → [Connection] → Custom Database",
     terraformResource: "auth0_connection",
     terraformFields: ["options.enabledDatabaseCustomization", "options.customScripts"],
-    validationSteps: [
+    implementationSteps: [
       "Confirm which custom scripts are enabled (login, get_user, change_password, etc.)",
-      "Review secret handling inside scripts",
-      "Confirm ownership and migration plan toward a managed connection or Actions"
+      "Verify a named owner and runbook exist for each script",
+      "Confirm secrets are managed via Auth0 Action Secrets or an external vault (not hardcoded)",
+      "If a user migration is in progress, define and communicate a migration completion timeline"
+    ],
+    validationSteps: [
+      "Review script bodies for hardcoded secrets, credentials, or API keys",
+      "Confirm ownership and governance are documented"
     ],
     falsePositiveNotes: [
-      "Custom DB scripts may be legitimate during migration; flag for governance and a migration timeline."
+      "Custom DB scripts are expected and legitimate for Auth0 Custom Database and user-migration architectures. This is an Architecture Note, not a risk finding."
     ]
   },
 
@@ -207,14 +216,21 @@ export const FINDING_METADATA: Record<string, Metadata> = {
     auth0Area: "Applications → APIs → Auth0 Management API → Machine to Machine Applications",
     terraformResource: "auth0_client_grant",
     terraformFields: ["scopes"],
+    implementationSteps: [
+      "Note: the Auth0 Management API is a default platform API and cannot be removed. The risk is broad client grants, not the API's existence.",
+      "For each affected M2M client: create a purpose-built least-privilege client with only the scopes it needs",
+      "Remove `create:`, `update:`, `delete:`, and admin/key/secret scopes not in active use",
+      "Avoid using the API Explorer Application for production automation; create a dedicated client instead"
+    ],
     validationSteps: [
-      "Identify the M2M client that holds Management API scopes",
-      "Audit scopes against actual operational need (read-only where possible)",
-      "Remove `create:`, `update:`, `delete:`, and admin/key/secret scopes that are not in active use"
+      "Confirm each remaining scope is actively used by the client",
+      "Re-test automation flows after scopes are reduced",
+      "Set up token rotation and lifetime limits on all Management API M2M clients"
     ],
     falsePositiveNotes: [
       "Some scopes are required for automation and IaC; document and time-bound them.",
-      "If this grant is used by a posture-scanning tool, read-only scopes are sufficient."
+      "If this grant is used by a posture-scanning tool, read-only scopes are sufficient.",
+      "The Management API itself is expected to exist in every Auth0 tenant."
     ]
   },
 
@@ -223,8 +239,12 @@ export const FINDING_METADATA: Record<string, Metadata> = {
     auth0Area: "User Management → Roles",
     terraformResource: "auth0_role",
     validationSteps: [
-      "Define roles to model authorization, even for a single application",
-      "Assign roles instead of granting direct user permissions"
+      "Confirm where authorization is managed: application-side, external service, or Auth0 RBAC",
+      "If Auth0 manages authorization: define roles, enable RBAC on APIs, assign roles to users",
+      "If authorization is managed outside Auth0: document the decision and ensure access reviews cover it"
+    ],
+    falsePositiveNotes: [
+      "Zero roles is informational by default. Many CIAM tenants manage authorization in the application or a downstream service. Only escalate if Auth0 is expected to govern authorization."
     ]
   },
 
@@ -251,16 +271,23 @@ export const FINDING_METADATA: Record<string, Metadata> = {
 
   // -------------------- MFA / Attack Protection --------------------
   "AUTH-SEC-001": {
-    auth0Area: "Security → Multi-factor Auth",
+    auth0Area: "Security → Multi-factor Auth / Actions (step-up)",
     terraformResource: "auth0_guardian",
     terraformFields: ["policy", "webauthn_platform.enabled", "webauthn_roaming.enabled", "otp"],
+    implementationSteps: [
+      "Decide the MFA strategy for your CIAM tenant: blanket enforcement, risk-based (`confidence-score`), or Actions-based step-up",
+      "For admin/customer-admin access: enforce MFA or step-up unconditionally",
+      "For credential changes (password reset, email change): require step-up MFA",
+      "For high-value transactions and high-risk logins (new device, unusual geography): apply risk-based MFA",
+      "If using Actions for step-up: implement in the Login or Post-Login trigger and test flows end-to-end"
+    ],
     validationSteps: [
-      "Set Guardian policy to `all-applications` or `confidence-score`",
-      "Test the login flow requires MFA for target applications",
-      "Confirm at least one phishing-resistant factor (WebAuthn) is available"
+      "Confirm sensitive flows (admin, credential changes, high-risk logins) require a second factor",
+      "Verify that custom step-up Actions are deployed and tested",
+      "Confirm at least one phishing-resistant factor (WebAuthn) is available for high-assurance flows"
     ],
     falsePositiveNotes: [
-      "Sandbox tenants may temporarily run without MFA; production tenants should enforce MFA."
+      "For CIAM tenants, enforcing MFA on every customer login is a business and UX decision. Absence of blanket MFA policy is not automatically a risk — confirm step-up/risk-based controls are in place for sensitive flows."
     ]
   },
   "AUTH-SEC-004": {

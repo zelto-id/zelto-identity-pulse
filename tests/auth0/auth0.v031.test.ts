@@ -133,12 +133,13 @@ describe("v0.3.1 — Not Assessed when ANY key collector failed", () => {
   it("applies the same rule on the partial-scope fixture (multiple unassessed)", () => {
     const report = analyzeAuth0Snapshot(load("partial-scope.snapshot.json"));
     const unassessed = report.categories.filter((c) => !c.assessed);
-    // partial-scope skips rules, hooks, log_streams, attack_protection →
-    // actionsAndExtensibility, monitoring, attackProtection are all N/A.
+    // partial-scope skips rules, hooks, log_streams, attack_protection.
+    // With rules/hooks removed from key collectors for actionsAndExtensibility,
+    // only actions matters — and actions succeeded in this fixture.
+    // So: monitoring (log_streams skipped) and attackProtection (attack_protection skipped) are N/A.
+    // actionsAndExtensibility IS assessed because actions succeeded.
     const ids = unassessed.map((c) => c.id).sort();
-    expect(ids).toEqual(
-      ["actionsAndExtensibility", "attackProtection", "monitoring"].sort()
-    );
+    expect(ids).toEqual(["attackProtection", "monitoring"].sort());
     expect(report.score.breakdown.unassessedWeight).toBeGreaterThan(0);
   });
 });

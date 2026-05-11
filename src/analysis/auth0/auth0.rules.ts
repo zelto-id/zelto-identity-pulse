@@ -366,11 +366,17 @@ const ruleDbPasswordPolicy: Rule = ({ snapshot }) => {
     return !policy || policy === "none" || policy === "low";
   });
   if (offenders.length === 0) return [];
+
+  // Severity depends on whether database/password connections are actively used
+  // by production clients. Without that signal, treat as medium.
+  const hasActiveClients = offenders.some((c) => (c.enabled_clients ?? []).length > 0);
+  const severity = hasActiveClients ? "high" : "medium";
+
   return [
     mkFinding({
       id: "AUTH-CON-001",
-      title: "Database connection uses a weak or missing password policy",
-      severity: "high",
+      title: "Database connection has a weak or missing password policy",
+      severity,
       category: "connections",
       affectedResources: offenders.map(formatConnectionName),
       evidence: offenders
@@ -380,10 +386,15 @@ const ruleDbPasswordPolicy: Rule = ({ snapshot }) => {
         )
         .join(" | "),
       recommendation:
-        "Set password_policy to `good` or `excellent` and enable history, dictionary, and personal-info checks.",
+        "Validate that advanced password-policy controls (history, dictionary, personal-info checks) are available and enabled for your Auth0 plan. " +
+        "If `good` or `excellent` policy is available, enable it. " +
+        "If advanced policy controls are unavailable or Early Access on your plan, document compensating controls including: " +
+        "attack protection (brute-force and suspicious-IP throttling), breached-password detection, rate limiting, " +
+        "bot protection, MFA or step-up on sensitive flows, and monitoring/alerting.",
       businessRisk:
-        "Weak password policies materially increase credential-stuffing and brute-force takeover risk.",
-      confidence: "high"
+        "Weak password policies increase credential-stuffing and brute-force takeover risk. " +
+        "When advanced policy controls are a tenant feature, compensating controls must be verified.",
+      confidence: "medium"
     })
   ];
 };
@@ -424,8 +435,11 @@ const ruleCustomDbScripts: Rule = ({ snapshot }) => {
   return [
     mkFinding({
       id: "AUTH-CON-003",
-      title: "Custom database scripts in use",
-      severity: "medium",
+      title: "Custom database scripts detected (Architecture Note)",
+      // Advisory by default — custom DB scripts are expected for Auth0 custom
+      // DB / migration architectures and are not inherently risky.
+      severity: "info",
+      scoreImpact: 0,
       category: "connections",
       affectedResources: conns.map(formatConnectionName),
       evidence: conns
@@ -435,9 +449,13 @@ const ruleCustomDbScripts: Rule = ({ snapshot }) => {
         )
         .join(" | "),
       recommendation:
-        "Review custom DB scripts for governance, secret handling, and migration paths to a standard provider.",
+        "Custom database scripts are expected when using Auth0's Custom Database or migration architecture. " +
+        "Confirm the following: scripts have a named owner and runbook; no plaintext secrets are present in script bodies; " +
+        "if a user-migration is in progress, define and communicate a completion timeline; " +
+        "secrets are managed via Auth0 Action Secrets or an external vault rather than hardcoded values.",
       businessRisk:
-        "Custom DB scripts run inside the auth pipeline and create operational and security blind spots.",
+        "Custom DB scripts run inside the auth pipeline. If scripts contain hardcoded secrets, " +
+        "lack an owner, or a migration is overdue, operational and security risk increases.",
       confidence: "medium"
     })
   ];
@@ -590,62 +608,96 @@ const ruleManagementApiGrant: Rule = ({ snapshot }) => {
   const isHighRisk = (s: string): boolean =>
     HIGH_RISK_TOKENS.some((t) => s.startsWith(t) || s.includes(t));
 
-  return mgmtGrants
-    .map((g) => {
-      const scopes = g.scope ?? [];
-      const cls = classifyMgmtScopes(scopes);
-      const writeOrAdmin = scopes.filter(isHighRisk).length;
-      const mostlyReadOnly = cls.total > 0 && writeOrAdmin === 0;
-      const client = clientLookup.get(g.client_id);
-      const looksLikeApiExplorer =
-        !!client &&
-        /api\s*explorer/i.test(client.name);
+  // Collect per-grant details.
+  interface GrantDetail {
+    human: string;
+    scopes: string[];
+    writeOrAdmin: number;
+    sensitive: number;
+    total: number;
+    topSensitive: string[];
+    looksLikeApiExplorer: boolean;
+    mostlyReadOnly: boolean;
+    severity: Severity;
+  }
 
-      // Severity calibration:
-      //  - mostly read-only → medium
-      //  - many sensitive write/delete/admin scopes → critical
-      //  - moderate sensitive → high (production-equivalent)
-      //  - small/unknown → low
-      let severity: Severity;
-      if (writeOrAdmin >= 6 || cls.sensitive >= 10) severity = "critical";
-      else if (writeOrAdmin >= 2 || cls.sensitive >= 3) severity = "high";
-      else if (mostlyReadOnly) severity = "medium";
-      else if (cls.total > 5) severity = "medium";
-      else if (cls.total > 0) severity = "low";
-      else return null;
+  const grantDetails: GrantDetail[] = [];
+  for (const g of mgmtGrants) {
+    const scopes = g.scope ?? [];
+    const cls = classifyMgmtScopes(scopes);
+    const writeOrAdmin = scopes.filter(isHighRisk).length;
+    const mostlyReadOnly = cls.total > 0 && writeOrAdmin === 0;
+    const client = clientLookup.get(g.client_id);
+    const looksLikeApiExplorer = !!client && /api\s*explorer/i.test(client.name);
 
-      const human = formatClientGrantName(g, clientLookup, rsLookup);
-      const evidenceBits = [
-        `${human}`,
-        `total_scopes=${cls.total}`,
-        `sensitive_scopes=${cls.sensitive}`,
-        `write/delete/admin=${writeOrAdmin}`
-      ];
-      if (cls.topSensitive.length > 0) {
-        evidenceBits.push(
-          `examples=${cls.topSensitive.slice(0, 5).join(", ")}`
-        );
-      }
-      if (looksLikeApiExplorer) {
-        evidenceBits.push("client_name_matches_api_explorer");
-      }
-      const evidence = evidenceBits.join("; ") + ".";
+    let severity: Severity;
+    if (writeOrAdmin >= 6 || cls.sensitive >= 10) severity = "critical";
+    else if (writeOrAdmin >= 2 || cls.sensitive >= 3) severity = "high";
+    else if (mostlyReadOnly) severity = "medium";
+    else if (cls.total > 5) severity = "medium";
+    else if (cls.total > 0) severity = "low";
+    else continue; // no actionable scopes
 
-      return mkFinding({
-        id: "AUTH-API-007",
-        title: "Management API access should be least-privilege",
-        severity,
-        category: "apis",
-        affectedResources: [human],
-        evidence,
-        recommendation:
-          "Create a dedicated least-privilege M2M client for scanning/IaC instead of using the API Explorer Application. Audit Management API scopes against operational need; prefer `read:*` only and remove `create:*`, `update:*`, `delete:*`, and admin/key/secret scopes that are not actively used.",
-        businessRisk:
-          "Excessive Management API scopes give a single compromised client tenant-wide write authority. Long-lived shared M2M credentials enlarge blast radius and complicate rotation.",
-        confidence: mostlyReadOnly ? "medium" : "high"
-      });
+    grantDetails.push({
+      human: formatClientGrantName(g, clientLookup, rsLookup),
+      scopes,
+      writeOrAdmin,
+      sensitive: cls.sensitive,
+      total: cls.total,
+      topSensitive: cls.topSensitive,
+      looksLikeApiExplorer,
+      mostlyReadOnly,
+      severity
+    });
+  }
+
+  if (grantDetails.length === 0) return [];
+
+  // Use the highest severity across all grants for the grouped finding.
+  const SEVERITY_ORDER: Severity[] = ["critical", "high", "medium", "low", "info"];
+  const topSeverity = SEVERITY_ORDER.find((s) =>
+    grantDetails.some((d) => d.severity === s)
+  ) ?? "low";
+
+  const mostlyReadOnlyOverall = grantDetails.every((d) => d.mostlyReadOnly);
+  const anyApiExplorer = grantDetails.some((d) => d.looksLikeApiExplorer);
+
+  // Build grouped evidence: one table row per client grant.
+  const tableRows = grantDetails
+    .map((d) => {
+      const examples = d.topSensitive.slice(0, 3).join(", ") || "—";
+      const flags = d.looksLikeApiExplorer ? " [api-explorer]" : "";
+      return `${d.human}${flags}: total_scopes=${d.total}, sensitive=${d.sensitive}, write/delete/admin=${d.writeOrAdmin}, examples=${examples}`;
     })
-    .filter((f): f is Finding => f !== null);
+    .join(" | ");
+
+  const evidence =
+    `The Auth0 Management API is a default platform API. The risk is broad client grants/scopes, not the existence of the Management API itself. ` +
+    `${grantDetails.length} client grant(s) with broader-than-least-privilege scopes detected. ` +
+    (anyApiExplorer ? `One or more grants use the API Explorer Application client — this client should not be used in production automation. ` : "") +
+    `Grants: ${tableRows}.`;
+
+  return [
+    mkFinding({
+      id: "AUTH-API-007",
+      title: "Management API client grants are broader than least privilege",
+      severity: topSeverity,
+      category: "apis",
+      affectedResources: grantDetails.map((d) => d.human),
+      evidence,
+      recommendation:
+        "The Auth0 Management API is a default platform API and cannot be removed. " +
+        "The risk is broad client grants, not the API's existence. " +
+        "For each affected client: audit scopes against operational need; prefer `read:*` only; " +
+        "remove `create:*`, `update:*`, `delete:*`, and admin/key/secret scopes that are not actively used. " +
+        "Create dedicated least-privilege M2M clients for each distinct use case (scanning, IaC, CI/CD). " +
+        "Avoid using the API Explorer Application for production automation; create a purpose-built client instead.",
+      businessRisk:
+        "Broad Management API scopes give compromised clients tenant-wide write authority. " +
+        "Long-lived shared M2M credentials with wide scopes enlarge blast radius and complicate rotation.",
+      confidence: mostlyReadOnlyOverall ? "medium" : "high"
+    })
+  ];
 };
 
 // ---------------------------------------------------------------------------
@@ -656,18 +708,37 @@ const ruleNoRoles: Rule = ({ snapshot }) => {
   const roles = snapshot.roles;
   if (!roles) return [];
   if (roles.length > 0) return [];
+
+  // Check for signals that would elevate this beyond informational:
+  // APIs with permissions but RBAC not enforced, or Organizations in use.
+  const hasUnenforceableApis = (snapshot.resourceServers ?? []).some(
+    (r) => !isManagementApiIdentifier(r.identifier) && (r.scopes ?? []).length > 0 && r.enforce_policies !== true
+  );
+  const hasOrganizations = (snapshot.organizations ?? []).length > 0;
+  const hasOrgClients = (snapshot.clients ?? []).some(
+    (c) => c.organization_usage === "require" || c.organization_usage === "allow"
+  );
+  const needsElevation = hasUnenforceableApis || hasOrganizations || hasOrgClients;
+
   return [
     mkFinding({
       id: "AUTH-RBAC-001",
-      title: "Tenant has no roles defined",
-      severity: "medium",
+      title: "No Auth0 roles defined — confirm where authorization is managed",
+      // Informational by default; only elevate when there are clear signals that
+      // Auth0 RBAC is expected to govern access.
+      severity: needsElevation ? "medium" : "info",
+      scoreImpact: needsElevation ? 6 : 0,
       category: "rbac",
       affectedResources: ["auth0_role"],
-      evidence: "0 roles returned from /roles.",
+      evidence: `0 roles returned from /roles. ${needsElevation ? `Elevation signals: unenforced_apis=${hasUnenforceableApis}, organizations=${hasOrganizations}, org_clients=${hasOrgClients}.` : "No elevation signals detected."}`,
       recommendation:
-        "Define roles to model authorization, even for a single application; avoid direct user permissions.",
+        "Confirm where authorization is managed for this tenant. " +
+        "If authorization is handled entirely outside Auth0 (e.g. in the application or a separate service), no action is required. " +
+        "If Auth0 is expected to govern authorization: define roles, assign them to users/groups, " +
+        "enable RBAC on APIs that define permissions, and avoid direct user-permission assignments.",
       businessRisk:
-        "Without roles, authorization is ad-hoc and entitlement reviews are difficult.",
+        "If authorization is expected to be managed in Auth0 but no roles exist, " +
+        "entitlement reviews are difficult and access governance is ad-hoc.",
       confidence: "medium"
     })
   ];
@@ -678,9 +749,18 @@ const ruleNoRoles: Rule = ({ snapshot }) => {
 // ---------------------------------------------------------------------------
 
 const ruleLegacyRulesHooks: Rule = ({ snapshot }) => {
-  const hasRules = (snapshot.rules ?? []).filter((r) => r.enabled !== false).length > 0;
-  const hasHooks = (snapshot.hooks ?? []).filter((h) => h.enabled !== false).length > 0;
+  // Rules and Hooks are only collected when --include-legacy-extensibility is
+  // passed. When not collected, snapshot.rules and snapshot.hooks will be
+  // undefined — we treat that as "not assessed" and do not emit a finding.
+  // We never treat 0 rules / 0 hooks as a positive signal.
+  const rules = snapshot.rules;
+  const hooks = snapshot.hooks;
+  if (rules === undefined && hooks === undefined) return [];
+
+  const hasRules = (rules ?? []).filter((r) => r.enabled !== false).length > 0;
+  const hasHooks = (hooks ?? []).filter((h) => h.enabled !== false).length > 0;
   if (!hasRules && !hasHooks) return [];
+
   const affected: string[] = [];
   if (hasRules) affected.push("auth0_rule");
   if (hasHooks) affected.push("auth0_hook");
@@ -691,7 +771,7 @@ const ruleLegacyRulesHooks: Rule = ({ snapshot }) => {
       severity: "critical",
       category: "actionsAndExtensibility",
       affectedResources: affected,
-      evidence: `Rules enabled: ${(snapshot.rules ?? []).length}, Hooks enabled: ${(snapshot.hooks ?? []).length}.`,
+      evidence: `Rules enabled: ${(rules ?? []).length}, Hooks enabled: ${(hooks ?? []).length}.`,
       recommendation:
         "Migrate Rules and Hooks logic to Auth0 Actions before the 2026-11-18 EOL date.",
       businessRisk:
@@ -735,19 +815,34 @@ const ruleMfaPolicy: Rule = ({ snapshot }) => {
     const enabledFactors = (g.factors ?? [])
       .filter((f) => f.enabled === true)
       .map((f) => f.name);
+    // Actions collector failure means custom step-up MFA logic could not be verified.
+    const actionsCollectorFailed = (snapshot.coverage ?? []).some(
+      (c) => c.collector === "actions" && (c.status === "failed" || c.status === "skipped")
+    );
+    const actionsNote = actionsCollectorFailed
+      ? " Actions were not assessed, so custom step-up MFA logic could not be verified."
+      : "";
     return [
       mkFinding({
         id: "AUTH-SEC-001",
-        title: "MFA policy indicates 'never'",
-        severity: "critical",
+        title: "No tenant-level MFA policy: step-up and risk-based MFA controls should be confirmed",
+        // In CIAM, blanket MFA for every login is a business/UX decision.
+        // Treat as high rather than critical; severity adjustment handles production.
+        severity: "high",
         category: "attackProtection",
         affectedResources: ["auth0_guardian.policy"],
-        evidence: `Guardian policy=${g.policy ?? "not set"}, enabled_factors=${enabledFactors.length ? enabledFactors.join(", ") : "none"}.`,
+        evidence: `Guardian policy=${g.policy ?? "not set"}, enabled_factors=${enabledFactors.length ? enabledFactors.join(", ") : "none"}.${actionsNote}`,
         recommendation:
-          "Set MFA policy to `all-applications` or risk-based `confidence-score` for production tenants.",
+          "For CIAM tenants, enforcing MFA on every login is a business and UX decision. " +
+          "Confirm that MFA or step-up authentication is applied to high-risk and sensitive flows, including: " +
+          "admin/customer-admin access, credential changes (password reset, email change), profile changes, " +
+          "high-value transactions, and high-risk logins (new device, unusual geography). " +
+          "Use risk-based MFA (`confidence-score` policy) or Actions-based step-up MFA to scope enforcement " +
+          "to these flows without gating every customer login.",
         businessRisk:
-          "Without enforced MFA, account takeover requires only a leaked or guessed password.",
-        confidence: "high"
+          "Without any MFA or step-up controls, sensitive flows (admin access, credential changes, high-risk logins) " +
+          "are protected only by a password, increasing account-takeover risk for high-value targets.",
+        confidence: actionsCollectorFailed ? "medium" : "high"
       })
     ];
   }
