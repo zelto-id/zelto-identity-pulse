@@ -30,6 +30,7 @@ import { buildOpportunities, buildOpportunityGroups } from "./auth0.opportunitie
 import { scoreFindings, buildPartialScanImpact } from "./auth0.scoring";
 import { buildRemediationPlan } from "./auth0.remediation";
 import { buildKeyDecisions } from "./auth0.decisions";
+import { consolidateFindings } from "./auth0.consolidation";
 
 export interface AnalyzeOptions {
   environment?: Environment;
@@ -47,6 +48,7 @@ export function analyzeAuth0Snapshot(
   const coverage = snapshot.coverage;
 
   const scoring = scoreFindings(findings, partial, coverage, { environment });
+  const consolidatedFindings = consolidateFindings(findings);
   const opportunities = buildOpportunities(findings);
   const opportunityGroups = buildOpportunityGroups(opportunities);
   const remediationPlan = buildRemediationPlan(findings);
@@ -73,6 +75,7 @@ export function analyzeAuth0Snapshot(
     },
     categories: scoring.categories,
     findings,
+    consolidatedFindings,
     keyDecisions,
     opportunities,
     opportunityGroups,

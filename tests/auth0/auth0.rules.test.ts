@@ -126,7 +126,7 @@ describe("rules", () => {
     expect(f.scoreImpact).toBe(0);
   });
 
-  it("AUTH-RBAC-001 elevates to medium when unenforced APIs with scopes exist", () => {
+  it("AUTH-RBAC-001 elevates to low (not medium) when unenforced APIs with scopes exist", () => {
     const snap: any = {
       metadata: { domain: "t.auth0.com", partial: false, missingScopes: [], failedCollectors: [], connectorVersion: "test" },
       coverage: [],
@@ -142,11 +142,14 @@ describe("rules", () => {
     const findings = runAllRules(snap as Auth0TenantSnapshot);
     const f = findings.find((x) => x.id === "AUTH-RBAC-001")!;
     expect(f).toBeDefined();
-    expect(f.severity).toBe("medium");
-    expect(f.scoreImpact).toBeGreaterThan(0);
+    // Capped at low per the updated specification: absence of built-in roles is a
+    // valid architectural decision and must not escalate beyond a maturity note.
+    expect(f.severity).toBe("low");
+    // Score impact is always 0 — this finding should not affect the A-F grade.
+    expect(f.scoreImpact).toBe(0);
   });
 
-  it("AUTH-API-007 groups multiple management API grants into one finding", () => {
+  it("AUTH-API-007 emits one finding per client (not grouped)", () => {
     const snap: any = {
       metadata: { domain: "t.auth0.com", partial: false, missingScopes: [], failedCollectors: [], connectorVersion: "test" },
       coverage: [],
@@ -166,16 +169,16 @@ describe("rules", () => {
     };
     const findings = runAllRules(snap as Auth0TenantSnapshot);
     const mgmtFindings = findings.filter((x) => x.id === "AUTH-API-007");
-    // Must be grouped into exactly one finding
-    expect(mgmtFindings.length).toBe(1);
-    const f = mgmtFindings[0];
-    // Both clients should appear in affectedResources
-    expect(f.affectedResources.length).toBe(2);
-    // Highest severity (from c1 which has write/delete) should dominate
-    expect(["high", "critical"]).toContain(f.severity);
-    // Evidence must mention Management API is a default platform API
-    expect(f.evidence).toMatch(/default platform API/i);
-    expect(f.title).toMatch(/broader than least privilege/i);
+    // One finding per client (per-client contextual analysis).
+    expect(mgmtFindings.length).toBe(2);
+    // c1 has create/delete/update:clients → critical or high with destructive scopes
+    const c1 = mgmtFindings.find((f) => f.affectedResources.some((r) => r.includes("Ops Bot")))!;
+    expect(c1).toBeDefined();
+    expect(["high", "critical"]).toContain(c1.severity);
+    // c2 has read:* only → low
+    const c2 = mgmtFindings.find((f) => f.affectedResources.some((r) => r.includes("CI Pipeline")))!;
+    expect(c2).toBeDefined();
+    expect(c2.severity).toBe("low");
   });
 
   it("does not flag healthy tenant for critical issues", () => {

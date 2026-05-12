@@ -359,18 +359,60 @@ const ruleConfidentialClientAuth: Rule = ({ snapshot }) => {
 // Connections
 // ---------------------------------------------------------------------------
 
+type PolicyLevel = "none" | "low" | "fair" | "good" | "excellent";
+
+/**
+ * Derive the effective password policy from a connection's options.
+ *
+ * The Auth0 API exposes two overlapping signals:
+ *  - `options.password_policy`          — legacy string label (may be stale)
+ *  - `options.password_complexity_options.min_length` — modern per-tenant setting
+ *
+ * Some tenants configure password strength via the dashboard (which writes to
+ * `password_complexity_options`) without updating the legacy `password_policy`
+ * field.  We must check both and use the stronger signal.
+ */
+function deriveEffectivePasswordPolicy(options: {
+  password_policy?: string;
+  password_complexity_options?: { min_length?: number };
+}): { level: PolicyLevel; source: string } {
+  const legacy = options.password_policy as PolicyLevel | undefined;
+
+  // Explicit good/excellent legacy label wins immediately.
+  if (legacy === "good" || legacy === "excellent") {
+    return { level: legacy, source: "password_policy" };
+  }
+
+  // Modern tenants may only populate password_complexity_options.
+  // Presence of a min_length implies a configured threshold.
+  const minLength = options.password_complexity_options?.min_length;
+  if (typeof minLength === "number") {
+    let level: PolicyLevel;
+    if (minLength >= 12) level = "excellent";
+    else if (minLength >= 8) level = "good";
+    else if (minLength >= 6) level = "fair";
+    else level = "low";
+    return { level, source: `password_complexity_options.min_length=${minLength}` };
+  }
+
+  // Fall back to the legacy label for "fair" / "low", or default to "none".
+  if (legacy === "fair") return { level: "fair", source: "password_policy" };
+  if (legacy === "low") return { level: "low", source: "password_policy" };
+  return { level: "none", source: "not set" };
+}
+
 const ruleDbPasswordPolicy: Rule = ({ snapshot }) => {
   const conns = (snapshot.connections ?? []).filter((c) => c.strategy === "auth0");
   const offenders = conns.filter((c) => {
-    const policy = c.options?.password_policy;
-    return !policy || policy === "none" || policy === "low";
+    const { level } = deriveEffectivePasswordPolicy(c.options ?? {});
+    return level === "none" || level === "low";
   });
   if (offenders.length === 0) return [];
 
   // Severity depends on whether database/password connections are actively used
   // by production clients. Without that signal, treat as medium.
   const hasActiveClients = offenders.some((c) => (c.enabled_clients ?? []).length > 0);
-  const severity = hasActiveClients ? "high" : "medium";
+  const severity: Severity = hasActiveClients ? "high" : "medium";
 
   return [
     mkFinding({
@@ -380,10 +422,10 @@ const ruleDbPasswordPolicy: Rule = ({ snapshot }) => {
       category: "connections",
       affectedResources: offenders.map(formatConnectionName),
       evidence: offenders
-        .map(
-          (c) =>
-            `${formatConnectionName(c)}: policy=${c.options?.password_policy ?? "none"}, enabled_clients=${(c.enabled_clients ?? []).length}`
-        )
+        .map((c) => {
+          const { level, source } = deriveEffectivePasswordPolicy(c.options ?? {});
+          return `${formatConnectionName(c)}: effective_policy=${level} (from: ${source}), enabled_clients=${(c.enabled_clients ?? []).length}`;
+        })
         .join(" | "),
       recommendation:
         "Validate that advanced password-policy controls (history, dictionary, personal-info checks) are available and enabled for your Auth0 plan. " +
@@ -593,111 +635,225 @@ const ruleManagementApiGrant: Rule = ({ snapshot }) => {
   const mgmtGrants = grants.filter((g) => isManagementApiIdentifier(g.audience));
   if (mgmtGrants.length === 0) return [];
 
-  // Scope categories that change severity calibration.
-  const HIGH_RISK_TOKENS = [
-    "create:",
-    "update:",
-    "delete:",
-    "write:",
-    "admin",
-    "keys",
-    "secrets",
-    "client_grants",
-    "clients"
-  ];
-  const isHighRisk = (s: string): boolean =>
-    HIGH_RISK_TOKENS.some((t) => s.startsWith(t) || s.includes(t));
+  // ── Helpers ──────────────────────────────────────────────────────────────
 
-  // Collect per-grant details.
-  interface GrantDetail {
-    human: string;
-    scopes: string[];
-    writeOrAdmin: number;
-    sensitive: number;
-    total: number;
-    topSensitive: string[];
-    looksLikeApiExplorer: boolean;
-    mostlyReadOnly: boolean;
-    severity: Severity;
-  }
+  const looksLikeApiExplorer = (name: string) => /api\s*explorer/i.test(name);
+  const looksLikeIac = (name: string) =>
+    /terraform|iac|deployment|infrastructure|infra|ci.?cd|provisioner/i.test(name);
 
-  const grantDetails: GrantDetail[] = [];
+  const WRITE_PREFIXES = ["create:", "update:", "delete:", "write:"];
+  const isWriteScope = (s: string) => WRITE_PREFIXES.some((p) => s.startsWith(p));
+
+  // "Destructive" = scopes that permanently remove data or grant high-blast write on
+  // management-plane resources (clients, grants, connection secrets).
+  const DESTRUCTIVE_EXACT = new Set([
+    "update:clients",
+    "update:client_keys",
+    "create:client_grants",
+    "delete:client_grants",
+    "update:client_secrets",
+    "create:connections",
+    "delete:connections",
+    "update:connections"
+  ]);
+  const hasDestructive = (scopes: string[]) =>
+    scopes.some(
+      (s) => s.startsWith("delete:") || DESTRUCTIVE_EXACT.has(s)
+    );
+
+  const isFullAdmin = (scopes: string[]) => {
+    const hasCreate = scopes.some((s) => s.startsWith("create:"));
+    const hasDelete = scopes.some((s) => s.startsWith("delete:"));
+    const hasUpdate = scopes.some((s) => s.startsWith("update:"));
+    const writeCount = scopes.filter(isWriteScope).length;
+    return (hasCreate && hasDelete) || (hasCreate && hasUpdate && writeCount >= 5);
+  };
+
+  // ── Per-client findings ───────────────────────────────────────────────────
+
+  const findings: Finding[] = [];
+
   for (const g of mgmtGrants) {
     const scopes = g.scope ?? [];
     const cls = classifyMgmtScopes(scopes);
-    const writeOrAdmin = scopes.filter(isHighRisk).length;
-    const mostlyReadOnly = cls.total > 0 && writeOrAdmin === 0;
+    if (cls.total === 0) continue;
+
     const client = clientLookup.get(g.client_id);
-    const looksLikeApiExplorer = !!client && /api\s*explorer/i.test(client.name);
+    const clientName = client?.name ?? g.client_id;
+    const human = formatClientGrantName(g, clientLookup, rsLookup);
+    const writeCount = scopes.filter(isWriteScope).length;
+    const examplesStr = cls.topSensitive.slice(0, 5).join(", ") || "—";
 
-    let severity: Severity;
-    if (writeOrAdmin >= 6 || cls.sensitive >= 10) severity = "critical";
-    else if (writeOrAdmin >= 2 || cls.sensitive >= 3) severity = "high";
-    else if (mostlyReadOnly) severity = "medium";
-    else if (cls.total > 5) severity = "medium";
-    else if (cls.total > 0) severity = "low";
-    else continue; // no actionable scopes
+    if (looksLikeApiExplorer(clientName)) {
+      // ── Rule 1: API Explorer Application ─────────────────────────────────
+      // Any write/admin scope on this client is critical; it is an interactive
+      // developer tool and should never hold production write authority.
+      if (writeCount === 0) {
+        // Read-only API Explorer is informational — acknowledge but do not penalise.
+        findings.push(
+          mkFinding({
+            id: "AUTH-API-007",
+            title: "API Explorer Application has read-only Management API access",
+            severity: "low",
+            category: "apis",
+            affectedResources: [human],
+            evidence: `${human}; total_scopes=${cls.total}; sensitive_scopes=${cls.sensitive}; write/delete/admin=0; examples=${examplesStr}; client_name_matches_api_explorer.`,
+            recommendation:
+              "The API Explorer Application holds read-only Management API scopes. " +
+              "If active in production, consider replacing it with a dedicated, purpose-built M2M client " +
+              "to make the intent explicit and simplify scope auditing.",
+            businessRisk:
+              "Read-only credentials have limited blast radius but should still be scoped to the minimum required.",
+            confidence: "high"
+          })
+        );
+      } else {
+        findings.push(
+          mkFinding({
+            id: "AUTH-API-007",
+            title: "API Explorer Application has privileged Management API access",
+            severity: "critical",
+            category: "apis",
+            affectedResources: [human],
+            evidence: `${human}; total_scopes=${cls.total}; sensitive_scopes=${cls.sensitive}; write/delete/admin=${writeCount}; examples=${examplesStr}; client_name_matches_api_explorer.`,
+            recommendation:
+              "Disable the write/admin scopes on the API Explorer Application immediately, or revoke the grant entirely. " +
+              "The API Explorer Application is an interactive developer tool — its credentials are typically long-lived, " +
+              "shared, and not rotated. It must not hold production write authority. " +
+              "Create a dedicated, least-privilege M2M client for any automation or scanning need.",
+            businessRisk:
+              "The API Explorer Application credentials represent maximum blast-radius risk: " +
+              "tenant-wide write authority on a credential that is commonly shared, rarely rotated, " +
+              "and not scoped to a specific pipeline.",
+            confidence: "high",
+            validationSteps: [
+              "Open Auth0 Dashboard → Applications → APIs → Auth0 Management API → Machine to Machine Applications",
+              "Locate the 'API Explorer Application' entry and remove all write/delete/admin scopes",
+              "If the grant is not required, revoke it entirely",
+              "Create a dedicated M2M client for any production automation need, scoped to read-only",
+              "Re-run `zelto-pulse scan auth0`"
+            ]
+          })
+        );
+      }
+    } else if (looksLikeIac(clientName)) {
+      // ── Rule 2: IaC / Terraform / Deployment clients ──────────────────────
+      // Write scopes are expected but the grant must be hardened.
+      if (writeCount === 0) continue; // read-only IaC is fine — skip
+      findings.push(
+        mkFinding({
+          id: "AUTH-API-007",
+          title: "IaC/automation client has broad Management API access",
+          severity: "high",
+          category: "apis",
+          affectedResources: [human],
+          evidence: `${human}; total_scopes=${cls.total}; sensitive_scopes=${cls.sensitive}; write/delete/admin=${writeCount}; examples=${examplesStr}; client_name_suggests_iac.`,
+          recommendation:
+            "Acknowledge this necessary but high-risk grant. " +
+            "Ensure credentials are stored in a secrets manager (not in source control) and rotated on a defined schedule. " +
+            "Restrict access to automated CI/CD pipelines only — these credentials must never be used interactively. " +
+            "Enable comprehensive audit-log streaming so every Management API call made by this client is traceable. " +
+            "Scope the grant to only the resource types this pipeline actively manages; remove any unused scopes.",
+          businessRisk:
+            "IaC credentials with broad Management API scopes represent maximum blast radius if the pipeline is compromised, " +
+            "credentials are leaked to source control, or a supply-chain attack occurs.",
+          confidence: "high",
+          validationSteps: [
+            "Confirm credentials are stored in a secrets manager (Vault, AWS Secrets Manager, GCP Secret Manager, etc.)",
+            "Verify a credential rotation schedule exists and is enforced",
+            "Confirm this client is only accessible from the automated pipeline; block interactive use",
+            "Audit scopes — remove any `create:`, `update:`, or `delete:` scopes the pipeline does not actively use",
+            "Verify log-stream is active and captures Management API calls",
+            "Re-run `zelto-pulse scan auth0`"
+          ]
+        })
+      );
+    } else {
+      // ── Rule 3: All other M2M clients — severity scaled by scope risk ─────
+      let title: string;
+      let severity: Severity;
+      let recommendation: string;
+      let validationSteps: string[];
 
-    grantDetails.push({
-      human: formatClientGrantName(g, clientLookup, rsLookup),
-      scopes,
-      writeOrAdmin,
-      sensitive: cls.sensitive,
-      total: cls.total,
-      topSensitive: cls.topSensitive,
-      looksLikeApiExplorer,
-      mostlyReadOnly,
-      severity
-    });
+      if (writeCount === 0) {
+        // Read-only grant
+        severity = "low";
+        title = "M2M client has read-only Management API access — confirm scope necessity";
+        recommendation =
+          "Read-only Management API scopes carry lower risk but should still be scoped to the minimum required. " +
+          "Confirm each `read:*` scope is actively consumed by this client; remove any unused ones. " +
+          "Ensure credentials are rotated periodically.";
+        validationSteps = [
+          "List which `read:*` scopes are actively called by this application",
+          "Remove any scopes not in active use",
+          "Rotate credentials and bind token lifetime to the shortest acceptable window"
+        ];
+      } else if (isFullAdmin(scopes)) {
+        // Full admin: create + delete, or many write categories
+        severity = "critical";
+        title = "M2M client has full admin-write Management API access";
+        recommendation =
+          "This client holds broad create, update, and delete Management API scopes across multiple resource types. " +
+          "Immediately audit each scope against active operational need. " +
+          "Refactor into purpose-built clients with only the scopes each workflow requires. " +
+          "Remove `create:*`, `delete:*`, and broad `update:*` scopes not in active use.";
+        validationSteps = [
+          "Map each scope to a specific feature or API call in the application",
+          "Remove all scopes with no active use",
+          "Replace this client with two or more purpose-built clients scoped to individual workflows",
+          "Re-run `zelto-pulse scan auth0`"
+        ];
+      } else if (hasDestructive(scopes)) {
+        // Destructive: delete:* or high-blast update/create on management-plane resources
+        severity = "high";
+        title = "M2M client has destructive Management API scopes";
+        recommendation =
+          "This client holds delete or high-blast-radius write scopes. " +
+          "Review whether `delete:users` and similar destructive scopes are essential, " +
+          "or whether that operation can be handled by a more controlled internal process (e.g. soft-delete via Actions). " +
+          "Ensure all destructive operations are audit-logged and require explicit confirmation in the calling service. " +
+          "Rotate credentials on a defined schedule.";
+        validationSteps = [
+          "Confirm delete/destructive scopes are actively required (not inherited from a template)",
+          "Verify all destructive calls are logged and attributable to a specific workflow",
+          "Evaluate replacing irreversible deletes with soft-deletes or a queue-based process",
+          "Re-run `zelto-pulse scan auth0`"
+        ];
+      } else {
+        // Limited writes (e.g. update:users_app_metadata)
+        severity = "medium";
+        title = "M2M client has limited write access to the Management API";
+        recommendation =
+          "This client holds limited write scopes (e.g. `update:users_app_metadata`). " +
+          "Confirm each scope is actively required by the integration. " +
+          "Consider narrowing to `read:*` only where possible, and rotate credentials periodically.";
+        validationSteps = [
+          "Confirm each write scope is actively used by this client",
+          "Narrow to read-only where the application does not need to write",
+          "Rotate credentials and verify token lifetime is bounded"
+        ];
+      }
+
+      findings.push(
+        mkFinding({
+          id: "AUTH-API-007",
+          title,
+          severity,
+          category: "apis",
+          affectedResources: [human],
+          evidence: `${human}; total_scopes=${cls.total}; sensitive_scopes=${cls.sensitive}; write/delete/admin=${writeCount}; examples=${examplesStr}.`,
+          recommendation,
+          businessRisk:
+            "Excessive Management API scopes extend a compromised credential's blast radius across the tenant. " +
+            "Long-lived credentials with unnecessary grants complicate rotation and incident response.",
+          confidence: writeCount === 0 ? "medium" : "high",
+          validationSteps
+        })
+      );
+    }
   }
 
-  if (grantDetails.length === 0) return [];
-
-  // Use the highest severity across all grants for the grouped finding.
-  const SEVERITY_ORDER: Severity[] = ["critical", "high", "medium", "low", "info"];
-  const topSeverity = SEVERITY_ORDER.find((s) =>
-    grantDetails.some((d) => d.severity === s)
-  ) ?? "low";
-
-  const mostlyReadOnlyOverall = grantDetails.every((d) => d.mostlyReadOnly);
-  const anyApiExplorer = grantDetails.some((d) => d.looksLikeApiExplorer);
-
-  // Build grouped evidence: one table row per client grant.
-  const tableRows = grantDetails
-    .map((d) => {
-      const examples = d.topSensitive.slice(0, 3).join(", ") || "—";
-      const flags = d.looksLikeApiExplorer ? " [api-explorer]" : "";
-      return `${d.human}${flags}: total_scopes=${d.total}, sensitive=${d.sensitive}, write/delete/admin=${d.writeOrAdmin}, examples=${examples}`;
-    })
-    .join(" | ");
-
-  const evidence =
-    `The Auth0 Management API is a default platform API. The risk is broad client grants/scopes, not the existence of the Management API itself. ` +
-    `${grantDetails.length} client grant(s) with broader-than-least-privilege scopes detected. ` +
-    (anyApiExplorer ? `One or more grants use the API Explorer Application client — this client should not be used in production automation. ` : "") +
-    `Grants: ${tableRows}.`;
-
-  return [
-    mkFinding({
-      id: "AUTH-API-007",
-      title: "Management API client grants are broader than least privilege",
-      severity: topSeverity,
-      category: "apis",
-      affectedResources: grantDetails.map((d) => d.human),
-      evidence,
-      recommendation:
-        "The Auth0 Management API is a default platform API and cannot be removed. " +
-        "The risk is broad client grants, not the API's existence. " +
-        "For each affected client: audit scopes against operational need; prefer `read:*` only; " +
-        "remove `create:*`, `update:*`, `delete:*`, and admin/key/secret scopes that are not actively used. " +
-        "Create dedicated least-privilege M2M clients for each distinct use case (scanning, IaC, CI/CD). " +
-        "Avoid using the API Explorer Application for production automation; create a purpose-built client instead.",
-      businessRisk:
-        "Broad Management API scopes give compromised clients tenant-wide write authority. " +
-        "Long-lived shared M2M credentials with wide scopes enlarge blast radius and complicate rotation.",
-      confidence: mostlyReadOnlyOverall ? "medium" : "high"
-    })
-  ];
+  return findings;
 };
 
 // ---------------------------------------------------------------------------
@@ -724,21 +880,28 @@ const ruleNoRoles: Rule = ({ snapshot }) => {
     mkFinding({
       id: "AUTH-RBAC-001",
       title: "No Auth0 roles defined — confirm where authorization is managed",
-      // Informational by default; only elevate when there are clear signals that
-      // Auth0 RBAC is expected to govern access.
-      severity: needsElevation ? "medium" : "info",
-      scoreImpact: needsElevation ? 6 : 0,
+      // Informational by default; only a low-severity maturity note when there are
+      // signals that Auth0 RBAC may be expected (unenforced APIs, organizations).
+      // Never escalated to medium: absence of built-in roles is a valid architectural
+      // choice (SAML attributes, custom claims, downstream authz services, etc.) and
+      // this tool cannot evaluate the security of custom authorization logic.
+      severity: needsElevation ? "low" : "info",
+      scoreImpact: 0,
       category: "rbac",
       affectedResources: ["auth0_role"],
-      evidence: `0 roles returned from /roles. ${needsElevation ? `Elevation signals: unenforced_apis=${hasUnenforceableApis}, organizations=${hasOrganizations}, org_clients=${hasOrgClients}.` : "No elevation signals detected."}`,
+      evidence: `0 roles returned from /roles. ${needsElevation ? `Context signals: unenforced_apis=${hasUnenforceableApis}, organizations=${hasOrganizations}, org_clients=${hasOrgClients}.` : "No escalation signals detected."}`,
       recommendation:
-        "Confirm where authorization is managed for this tenant. " +
-        "If authorization is handled entirely outside Auth0 (e.g. in the application or a separate service), no action is required. " +
-        "If Auth0 is expected to govern authorization: define roles, assign them to users/groups, " +
-        "enable RBAC on APIs that define permissions, and avoid direct user-permission assignments.",
+        "This tenant does not use the built-in Auth0 Roles feature for authorization. " +
+        "This is a valid architectural choice if a custom authorization model is in place " +
+        "(e.g. SAML attributes, application-managed claims, external authorization service, or permissions injected via Actions). " +
+        "Note: this tool cannot analyze the security or correctness of custom authorization logic. " +
+        "If you rely on a custom model, ensure it is documented, owned by a named team, and covered by your access-review process. " +
+        "If you intend to use Auth0 RBAC: define roles, enable RBAC enforcement on APIs that define permissions, " +
+        "and assign roles to users or groups rather than granting direct user permissions.",
       businessRisk:
-        "If authorization is expected to be managed in Auth0 but no roles exist, " +
-        "entitlement reviews are difficult and access governance is ad-hoc.",
+        "If authorization is expected to be governed in Auth0 but no roles exist, " +
+        "entitlement reviews are difficult and access governance is ad-hoc. " +
+        "Custom authorization logic outside Auth0 is opaque to this scanner.",
       confidence: "medium"
     })
   ];

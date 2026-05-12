@@ -201,6 +201,8 @@ export interface Auth0AnalysisReport {
   };
   categories: ReportCategory[];
   findings: Finding[];
+  /** Per-rule grouped view of findings with contextual interpretation. */
+  consolidatedFindings: ConsolidatedFinding[];
   keyDecisions: KeyDecision[];
   opportunities: Opportunity[];
   opportunityGroups: OpportunityGroup[];
@@ -284,3 +286,76 @@ export const SEVERITY_SCORE_IMPACT: Record<Severity, number> = {
   low: 2,
   info: 0
 };
+
+// ---------------------------------------------------------------------------
+// Consolidated findings
+// ---------------------------------------------------------------------------
+
+/**
+ * A row in the consolidated finding's per-resource table.
+ */
+export interface ConsolidatedFindingRow {
+  resource: string;
+  severity: Severity;
+  productionEquivalentSeverity?: Severity;
+  environmentAdjustedSeverity?: Severity;
+  scoreImpact: number;
+  productionEquivalentScoreImpact?: number;
+  evidenceSummary: string;
+}
+
+/**
+ * Educational "how to interpret" block backing a consolidated finding.
+ */
+export interface HowToInterpretContent {
+  /** Name / label for the underlying security principle. */
+  corePrincipleTitle: string;
+  /** Plain-English explanation of the underlying security principle. */
+  corePrincipleDetail: string;
+  /**
+   * Transparent description of how the tool maps scope/config features to
+   * severity levels (markdown-formatted bullet list supported).
+   */
+  riskModelDescription: string;
+  /**
+   * Short questions that guide the user to evaluate compensating controls
+   * in their own architecture.
+   */
+  selfAssessmentQuestions: string[];
+  /** Concluding advice: how to act once the questions are answered. */
+  concludingAdvice: string;
+}
+
+/**
+ * All per-instance findings for one rule ID grouped into a single object
+ * for de-duplicated report rendering.
+ */
+export interface ConsolidatedFinding {
+  id: string;
+  title: string;
+  /** Highest severity found across all instances. */
+  overallSeverity: Severity;
+  /** Highest production-equivalent severity across all instances. */
+  overallProductionEquivalentSeverity?: Severity;
+  category: string;
+  /** Total score impact summed across all instances (environment-adjusted). */
+  totalScoreImpact: number;
+  /** Total score impact summed across all instances (production-equivalent). */
+  totalProductionEquivalentScoreImpact?: number;
+  /** General risk summary applicable to all instances. */
+  riskSummary: string;
+  /** Unified recommendation text. */
+  recommendation: string;
+  /** Per-resource rows (one per original Finding instance). */
+  instances: ConsolidatedFindingRow[];
+  /** Optional contextual interpretation guide. */
+  howToInterpret?: HowToInterpretContent;
+  // Remediation metadata (merged from first instance with the data)
+  auth0Area?: string;
+  terraformResource?: string;
+  terraformFields?: string[];
+  implementationSteps?: string[];
+  validationSteps?: string[];
+  falsePositiveNotes?: string[];
+  confidence?: Confidence;
+}

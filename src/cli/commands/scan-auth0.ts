@@ -9,6 +9,7 @@ import { Command } from "commander";
 import { runAuth0Connector } from "../../connectors/auth0/auth0.connector";
 import { analyzeAuth0Snapshot } from "../../analysis/auth0/auth0.analyzer";
 import { renderAuth0Report } from "../../reporting/markdown/auth0-report.renderer";
+import { renderAuth0ReportHtml } from "../../reporting/html/auth0-report.html-renderer";
 import { createLogger } from "../../core/logger";
 import { ConfigError, AuthenticationError } from "../../core/errors";
 import {
@@ -28,6 +29,9 @@ const VALID_ENVIRONMENTS: Environment[] = [
   "unknown"
 ];
 
+type ReportFormat = "markdown" | "html" | "all";
+const VALID_FORMATS: ReportFormat[] = ["markdown", "html", "all"];
+
 interface ScanAuth0Options {
   domain?: string;
   token?: string;
@@ -40,6 +44,7 @@ interface ScanAuth0Options {
   fromSnapshot?: string;
   environment?: string;
   includeLegacyExtensibility?: boolean;
+  format?: string;
 }
 
 export function registerScanAuth0Command(program: Command): void {
@@ -69,6 +74,11 @@ export function registerScanAuth0Command(program: Command): void {
       "--include-legacy-extensibility",
       "Collect Rules and Hooks (legacy extensibility) and report them as EOL migration risk if present. Excluded from the default Actions & Extensibility score.",
       false
+    )
+    .option(
+      "--format <format>",
+      `Output format: markdown | html | all. Default: markdown.`,
+      "markdown"
     )
     .action(async (options: ScanAuth0Options) => {
       try {
@@ -138,14 +148,46 @@ async function runScanAuth0(options: ScanAuth0Options): Promise<void> {
   const environment = await resolveEnvironment(options);
   const report = analyzeAuth0Snapshot(snapshot, { environment });
 
-  // 4. Render markdown.
-  const md = renderAuth0Report(report);
-  const outPath =
-    options.output ??
-    path.join("reports", `auth0-report-${stamp}.md`);
-  ensureDirSync(path.dirname(outPath));
-  writeFileSync(outPath, md);
-  logger.info(`Report written to ${outPath}`);
+  // 4. Resolve format.
+  const rawFormat = (options.format ?? "markdown").toLowerCase();
+  if (!(VALID_FORMATS as string[]).includes(rawFormat)) {
+    throw new ConfigError(
+      `Invalid --format value '${options.format}'. Expected one of: ${VALID_FORMATS.join(", ")}.`
+    );
+  }
+  const format = rawFormat as ReportFormat;
+  const wantMarkdown = format === "markdown" || format === "all";
+  const wantHtml     = format === "html"     || format === "all";
+
+  // 4a. Render & write markdown.
+  const writtenPaths: string[] = [];
+  if (wantMarkdown) {
+    const md = renderAuth0Report(report);
+    const mdPath =
+      options.output ??
+      path.join("reports", `auth0-report-${stamp}.md`);
+    ensureDirSync(path.dirname(mdPath));
+    writeFileSync(mdPath, md);
+    logger.info(`Markdown report written to ${mdPath}`);
+    writtenPaths.push(mdPath);
+  }
+
+  // 4b. Render & write HTML.
+  if (wantHtml) {
+    const html = renderAuth0ReportHtml(report);
+    // When --output is provided and only HTML is requested, honour it directly.
+    // Otherwise derive the path from the timestamp.
+    const htmlPath =
+      format === "html" && options.output
+        ? options.output.replace(/\.md$/, ".html")
+        : path.join("reports", `auth0-report-${stamp}.html`);
+    ensureDirSync(path.dirname(htmlPath));
+    writeFileSync(htmlPath, html);
+    logger.info(`HTML report written to ${htmlPath}`);
+    writtenPaths.push(htmlPath);
+  }
+
+  const outPath = writtenPaths[0] ?? "(no output)";
 
   // 5. Console summary.
   process.stdout.write(
@@ -154,7 +196,7 @@ async function runScanAuth0(options: ScanAuth0Options): Promise<void> {
       (report.collectionStatus.partial
         ? `Partial scan: ${report.collectionStatus.failedCollectors.length} collector(s) failed/skipped\n`
         : ``) +
-      `Report: ${outPath}\n`
+      writtenPaths.map((p) => `Report: ${p}`).join("\n") + "\n"
   );
 
   // 6. Threshold exit code.

@@ -137,8 +137,18 @@ function bucketFor(f: Finding): "immediate" | "shortTerm" | "later" {
 }
 
 export function buildRemediationPlan(findings: Finding[]): RemediationPlan {
-  const sortable = findings
-    .filter((f) => f.severity !== "info")
+  // Deduplicate by findingId: keep only the highest-severity instance per rule
+  // so AUTH-API-007 (or any multi-resource rule) appears once in the plan.
+  const byId = new Map<string, Finding>();
+  for (const f of findings) {
+    if (f.severity === "info") continue;
+    const existing = byId.get(f.id);
+    if (!existing || SEVERITY_ORDER[f.severity] < SEVERITY_ORDER[existing.severity]) {
+      byId.set(f.id, f);
+    }
+  }
+
+  const sortable = Array.from(byId.values())
     .slice()
     .sort((a, b) => {
       const s = SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity];

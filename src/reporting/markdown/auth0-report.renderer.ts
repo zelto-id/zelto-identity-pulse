@@ -7,6 +7,7 @@
 
 import {
   Auth0AnalysisReport,
+  ConsolidatedFinding,
   Finding,
   KeyDecision,
   Opportunity,
@@ -162,18 +163,30 @@ export function renderAuth0Report(report: Auth0AnalysisReport): string {
     }
   }
 
-  // Findings by severity
+  // Consolidated findings (grouped by rule ID)
+  const bySeverity: Record<Severity, ConsolidatedFinding[]> = {
+    critical: [],
+    high: [],
+    medium: [],
+    low: [],
+    info: []
+  };
+  for (const cf of report.consolidatedFindings) {
+    if (cf.overallSeverity !== "info") {
+      bySeverity[cf.overallSeverity].push(cf);
+    }
+  }
   for (const sev of ["critical", "high", "medium", "low"] as Severity[]) {
     lines.push(`## ${capitalize(sev)} Findings`);
     lines.push("");
-    const list = report.findings.filter((f) => f.severity === sev);
+    const list = bySeverity[sev];
     if (list.length === 0) {
       lines.push(`_None._`);
       lines.push("");
       continue;
     }
-    for (const f of list) {
-      renderFinding(lines, f);
+    for (const cf of list) {
+      renderConsolidatedFinding(lines, cf);
     }
   }
 
@@ -343,6 +356,158 @@ function renderRemediationBucket(lines: string[], b: RemediationBucket): void {
   lines.push("");
 }
 
+function renderConsolidatedFinding(lines: string[], cf: ConsolidatedFinding): void {
+  lines.push(`### ${cf.id} — ${cf.title}`);
+  lines.push("");
+
+  // Meta badges
+  lines.push(`- **Overall severity:** ${cf.overallSeverity}`);
+  if (
+    cf.overallProductionEquivalentSeverity &&
+    cf.overallProductionEquivalentSeverity !== cf.overallSeverity
+  ) {
+    lines.push(
+      `  - Production-equivalent: **${cf.overallProductionEquivalentSeverity}** | Environment-adjusted: **${cf.overallSeverity}**`
+    );
+  }
+  lines.push(`- **Category:** ${cf.category}`);
+  if (
+    cf.totalProductionEquivalentScoreImpact !== undefined &&
+    cf.totalProductionEquivalentScoreImpact !== cf.totalScoreImpact
+  ) {
+    lines.push(
+      `- **Score impact:** -${cf.totalScoreImpact} (environment-adjusted) / -${cf.totalProductionEquivalentScoreImpact} (production-equivalent)`
+    );
+  } else {
+    lines.push(`- **Score impact:** -${cf.totalScoreImpact}`);
+  }
+  if (cf.confidence) lines.push(`- **Confidence:** ${cf.confidence}`);
+  lines.push("");
+
+  // Risk summary
+  lines.push(`**Risk Summary**`);
+  lines.push("");
+  lines.push(cf.riskSummary);
+  lines.push("");
+
+  // Per-resource instances table
+  lines.push(`**Affected Resources**`);
+  lines.push("");
+  const hasAdjusted = cf.instances.some(
+    (row) =>
+      row.productionEquivalentSeverity &&
+      row.productionEquivalentSeverity !== row.environmentAdjustedSeverity
+  );
+  if (hasAdjusted) {
+    lines.push(`| Resource | Severity (adj.) | Severity (prod-equiv.) | Evidence Summary |`);
+    lines.push(`|---|:---:|:---:|---|`);
+    for (const row of cf.instances) {
+      const prodSev = row.productionEquivalentSeverity ?? row.severity;
+      lines.push(
+        `| ${escapePipe(row.resource)} | ${row.severity} | ${prodSev} | ${escapePipe(row.evidenceSummary)} |`
+      );
+    }
+  } else {
+    lines.push(`| Resource | Severity | Evidence Summary |`);
+    lines.push(`|---|:---:|---|`);
+    for (const row of cf.instances) {
+      lines.push(
+        `| ${escapePipe(row.resource)} | ${row.severity} | ${escapePipe(row.evidenceSummary)} |`
+      );
+    }
+  }
+  lines.push("");
+
+  // Unified recommendation
+  lines.push(`**Recommendation**`);
+  lines.push("");
+  lines.push(cf.recommendation);
+  lines.push("");
+
+  // How to Interpret
+  if (cf.howToInterpret) {
+    renderHowToInterpret(lines, cf.howToInterpret);
+  }
+
+  // False-positive notes
+  if (cf.falsePositiveNotes && cf.falsePositiveNotes.length > 0) {
+    lines.push(`**False-positive notes**`);
+    lines.push("");
+    for (const n of cf.falsePositiveNotes) {
+      lines.push(`- ${n}`);
+    }
+    lines.push("");
+  }
+
+  // Structured remediation block
+  if (
+    cf.auth0Area ||
+    cf.terraformResource ||
+    (cf.implementationSteps && cf.implementationSteps.length > 0) ||
+    (cf.validationSteps && cf.validationSteps.length > 0)
+  ) {
+    lines.push(`#### Remediation`);
+    lines.push("");
+    if (cf.auth0Area) {
+      lines.push(`**Auth0 Dashboard**`);
+      lines.push("");
+      lines.push(cf.auth0Area);
+      lines.push("");
+    }
+    if (cf.terraformResource || (cf.terraformFields && cf.terraformFields.length > 0)) {
+      lines.push(`**Terraform**`);
+      lines.push("");
+      if (cf.terraformResource) lines.push(`Resource: \`${cf.terraformResource}\``);
+      if (cf.terraformFields && cf.terraformFields.length > 0) {
+        lines.push(`Fields: ${cf.terraformFields.map((x) => `\`${x}\``).join(", ")}`);
+      }
+      lines.push("");
+    }
+    if (cf.implementationSteps && cf.implementationSteps.length > 0) {
+      lines.push(`**Implementation steps**`);
+      lines.push("");
+      cf.implementationSteps.forEach((s, i) => lines.push(`${i + 1}. ${s}`));
+      lines.push("");
+    }
+    if (cf.validationSteps && cf.validationSteps.length > 0) {
+      lines.push(`**Validation**`);
+      lines.push("");
+      cf.validationSteps.forEach((s, i) => lines.push(`${i + 1}. ${s}`));
+      lines.push(`${cf.validationSteps.length + 1}. Re-run \`zelto-pulse scan auth0\`.`);
+      lines.push("");
+    }
+  }
+
+  lines.push("");
+}
+
+function renderHowToInterpret(
+  lines: string[],
+  h: import("./report.types").HowToInterpretContent
+): void {
+  lines.push(`#### How to Interpret This Finding & Assess Your True Risk`);
+  lines.push("");
+  lines.push(`**Core Principle: ${h.corePrincipleTitle}**`);
+  lines.push("");
+  lines.push(h.corePrincipleDetail);
+  lines.push("");
+  lines.push(`**Objective Risk Model**`);
+  lines.push("");
+  // riskModelDescription may contain markdown bullets — emit as-is.
+  lines.push(h.riskModelDescription);
+  lines.push("");
+  lines.push(`**Architectural Self-Assessment**`);
+  lines.push("");
+  for (const q of h.selfAssessmentQuestions) {
+    lines.push(`- ${q}`);
+  }
+  lines.push("");
+  lines.push(`**Concluding Advice**`);
+  lines.push("");
+  lines.push(h.concludingAdvice);
+  lines.push("");
+}
+
 function renderFinding(lines: string[], f: Finding): void {
   lines.push(`### ${f.id} — ${f.title}`);
   lines.push("");
@@ -503,4 +668,4 @@ function escapePipe(s: string): string {
 }
 
 // Re-export for tests/consumers.
-export type { Auth0AnalysisReport, Finding, Opportunity, ReportCategory };
+export type { Auth0AnalysisReport, ConsolidatedFinding, Finding, Opportunity, ReportCategory };
