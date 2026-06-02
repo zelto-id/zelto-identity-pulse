@@ -4,6 +4,7 @@
  */
 
 import { Command } from "commander";
+import { registerCompareCommand } from "./commands/compare";
 import { registerScanAuth0Command } from "./commands/scan-auth0";
 import { registerScanOktaCommand } from "./commands/scan-okta";
 import { loadDotEnv } from "../core/dotenv";
@@ -27,6 +28,7 @@ function main(): void {
 
   registerScanAuth0Command(scan);
   registerScanOktaCommand(scan);
+  registerCompareCommand(program);
 
   program.parseAsync(process.argv).catch((err) => {
     process.stderr.write(`Unhandled error: ${(err as Error)?.message ?? err}\n`);

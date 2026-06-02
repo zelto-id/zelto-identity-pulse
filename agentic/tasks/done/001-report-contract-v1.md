@@ -1,7 +1,7 @@
 # Task: Report Contract v1
 
 ## Status
-active
+done
 
 ## Priority
 P0
@@ -76,6 +76,7 @@ _No bugs recorded yet._
 - 2026-05-29: Added a shared Report Contract v1 JSON builder and JSON renderer for Auth0 and Okta, including `schemaVersion`, provider and tenant metadata, coverage, limitations, positive signals, remediation plan, and stable finding fingerprints.
 - 2026-05-29: Extended both scan commands to support `json` output and comma-separated format selection while preserving existing Markdown and HTML outputs.
 - 2026-05-29: Added contract and output-format tests, ran `npm run build` and `npm test`, and verified fixture-based Auth0 and Okta CLI output generation from saved snapshots.
+- 2026-06-02: Fixed `--format all` to include JSON output, re-ran build/tests and fixture-based CLI checks, then moved the task to `done`.
 
 ## Definition of Done
 This task is done only when:

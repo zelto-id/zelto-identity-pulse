@@ -1,7 +1,7 @@
 # Task: Delta Compare Engine
 
 ## Status
-backlog
+done
 
 ## Priority
 P0
@@ -57,7 +57,10 @@ Compare two structured reports and emit a deterministic delta object that identi
 _No bugs recorded yet._
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-06-02: Added provider-agnostic delta report types and comparison logic for Report Contract v1 JSON, including score, category, finding, and coverage deltas.
+- 2026-06-02: Added `zelto-pulse compare --before <file> --after <file> [--output <file>]` for deterministic structured delta JSON output.
+- 2026-06-02: Added regression tests for new, resolved, unchanged, worsened, and improved finding states, plus category movement, coverage movement, identical Okta reports, and cross-provider rejection.
+- 2026-06-02: Ran required build and test checks, then manually verified Auth0 and Okta fixture report comparisons and byte-for-byte deterministic repeated output.
 
 ## Definition of Done
 This task is done only when:

@@ -26,7 +26,7 @@ export function parseReportFormats(raw: string | undefined): ReportFormat[] {
     if (!normalized) continue;
 
     if (normalized === "all") {
-      for (const format of ["markdown", "html"] as ReportFormat[]) {
+      for (const format of VALID_FORMATS) {
         if (!seen.has(format)) {
           seen.add(format);
           formats.push(format);
