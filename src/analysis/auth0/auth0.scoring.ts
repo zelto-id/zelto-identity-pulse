@@ -63,14 +63,19 @@ export function computeCategoryConfidence(
     };
   }
 
+  const presentCollectors = new Set(relevant.map((collector) => collector.collector));
+  const missing = keyCollectors.filter((collector) => !presentCollectors.has(collector));
   const failed = relevant.filter((c) => c.status === "failed" || c.status === "skipped");
   const partial = relevant.filter((c) => c.status === "partial");
 
   // Any key collector failed/skipped → category is Not Assessed. A category
   // with one missing key collector cannot be honestly distinguished from
   // "fully clean" in those areas, so we do not award a partial score.
-  if (failed.length > 0) {
-    const labels = failed.map((f) => `${f.collector} (${f.status})`).join(", ");
+  if (missing.length > 0 || failed.length > 0) {
+    const labels = [
+      ...missing.map((collector) => `${collector} (missing)`),
+      ...failed.map((f) => `${f.collector} (${f.status})`)
+    ].join(", ");
     return {
       confidence: "low",
       reason: `Not assessed because key collector(s) ${labels}.`,

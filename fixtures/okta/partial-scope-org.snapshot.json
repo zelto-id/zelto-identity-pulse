@@ -1,0 +1,126 @@
+{
+  "metadata": {
+    "provider": "okta",
+    "product": "workforce",
+    "orgUrl": "https://partial.okta.com",
+    "collectedAt": "2026-05-18T10:00:00.000Z",
+    "connectorVersion": "0.1.0",
+    "authMode": "oauth",
+    "partial": true,
+    "missingScopes": ["okta.roles.read", "okta.logStreams.read", "okta.logs.read"],
+    "failedCollectors": [
+      { "collector": "admin_roles", "status": "skipped", "reason": "HTTP 403: missing scope", "missingScopes": ["okta.roles.read"] },
+      { "collector": "log_streams", "status": "skipped", "reason": "HTTP 403: missing scope", "missingScopes": ["okta.logStreams.read"] },
+      { "collector": "system_log", "status": "skipped", "reason": "HTTP 403: missing scope", "missingScopes": ["okta.logs.read"] }
+    ],
+    "collectionOptions": {
+      "includeUsers": "bounded",
+      "maxUsers": 500,
+      "includeSystemLog": true,
+      "systemLogDays": 7,
+      "maxLogs": 1000
+    }
+  },
+  "org": {
+    "id": "00opartial",
+    "subdomain": "partial",
+    "companyName": "Partial Corp",
+    "website": "https://partial.example"
+  },
+  "features": [
+    { "id": "feat1", "name": "API_ACCESS_MANAGEMENT", "status": "ENABLED" }
+  ],
+  "users": [
+    {
+      "id": "00u1",
+      "status": "ACTIVE",
+      "profile": { "login": "admin@partial.example", "email": "admin@partial.example" }
+    }
+  ],
+  "groups": [
+    {
+      "id": "00g1",
+      "type": "OKTA_GROUP",
+      "profile": { "name": "Employees", "description": "All employees" }
+    }
+  ],
+  "groupRules": [],
+  "apps": [
+    {
+      "id": "0oa1",
+      "name": "oidc_client",
+      "label": "Partial App",
+      "status": "ACTIVE",
+      "signOnMode": "OPENID_CONNECT",
+      "settings": {
+        "oauthClient": {
+          "application_type": "web",
+          "grant_types": ["authorization_code"],
+          "response_types": ["code"],
+          "redirect_uris": ["https://partial.example/callback"]
+        }
+      }
+    }
+  ],
+  "policies": {
+    "all": [
+      {
+        "id": "pol1",
+        "name": "Global Session",
+        "type": "OKTA_SIGN_ON",
+        "status": "ACTIVE",
+        "rules": [{ "id": "rule1", "name": "Default", "status": "ACTIVE" }]
+      }
+    ],
+    "globalSessionPolicies": [
+      {
+        "id": "pol1",
+        "name": "Global Session",
+        "type": "OKTA_SIGN_ON",
+        "status": "ACTIVE",
+        "rules": [{ "id": "rule1", "name": "Default", "status": "ACTIVE" }]
+      }
+    ],
+    "passwordPolicies": [],
+    "authenticatorEnrollmentPolicies": [],
+    "appSignInPolicies": [],
+    "unknownTypePolicies": []
+  },
+  "authenticators": [
+    { "id": "aut1", "key": "okta_verify", "name": "Okta Verify", "status": "ACTIVE" }
+  ],
+  "authorizationServers": [],
+  "authorizationServerScopes": [],
+  "authorizationServerClaims": [],
+  "authorizationServerPolicies": [],
+  "networkZones": [
+    { "id": "zn1", "name": "HQ", "status": "ACTIVE", "type": "IP" }
+  ],
+  "trustedOrigins": [
+    { "id": "to1", "name": "Portal", "origin": "https://partial.example", "status": "ACTIVE" }
+  ],
+  "idps": [],
+  "eventHooks": [],
+  "inlineHooks": [],
+  "domains": [],
+  "coverage": [
+    { "collector": "org", "status": "success", "count": 1, "requiredScopes": ["okta.orgs.read"] },
+    { "collector": "features", "status": "success", "count": 1, "requiredScopes": ["okta.features.read"] },
+    { "collector": "users", "status": "success", "count": 1, "requiredScopes": ["okta.users.read"] },
+    { "collector": "groups", "status": "success", "count": 1, "requiredScopes": ["okta.groups.read"] },
+    { "collector": "group_rules", "status": "success", "count": 0, "requiredScopes": ["okta.groups.read"] },
+    { "collector": "apps", "status": "success", "count": 1, "requiredScopes": ["okta.apps.read"] },
+    { "collector": "policies", "status": "success", "count": 1, "requiredScopes": ["okta.policies.read"] },
+    { "collector": "authenticators", "status": "success", "count": 1, "requiredScopes": ["okta.authenticators.read"] },
+    { "collector": "authorization_servers", "status": "success", "count": 0, "requiredScopes": ["okta.authorizationServers.read"] },
+    { "collector": "admin_roles", "status": "skipped", "requiredScopes": ["okta.roles.read"], "missingScopes": ["okta.roles.read"] },
+    { "collector": "network_zones", "status": "success", "count": 1, "requiredScopes": ["okta.networkZones.read"] },
+    { "collector": "trusted_origins", "status": "success", "count": 1, "requiredScopes": ["okta.trustedOrigins.read"] },
+    { "collector": "idps", "status": "success", "count": 0, "requiredScopes": ["okta.idps.read"] },
+    { "collector": "event_hooks", "status": "success", "count": 0, "requiredScopes": ["okta.eventHooks.read"] },
+    { "collector": "inline_hooks", "status": "success", "count": 0, "requiredScopes": ["okta.inlineHooks.read"] },
+    { "collector": "log_streams", "status": "skipped", "requiredScopes": ["okta.logStreams.read"], "missingScopes": ["okta.logStreams.read"] },
+    { "collector": "domains", "status": "success", "count": 0, "requiredScopes": ["okta.domains.read"] },
+    { "collector": "system_log", "status": "skipped", "requiredScopes": ["okta.logs.read"], "missingScopes": ["okta.logs.read"] }
+  ]
+}

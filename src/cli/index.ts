@@ -5,6 +5,7 @@
 
 import { Command } from "commander";
 import { registerScanAuth0Command } from "./commands/scan-auth0";
+import { registerScanOktaCommand } from "./commands/scan-okta";
 import { loadDotEnv } from "../core/dotenv";
 
 function main(): void {
@@ -16,7 +17,7 @@ function main(): void {
   program
     .name("zelto-pulse")
     .description(
-      "Local-first identity-security posture analyzer (Auth0 MVP). Read-only."
+      "Local-first identity-security posture analyzer for Auth0 and Okta Workforce. Read-only."
     )
     .version("0.1.0");
 
@@ -25,6 +26,7 @@ function main(): void {
     .description("Run a posture scan against an identity provider.");
 
   registerScanAuth0Command(scan);
+  registerScanOktaCommand(scan);
 
   program.parseAsync(process.argv).catch((err) => {
     process.stderr.write(`Unhandled error: ${(err as Error)?.message ?? err}\n`);

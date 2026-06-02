@@ -20,6 +20,16 @@ import {
 } from "../../core/filesystem";
 import { Auth0TenantSnapshot } from "../../connectors/auth0/auth0.types";
 import { Environment, Severity } from "../../reporting/markdown/report.types";
+import {
+  buildAuth0ReportContractV1,
+  renderReportContractV1Json
+} from "../../reporting/json/report-contract";
+import {
+  parseReportFormats,
+  reportFormatLabel,
+  resolveReportOutputPath,
+  ReportFormat
+} from "../../reporting/report-output";
 
 const VALID_ENVIRONMENTS: Environment[] = [
   "production",
@@ -28,9 +38,6 @@ const VALID_ENVIRONMENTS: Environment[] = [
   "sandbox",
   "unknown"
 ];
-
-type ReportFormat = "markdown" | "html" | "all";
-const VALID_FORMATS: ReportFormat[] = ["markdown", "html", "all"];
 
 interface ScanAuth0Options {
   domain?: string;
@@ -53,7 +60,7 @@ export function registerScanAuth0Command(program: Command): void {
     .description("Scan an Auth0 tenant and generate a posture report.")
     .option("--domain <domain>", "Auth0 tenant domain (or AUTH0_DOMAIN env var)")
     .option("--token <token>", "Auth0 Management API token (or AUTH0_MGMT_API_TOKEN env var). Prefer the env var to avoid leaking via shell history.")
-    .option("--output <path>", "Markdown report output path")
+    .option("--output <path>", "Report output path")
     .option("--snapshot-output <path>", "Snapshot output path (implies --save-snapshot)")
     .option("--save-snapshot", "Save the redacted snapshot JSON", false)
     .option("--include-raw [bool]", "(MVP no-op) Include raw API responses; ignored — never enabled in MVP", "false")
@@ -77,7 +84,7 @@ export function registerScanAuth0Command(program: Command): void {
     )
     .option(
       "--format <format>",
-      `Output format: markdown | html | all. Default: markdown.`,
+      "Output format: markdown | html | json | all, or a comma-separated combination. Default: markdown.",
       "markdown"
     )
     .action(async (options: ScanAuth0Options) => {
@@ -149,45 +156,61 @@ async function runScanAuth0(options: ScanAuth0Options): Promise<void> {
   const report = analyzeAuth0Snapshot(snapshot, { environment });
 
   // 4. Resolve format.
-  const rawFormat = (options.format ?? "markdown").toLowerCase();
-  if (!(VALID_FORMATS as string[]).includes(rawFormat)) {
-    throw new ConfigError(
-      `Invalid --format value '${options.format}'. Expected one of: ${VALID_FORMATS.join(", ")}.`
-    );
+  let formats: ReportFormat[];
+  try {
+    formats = parseReportFormats(options.format);
+  } catch (err) {
+    throw new ConfigError((err as Error).message);
   }
-  const format = rawFormat as ReportFormat;
-  const wantMarkdown = format === "markdown" || format === "all";
-  const wantHtml     = format === "html"     || format === "all";
+  const wantMarkdown = formats.includes("markdown");
+  const wantHtml = formats.includes("html");
+  const wantJson = formats.includes("json");
+  const multipleOutputs = formats.length > 1;
 
   // 4a. Render & write markdown.
   const writtenPaths: string[] = [];
   if (wantMarkdown) {
     const md = renderAuth0Report(report);
-    const mdPath =
-      options.output ??
-      path.join("reports", `auth0-report-${stamp}.md`);
+    const mdPath = resolveReportOutputPath({
+      requestedOutput: options.output,
+      format: "markdown",
+      multiple: multipleOutputs,
+      defaultPath: path.join("reports", `auth0-report-${stamp}.md`)
+    });
     ensureDirSync(path.dirname(mdPath));
     writeFileSync(mdPath, md);
-    logger.info(`Markdown report written to ${mdPath}`);
+    logger.info(`${reportFormatLabel("markdown")} report written to ${mdPath}`);
     writtenPaths.push(mdPath);
   }
 
   // 4b. Render & write HTML.
   if (wantHtml) {
     const html = renderAuth0ReportHtml(report);
-    // When --output is provided and only HTML is requested, honour it directly.
-    // Otherwise derive the path from the timestamp.
-    const htmlPath =
-      format === "html" && options.output
-        ? options.output.replace(/\.md$/, ".html")
-        : path.join("reports", `auth0-report-${stamp}.html`);
+    const htmlPath = resolveReportOutputPath({
+      requestedOutput: options.output,
+      format: "html",
+      multiple: multipleOutputs,
+      defaultPath: path.join("reports", `auth0-report-${stamp}.html`)
+    });
     ensureDirSync(path.dirname(htmlPath));
     writeFileSync(htmlPath, html);
-    logger.info(`HTML report written to ${htmlPath}`);
+    logger.info(`${reportFormatLabel("html")} report written to ${htmlPath}`);
     writtenPaths.push(htmlPath);
   }
 
-  const outPath = writtenPaths[0] ?? "(no output)";
+  if (wantJson) {
+    const structuredReport = buildAuth0ReportContractV1(report, snapshot);
+    const jsonPath = resolveReportOutputPath({
+      requestedOutput: options.output,
+      format: "json",
+      multiple: multipleOutputs,
+      defaultPath: path.join("reports", `auth0-report-${stamp}.json`)
+    });
+    ensureDirSync(path.dirname(jsonPath));
+    writeFileSync(jsonPath, renderReportContractV1Json(structuredReport));
+    logger.info(`${reportFormatLabel("json")} report written to ${jsonPath}`);
+    writtenPaths.push(jsonPath);
+  }
 
   // 5. Console summary.
   process.stdout.write(

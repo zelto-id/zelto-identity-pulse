@@ -220,6 +220,6 @@ export async function runAuth0Connector(
 
 function pickArray<T>(r: CollectorResult<unknown> | undefined): T[] | undefined {
   if (!r) return undefined;
-  if (r.status !== "success") return undefined;
+  if (r.status !== "success" && r.status !== "partial") return undefined;
   return Array.isArray(r.data) ? (r.data as T[]) : undefined;
 }

@@ -1,0 +1,136 @@
+{
+  "metadata": {
+    "provider": "okta",
+    "product": "workforce",
+    "orgUrl": "https://risky.okta.com",
+    "collectedAt": "2026-05-18T10:00:00.000Z",
+    "connectorVersion": "0.1.0",
+    "authMode": "ssws",
+    "partial": false,
+    "missingScopes": [],
+    "failedCollectors": [],
+    "collectionOptions": {
+      "includeUsers": "bounded",
+      "maxUsers": 500,
+      "includeSystemLog": true,
+      "systemLogDays": 7,
+      "maxLogs": 1000
+    }
+  },
+  "org": {
+    "id": "00orisky",
+    "subdomain": "risky",
+    "companyName": "Risky Corp"
+  },
+  "features": [
+    { "id": "feat1", "name": "API_ACCESS_MANAGEMENT", "status": "ENABLED" }
+  ],
+  "users": [
+    {
+      "id": "00u1",
+      "status": "ACTIVE",
+      "profile": { "login": "admin@risky.example", "email": "admin@risky.example" }
+    }
+  ],
+  "groups": [
+    {
+      "id": "00g1",
+      "type": "OKTA_GROUP",
+      "profile": { "name": "Employees", "description": "All employees" }
+    }
+  ],
+  "groupRules": [],
+  "apps": [
+    {
+      "id": "0oa1",
+      "name": "oidc_client",
+      "label": "Legacy Workforce App",
+      "status": "ACTIVE",
+      "signOnMode": "OPENID_CONNECT",
+      "settings": {
+        "oauthClient": {
+          "application_type": "web",
+          "grant_types": ["authorization_code", "implicit", "refresh_token"],
+          "response_types": ["code", "token"],
+          "redirect_uris": ["http://legacy.risky.example/callback"],
+          "post_logout_redirect_uris": ["http://legacy.risky.example/logout"]
+        }
+      }
+    }
+  ],
+  "policies": {
+    "all": [],
+    "globalSessionPolicies": [],
+    "passwordPolicies": [],
+    "authenticatorEnrollmentPolicies": [],
+    "appSignInPolicies": [],
+    "unknownTypePolicies": []
+  },
+  "authenticators": [
+    { "id": "aut1", "key": "sms", "name": "SMS", "status": "ACTIVE" }
+  ],
+  "authorizationServers": [
+    { "id": "aus1", "name": "default", "status": "ACTIVE", "issuer": "https://risky.okta.com/oauth2/default" }
+  ],
+  "authorizationServerScopes": [],
+  "authorizationServerClaims": [],
+  "authorizationServerPolicies": [],
+  "adminRoles": [
+    { "principalId": "00u1", "principalType": "USER", "roleType": "SUPER_ADMIN" }
+  ],
+  "networkZones": [],
+  "trustedOrigins": [
+    { "id": "to1", "name": "Legacy Portal", "origin": "http://legacy.risky.example", "status": "ACTIVE" }
+  ],
+  "idps": [],
+  "eventHooks": [
+    {
+      "id": "eh1",
+      "name": "Legacy Event Hook",
+      "status": "ACTIVE",
+      "channel": { "type": "HTTP", "uri": "http://hooks.risky.example/event" }
+    }
+  ],
+  "inlineHooks": [
+    {
+      "id": "ih1",
+      "name": "Legacy Inline Hook",
+      "status": "ACTIVE",
+      "channel": { "type": "HTTP", "uri": "http://hooks.risky.example/inline" }
+    }
+  ],
+  "logStreams": [],
+  "domains": [],
+  "systemLog": {
+    "queryWindow": {
+      "since": "2026-05-11T00:00:00.000Z",
+      "until": "2026-05-18T00:00:00.000Z",
+      "maxEvents": 1000
+    },
+    "totalCollected": 4,
+    "eventTypeCounts": { "system.api_token.request": 2 },
+    "outcomeCounts": { "SUCCESS": 4 },
+    "actorTypeCounts": { "User": 4 },
+    "notableEvents": []
+  },
+  "coverage": [
+    { "collector": "org", "status": "success", "count": 1, "requiredScopes": ["okta.orgs.read"] },
+    { "collector": "features", "status": "success", "count": 1, "requiredScopes": ["okta.features.read"] },
+    { "collector": "users", "status": "success", "count": 1, "requiredScopes": ["okta.users.read"] },
+    { "collector": "groups", "status": "success", "count": 1, "requiredScopes": ["okta.groups.read"] },
+    { "collector": "group_rules", "status": "success", "count": 0, "requiredScopes": ["okta.groups.read"] },
+    { "collector": "apps", "status": "success", "count": 1, "requiredScopes": ["okta.apps.read"] },
+    { "collector": "policies", "status": "success", "count": 0, "requiredScopes": ["okta.policies.read"] },
+    { "collector": "authenticators", "status": "success", "count": 1, "requiredScopes": ["okta.authenticators.read"] },
+    { "collector": "authorization_servers", "status": "success", "count": 1, "requiredScopes": ["okta.authorizationServers.read"] },
+    { "collector": "admin_roles", "status": "success", "count": 1, "requiredScopes": ["okta.roles.read"] },
+    { "collector": "network_zones", "status": "success", "count": 0, "requiredScopes": ["okta.networkZones.read"] },
+    { "collector": "trusted_origins", "status": "success", "count": 1, "requiredScopes": ["okta.trustedOrigins.read"] },
+    { "collector": "idps", "status": "success", "count": 0, "requiredScopes": ["okta.idps.read"] },
+    { "collector": "event_hooks", "status": "success", "count": 1, "requiredScopes": ["okta.eventHooks.read"] },
+    { "collector": "inline_hooks", "status": "success", "count": 1, "requiredScopes": ["okta.inlineHooks.read"] },
+    { "collector": "log_streams", "status": "success", "count": 0, "requiredScopes": ["okta.logStreams.read"] },
+    { "collector": "domains", "status": "success", "count": 0, "requiredScopes": ["okta.domains.read"] },
+    { "collector": "system_log", "status": "success", "count": 4, "requiredScopes": ["okta.logs.read"] }
+  ]
+}

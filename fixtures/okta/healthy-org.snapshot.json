@@ -1,0 +1,199 @@
+{
+  "metadata": {
+    "provider": "okta",
+    "product": "workforce",
+    "orgUrl": "https://healthy.okta.com",
+    "collectedAt": "2026-05-18T10:00:00.000Z",
+    "connectorVersion": "0.1.0",
+    "authMode": "oauth",
+    "partial": false,
+    "missingScopes": [],
+    "failedCollectors": [],
+    "collectionOptions": {
+      "includeUsers": "bounded",
+      "maxUsers": 500,
+      "includeSystemLog": true,
+      "systemLogDays": 7,
+      "maxLogs": 1000
+    }
+  },
+  "org": {
+    "id": "00ohealthy",
+    "subdomain": "healthy",
+    "companyName": "Healthy Corp",
+    "website": "https://healthy.example"
+  },
+  "features": [
+    { "id": "feat1", "name": "API_ACCESS_MANAGEMENT", "status": "ENABLED" }
+  ],
+  "users": [
+    {
+      "id": "00u1",
+      "status": "ACTIVE",
+      "created": "2026-05-01T00:00:00.000Z",
+      "lastLogin": "2026-05-17T10:00:00.000Z",
+      "profile": { "login": "admin@healthy.example", "email": "admin@healthy.example" }
+    }
+  ],
+  "groups": [
+    {
+      "id": "00g1",
+      "type": "OKTA_GROUP",
+      "profile": { "name": "Employees", "description": "All employees" }
+    }
+  ],
+  "groupRules": [],
+  "apps": [
+    {
+      "id": "0oa1",
+      "name": "oidc_client",
+      "label": "Healthy App",
+      "status": "ACTIVE",
+      "signOnMode": "OPENID_CONNECT",
+      "settings": {
+        "oauthClient": {
+          "application_type": "web",
+          "grant_types": ["authorization_code", "refresh_token"],
+          "response_types": ["code"],
+          "redirect_uris": ["https://app.healthy.example/callback"],
+          "post_logout_redirect_uris": ["https://app.healthy.example/logout"],
+          "refresh_token": {
+            "rotation_type": "ROTATE",
+            "expiration_type": "EXPIRING"
+          }
+        }
+      }
+    }
+  ],
+  "policies": {
+    "all": [
+      {
+        "id": "pol1",
+        "name": "Global Session",
+        "type": "OKTA_SIGN_ON",
+        "status": "ACTIVE",
+        "rules": [{ "id": "rule1", "name": "Default", "status": "ACTIVE" }]
+      },
+      {
+        "id": "pol2",
+        "name": "App Sign-In",
+        "type": "ACCESS_POLICY",
+        "status": "ACTIVE",
+        "rules": [{ "id": "rule2", "name": "Default", "status": "ACTIVE" }]
+      }
+    ],
+    "globalSessionPolicies": [
+      {
+        "id": "pol1",
+        "name": "Global Session",
+        "type": "OKTA_SIGN_ON",
+        "status": "ACTIVE",
+        "rules": [{ "id": "rule1", "name": "Default", "status": "ACTIVE" }]
+      }
+    ],
+    "passwordPolicies": [],
+    "authenticatorEnrollmentPolicies": [],
+    "appSignInPolicies": [
+      {
+        "id": "pol2",
+        "name": "App Sign-In",
+        "type": "ACCESS_POLICY",
+        "status": "ACTIVE",
+        "rules": [{ "id": "rule2", "name": "Default", "status": "ACTIVE" }]
+      }
+    ],
+    "unknownTypePolicies": []
+  },
+  "authenticators": [
+    { "id": "aut1", "key": "okta_verify", "name": "Okta Verify", "status": "ACTIVE" }
+  ],
+  "authorizationServers": [
+    { "id": "aus1", "name": "default", "status": "ACTIVE", "issuer": "https://healthy.okta.com/oauth2/default" }
+  ],
+  "authorizationServerScopes": [
+    { "authorizationServerId": "aus1", "id": "scp1", "name": "api.read" }
+  ],
+  "authorizationServerClaims": [],
+  "authorizationServerPolicies": [
+    {
+      "authorizationServerId": "aus1",
+      "id": "asp1",
+      "name": "Default Policy",
+      "status": "ACTIVE",
+      "rules": [{ "id": "asr1", "name": "Rule", "status": "ACTIVE" }]
+    }
+  ],
+  "adminRoles": [
+    {
+      "principalId": "00g1",
+      "principalType": "GROUP",
+      "roleType": "APP_ADMIN"
+    }
+  ],
+  "networkZones": [
+    { "id": "zn1", "name": "HQ", "status": "ACTIVE", "type": "IP" }
+  ],
+  "trustedOrigins": [
+    {
+      "id": "to1",
+      "name": "Portal",
+      "origin": "https://portal.healthy.example",
+      "status": "ACTIVE"
+    }
+  ],
+  "idps": [],
+  "eventHooks": [
+    {
+      "id": "eh1",
+      "name": "Audit Hook",
+      "status": "ACTIVE",
+      "channel": { "type": "HTTP", "uri": "https://hooks.healthy.example/event" }
+    }
+  ],
+  "inlineHooks": [
+    {
+      "id": "ih1",
+      "name": "Claims Hook",
+      "status": "ACTIVE",
+      "channel": { "type": "HTTP", "uri": "https://hooks.healthy.example/inline" }
+    }
+  ],
+  "logStreams": [
+    { "id": "ls1", "name": "SIEM", "type": "splunk_cloud_logstreaming", "status": "ACTIVE" }
+  ],
+  "domains": [
+    { "id": "dom1", "domain": "login.healthy.example", "validationStatus": "VERIFIED" }
+  ],
+  "systemLog": {
+    "queryWindow": {
+      "since": "2026-05-11T00:00:00.000Z",
+      "until": "2026-05-18T00:00:00.000Z",
+      "maxEvents": 1000
+    },
+    "totalCollected": 12,
+    "eventTypeCounts": { "user.session.start": 8 },
+    "outcomeCounts": { "SUCCESS": 12 },
+    "actorTypeCounts": { "User": 12 },
+    "notableEvents": []
+  },
+  "coverage": [
+    { "collector": "org", "status": "success", "count": 1, "requiredScopes": ["okta.orgs.read"] },
+    { "collector": "features", "status": "success", "count": 1, "requiredScopes": ["okta.features.read"] },
+    { "collector": "users", "status": "success", "count": 1, "requiredScopes": ["okta.users.read"] },
+    { "collector": "groups", "status": "success", "count": 1, "requiredScopes": ["okta.groups.read"] },
+    { "collector": "group_rules", "status": "success", "count": 0, "requiredScopes": ["okta.groups.read"] },
+    { "collector": "apps", "status": "success", "count": 1, "requiredScopes": ["okta.apps.read"] },
+    { "collector": "policies", "status": "success", "count": 2, "requiredScopes": ["okta.policies.read"] },
+    { "collector": "authenticators", "status": "success", "count": 1, "requiredScopes": ["okta.authenticators.read"] },
+    { "collector": "authorization_servers", "status": "success", "count": 1, "requiredScopes": ["okta.authorizationServers.read"] },
+    { "collector": "admin_roles", "status": "success", "count": 1, "requiredScopes": ["okta.roles.read"] },
+    { "collector": "network_zones", "status": "success", "count": 1, "requiredScopes": ["okta.networkZones.read"] },
+    { "collector": "trusted_origins", "status": "success", "count": 1, "requiredScopes": ["okta.trustedOrigins.read"] },
+    { "collector": "idps", "status": "success", "count": 0, "requiredScopes": ["okta.idps.read"] },
+    { "collector": "event_hooks", "status": "success", "count": 1, "requiredScopes": ["okta.eventHooks.read"] },
+    { "collector": "inline_hooks", "status": "success", "count": 1, "requiredScopes": ["okta.inlineHooks.read"] },
+    { "collector": "log_streams", "status": "success", "count": 1, "requiredScopes": ["okta.logStreams.read"] },
+    { "collector": "domains", "status": "success", "count": 1, "requiredScopes": ["okta.domains.read"] },
+    { "collector": "system_log", "status": "success", "count": 12, "requiredScopes": ["okta.logs.read"] }
+  ]
+}

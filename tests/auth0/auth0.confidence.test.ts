@@ -13,6 +13,16 @@ describe("category confidence", () => {
     expect(c.confidence).toBe("high");
   });
 
+  it("is low when one required key collector is missing from coverage", () => {
+    const c = computeCategoryConfidence("brandingAndLoginExperience", [
+      { collector: "branding", status: "success", count: 1 },
+      { collector: "prompts", status: "success", count: 1 }
+    ] as any);
+    expect(c.confidence).toBe("low");
+    expect(c.assessed).toBe(false);
+    expect(c.reason).toMatch(/custom_domains|missing/i);
+  });
+
   it("is low when a key collector failed", () => {
     const c = computeCategoryConfidence("actionsAndExtensibility", [
       { collector: "actions", status: "failed", count: 0, notes: "403" },
