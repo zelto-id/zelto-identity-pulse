@@ -5,6 +5,8 @@
 
 import { Command } from "commander";
 import { registerCompareCommand } from "./commands/compare";
+import { registerRulesCommand } from "./commands/rules";
+import { registerConfiguredScanAction } from "./commands/scan-configured";
 import { registerScanAuth0Command } from "./commands/scan-auth0";
 import { registerScanOktaCommand } from "./commands/scan-okta";
 import { loadDotEnv } from "../core/dotenv";
@@ -26,9 +28,11 @@ function main(): void {
     .command("scan")
     .description("Run a posture scan against an identity provider.");
 
+  registerConfiguredScanAction(scan);
   registerScanAuth0Command(scan);
   registerScanOktaCommand(scan);
   registerCompareCommand(program);
+  registerRulesCommand(program);
 
   program.parseAsync(process.argv).catch((err) => {
     process.stderr.write(`Unhandled error: ${(err as Error)?.message ?? err}\n`);

@@ -15,7 +15,7 @@ Add pipeline-friendly enforcement behavior based on deterministic report outputs
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P4 — Advanced Workflows`
-- `027 — CI/CD Enforcement Mode`
+- `035 — CI/CD Enforcement Mode`
 
 ## Relevant Agents
 - Orchestrator

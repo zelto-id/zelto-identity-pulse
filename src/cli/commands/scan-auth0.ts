@@ -30,6 +30,11 @@ import {
   resolveReportOutputPath,
   ReportFormat
 } from "../../reporting/report-output";
+import {
+  LoadedReportConfig,
+  loadReportConfig,
+  mergeAuth0ScanOptions
+} from "../../config/report-config";
 
 const VALID_ENVIRONMENTS: Environment[] = [
   "production",
@@ -39,7 +44,8 @@ const VALID_ENVIRONMENTS: Environment[] = [
   "unknown"
 ];
 
-interface ScanAuth0Options {
+export interface ScanAuth0Options {
+  config?: string;
   domain?: string;
   token?: string;
   output?: string;
@@ -58,6 +64,7 @@ export function registerScanAuth0Command(program: Command): void {
   program
     .command("auth0")
     .description("Scan an Auth0 tenant and generate a posture report.")
+    .option("--config <path>", "Path to zelto-pulse.yml config file")
     .option("--domain <domain>", "Auth0 tenant domain (or AUTH0_DOMAIN env var)")
     .option("--token <token>", "Auth0 Management API token (or AUTH0_MGMT_API_TOKEN env var). Prefer the env var to avoid leaking via shell history.")
     .option("--output <path>", "Report output path")
@@ -87,9 +94,9 @@ export function registerScanAuth0Command(program: Command): void {
       "Output format: markdown | html | json | all, or a comma-separated combination. Default: markdown.",
       "markdown"
     )
-    .action(async (options: ScanAuth0Options) => {
+    .action(async (options: ScanAuth0Options, command: Command) => {
       try {
-        await runScanAuth0(options);
+        await runScanAuth0(options, command);
       } catch (err) {
         const logger = createLogger({ verbose: options.verbose });
         if (err instanceof ConfigError) {
@@ -106,7 +113,23 @@ export function registerScanAuth0Command(program: Command): void {
     });
 }
 
-async function runScanAuth0(options: ScanAuth0Options): Promise<void> {
+export async function runScanAuth0(
+  rawOptions: ScanAuth0Options,
+  command?: Command,
+  loadedConfig?: LoadedReportConfig
+): Promise<void> {
+  const parentOptions = command?.parent?.opts<{ config?: string; verbose?: boolean }>();
+  const configPath = rawOptions.config ?? parentOptions?.config;
+  const loaded = loadedConfig ?? loadReportConfig({ configPath });
+  const options = mergeAuth0ScanOptions(
+    {
+      ...rawOptions,
+      config: configPath,
+      verbose: rawOptions.verbose || parentOptions?.verbose
+    },
+    command,
+    loaded
+  ) as ScanAuth0Options;
   const logger = createLogger({ verbose: Boolean(options.verbose) });
 
   const domain = options.domain ?? process.env.AUTH0_DOMAIN;
@@ -153,7 +176,10 @@ async function runScanAuth0(options: ScanAuth0Options): Promise<void> {
 
   // 3. Analyze (with environment classification).
   const environment = await resolveEnvironment(options);
-  const report = analyzeAuth0Snapshot(snapshot, { environment });
+  const report = analyzeAuth0Snapshot(snapshot, {
+    environment,
+    businessContext: loaded.config.businessContext
+  });
 
   // 4. Resolve format.
   let formats: ReportFormat[];

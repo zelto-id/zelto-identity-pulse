@@ -31,6 +31,11 @@ import {
   resolveReportOutputPath,
   ReportFormat
 } from "../../reporting/report-output";
+import {
+  LoadedReportConfig,
+  loadReportConfig,
+  mergeOktaScanOptions
+} from "../../config/report-config";
 
 const VALID_ENVIRONMENTS: Environment[] = [
   "production",
@@ -43,7 +48,8 @@ const VALID_ENVIRONMENTS: Environment[] = [
 const VALID_AUTH_MODES: OktaAuthMode[] = ["oauth", "ssws"];
 const VALID_USER_COLLECTION_MODES: OktaUserCollectionMode[] = ["none", "bounded", "full"];
 
-interface ScanOktaOptions {
+export interface ScanOktaOptions {
+  config?: string;
   orgUrl?: string;
   authMode?: string;
   accessToken?: string;
@@ -69,6 +75,7 @@ export function registerScanOktaCommand(program: Command): void {
   program
     .command("okta")
     .description("Scan an Okta Workforce org and generate a posture report.")
+    .option("--config <path>", "Path to zelto-pulse.yml config file")
     .option("--org-url <url>", "Okta org URL (or OKTA_ORG_URL env var)")
     .option("--auth-mode <mode>", "Authentication mode: oauth | ssws")
     .option("--access-token <token>", "Okta OAuth access token (or OKTA_ACCESS_TOKEN env var). Prefer the env var.")
@@ -113,9 +120,9 @@ export function registerScanOktaCommand(program: Command): void {
       "Include full user or principal identifiers in generated reports instead of masking them by default.",
       false
     )
-    .action(async (options: ScanOktaOptions) => {
+    .action(async (options: ScanOktaOptions, command: Command) => {
       try {
-        await runScanOkta(options);
+        await runScanOkta(options, command);
       } catch (err) {
         const logger = createLogger({ verbose: options.verbose });
         if (err instanceof ConfigError) {
@@ -132,7 +139,23 @@ export function registerScanOktaCommand(program: Command): void {
     });
 }
 
-async function runScanOkta(options: ScanOktaOptions): Promise<void> {
+export async function runScanOkta(
+  rawOptions: ScanOktaOptions,
+  command?: Command,
+  loadedConfig?: LoadedReportConfig
+): Promise<void> {
+  const parentOptions = command?.parent?.opts<{ config?: string; verbose?: boolean }>();
+  const configPath = rawOptions.config ?? parentOptions?.config;
+  const loaded = loadedConfig ?? loadReportConfig({ configPath });
+  const options = mergeOktaScanOptions(
+    {
+      ...rawOptions,
+      config: configPath,
+      verbose: rawOptions.verbose || parentOptions?.verbose
+    },
+    command,
+    loaded
+  ) as ScanOktaOptions;
   const logger = createLogger({ verbose: Boolean(options.verbose) });
 
   let snapshot: OktaOrgSnapshot;
@@ -180,7 +203,8 @@ async function runScanOkta(options: ScanOktaOptions): Promise<void> {
   const environment = await resolveEnvironment(options.environment);
   const report = analyzeOktaSnapshot(snapshot, {
     environment,
-    includeIdentifiers: Boolean(options.includeIdentifiers)
+    includeIdentifiers: Boolean(options.includeIdentifiers),
+    businessContext: loaded.config.businessContext
   });
 
   let formats: ReportFormat[];

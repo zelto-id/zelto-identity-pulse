@@ -439,6 +439,15 @@ function renderConsolidatedFinding(lines: string[], cf: ConsolidatedFinding): vo
     lines.push("");
   }
 
+  if (cf.businessContextNotes && cf.businessContextNotes.length > 0) {
+    lines.push(`**Business context notes**`);
+    lines.push("");
+    for (const n of cf.businessContextNotes) {
+      lines.push(`- ${n}`);
+    }
+    lines.push("");
+  }
+
   // Structured remediation block
   if (
     cf.auth0Area ||
@@ -561,6 +570,12 @@ function renderFinding(lines: string[], f: Finding): void {
   if (f.falsePositiveNotes && f.falsePositiveNotes.length > 0) {
     lines.push(`- **False-positive notes:**`);
     for (const n of f.falsePositiveNotes) {
+      lines.push(`  - ${n}`);
+    }
+  }
+  if (f.businessContextNotes && f.businessContextNotes.length > 0) {
+    lines.push(`- **Business context notes:**`);
+    for (const n of f.businessContextNotes) {
       lines.push(`  - ${n}`);
     }
   }

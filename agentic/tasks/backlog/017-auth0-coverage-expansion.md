@@ -15,7 +15,7 @@ Expand Auth0 posture coverage in areas with real assessment value.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P2 — Provider Scale Readiness`
-- `014 — Auth0 Coverage Expansion`
+- `017 — Auth0 Coverage Expansion`
 
 ## Relevant Agents
 - Orchestrator

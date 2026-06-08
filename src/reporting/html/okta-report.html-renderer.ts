@@ -670,6 +670,10 @@ function renderFindingCard(finding: OktaFinding): string {
         <div class="finding-section-title">False-Positive / Context Notes</div>
         <div class="finding-text">${renderStringList(finding.falsePositiveNotes ?? [])}</div>
       </div>` : ""}
+      ${(finding.businessContextNotes ?? []).length > 0 ? `<div class="finding-section">
+        <div class="finding-section-title">Business Context Notes</div>
+        <div class="finding-text">${renderStringList(finding.businessContextNotes ?? [])}</div>
+      </div>` : ""}
       ${environmentAdjustment}
     </div>
   </details>`;

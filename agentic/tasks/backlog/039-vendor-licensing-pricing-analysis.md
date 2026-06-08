@@ -15,7 +15,7 @@ Model feature availability and licensing context so findings can separate risk f
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P4 — Advanced Workflows`
-- `031 — Vendor Licensing and Pricing Analysis`
+- `039 — Vendor Licensing and Pricing Analysis`
 
 ## Relevant Agents
 - Orchestrator

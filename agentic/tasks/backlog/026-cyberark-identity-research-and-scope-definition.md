@@ -15,7 +15,7 @@ Define the initial CyberArk posture surface, safe exclusions, and connector desi
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `023 — CyberArk Research and Scope Definition`
+- `026 — CyberArk Identity Research and Scope Definition`
 
 ## Relevant Agents
 - Orchestrator

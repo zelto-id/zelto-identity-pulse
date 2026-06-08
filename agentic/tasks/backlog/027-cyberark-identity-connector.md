@@ -15,7 +15,7 @@ Implement the approved read-only CyberArk identity connector.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `023 — CyberArk Research and Scope Definition`
+- `027 — CyberArk Identity Connector`
 - This roadmap adds the explicit connector follow-on after research is complete.
 
 ## Relevant Agents

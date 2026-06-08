@@ -192,6 +192,10 @@ export function consolidateFindings(findings: Finding[]): ConsolidatedFinding[] 
     // Merge false-positive notes (deduplicated).
     const allFpNotes = instances.flatMap((i) => i.falsePositiveNotes ?? []);
     const fpNotes = [...new Set(allFpNotes)];
+    const allBusinessContextNotes = instances.flatMap(
+      (i) => i.businessContextNotes ?? []
+    );
+    const businessContextNotes = [...new Set(allBusinessContextNotes)];
 
     result.push({
       id,
@@ -211,6 +215,8 @@ export function consolidateFindings(findings: Finding[]): ConsolidatedFinding[] 
       implementationSteps: withRemediation.implementationSteps,
       validationSteps: withRemediation.validationSteps,
       falsePositiveNotes: fpNotes.length > 0 ? fpNotes : undefined,
+      businessContextNotes:
+        businessContextNotes.length > 0 ? businessContextNotes : undefined,
       confidence: instances[0].confidence
     });
   }

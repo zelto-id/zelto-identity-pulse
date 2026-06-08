@@ -15,7 +15,7 @@ Expand Okta posture coverage in high-value workforce security areas.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P2 — Provider Scale Readiness`
-- `015 — Okta Coverage Expansion`
+- `018 — Okta Coverage Expansion`
 
 ## Relevant Agents
 - Orchestrator

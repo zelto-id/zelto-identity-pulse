@@ -1,7 +1,7 @@
 # Task: Delta HTML Report
 
 ## Status
-active
+done
 
 ## Priority
 P0
@@ -57,7 +57,10 @@ Render a client-readable HTML delta report from structured delta JSON.
 _No bugs recorded yet._
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-06-02: Added a self-contained delta HTML renderer for `StructuredDeltaReportV1` with executive summary, score movement, key decisions, category deltas, grouped finding states, coverage changes, and methodology.
+- 2026-06-02: Extended `zelto-pulse compare` with `--format json|html|all` while preserving JSON as the default output.
+- 2026-06-02: Added renderer tests for representative delta content, HTML escaping, obvious secret-pattern redaction, and delta compare format parsing.
+- 2026-06-02: Ran required build and test checks, then manually verified Auth0 and Okta fixture-based delta HTML output plus `--format all` sibling JSON/HTML output.
 
 ## Definition of Done
 This task is done only when:

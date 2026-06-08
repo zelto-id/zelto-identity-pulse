@@ -1,4 +1,5 @@
 import { CollectorFailure, ResourceCoverage } from "../../core/schema";
+import { BusinessContextProfile } from "../../core/business-context";
 import { Confidence, Environment, Grade, Severity } from "../markdown/report.types";
 import { OktaFindingClassification } from "../markdown/okta-report.types";
 
@@ -50,6 +51,7 @@ export interface StructuredReportFinding {
   recommendation: string;
   validationSteps: string[];
   falsePositiveNotes: string[];
+  businessContextNotes?: string[];
   scoreImpact: number;
   productionEquivalentSeverity?: Severity;
   environmentAdjustedSeverity?: Severity;
@@ -144,4 +146,5 @@ export interface StructuredReportV1 {
   limitations: string[];
   positiveSignals: StructuredReportPositiveSignal[];
   remediationPlan: StructuredReportRemediationPlan;
+  businessContext?: BusinessContextProfile;
 }

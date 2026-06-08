@@ -15,7 +15,7 @@ Track finding lifecycle states locally without introducing provider writes or Sa
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P4 — Advanced Workflows`
-- `026 — Remediation Workflow / Findings Lifecycle`
+- `034 — Remediation Workflow / Findings Lifecycle`
 
 ## Relevant Agents
 - Orchestrator

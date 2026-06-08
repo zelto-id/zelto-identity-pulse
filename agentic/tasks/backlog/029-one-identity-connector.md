@@ -15,7 +15,7 @@ Implement the approved read-only One Identity connector.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `024 — One Identity Research and Scope Definition`
+- `029 — One Identity Connector`
 - This roadmap adds the explicit connector follow-on after research is complete.
 
 ## Relevant Agents

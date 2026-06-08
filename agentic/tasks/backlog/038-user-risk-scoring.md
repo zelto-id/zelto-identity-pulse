@@ -15,7 +15,7 @@ Add conservative user risk indicators grounded in explicit posture evidence.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P4 — Advanced Workflows`
-- `030 — User Risk Scoring`
+- `038 — User Risk Scoring`
 
 ## Relevant Agents
 - Orchestrator

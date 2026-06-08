@@ -15,7 +15,7 @@ Add optional AI-assisted report enhancements on top of stable, redacted structur
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P5 — Platform Bets`
-- `032 — AI-Generated Report Enhancements`
+- `040 — AI-Generated Report Enhancements`
 
 ## Relevant Agents
 - Orchestrator

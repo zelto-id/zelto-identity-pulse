@@ -15,7 +15,7 @@ Maintain a provider coverage matrix aligned to Terraform-style resource expectat
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P2 — Provider Scale Readiness`
-- `016 — Terraform-Aligned Coverage Matrix`
+- `019 — Terraform-Aligned Coverage Matrix`
 
 ## Relevant Agents
 - Orchestrator

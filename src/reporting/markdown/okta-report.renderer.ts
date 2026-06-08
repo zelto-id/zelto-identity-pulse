@@ -251,6 +251,12 @@ function renderFinding(lines: string[], finding: OktaFinding): void {
       lines.push(`  - ${note}`);
     }
   }
+  if ((finding.businessContextNotes ?? []).length > 0) {
+    lines.push(`- **Business context notes:**`);
+    for (const note of finding.businessContextNotes ?? []) {
+      lines.push(`  - ${note}`);
+    }
+  }
   lines.push("");
 }
 

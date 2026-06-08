@@ -1,4 +1,5 @@
 import { CollectorFailure, ResourceCoverage } from "../../core/schema";
+import { BusinessContextProfile } from "../../core/business-context";
 
 export type Severity = "critical" | "high" | "medium" | "low" | "info";
 export type Grade = "A" | "B" | "C" | "D" | "F";
@@ -60,6 +61,7 @@ export interface Finding {
   implementationSteps?: string[];
   validationSteps?: string[];
   falsePositiveNotes?: string[];
+  businessContextNotes?: string[];
   confidence?: Confidence;
 }
 
@@ -216,6 +218,7 @@ export interface Auth0AnalysisReport {
     failedCollectors: CollectorFailure[];
     coverage: ResourceCoverage[];
   };
+  businessContext?: BusinessContextProfile;
 }
 
 /**
@@ -357,5 +360,6 @@ export interface ConsolidatedFinding {
   implementationSteps?: string[];
   validationSteps?: string[];
   falsePositiveNotes?: string[];
+  businessContextNotes?: string[];
   confidence?: Confidence;
 }

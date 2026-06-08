@@ -682,6 +682,13 @@ function renderConsolidatedFinding(cf: ConsolidatedFinding): string {
           <div class="finding-text"><ul>${cf.falsePositiveNotes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></div>
         </div>`
       : "";
+  const businessContextNotes =
+    cf.businessContextNotes && cf.businessContextNotes.length > 0
+      ? `<div class="finding-section">
+          <div class="finding-section-title">Business Context Notes</div>
+          <div class="finding-text"><ul>${cf.businessContextNotes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></div>
+        </div>`
+      : "";
 
   return `<details class="finding-card ${sevClass(cf.overallSeverity)}" id="finding-${esc(cf.id)}" data-severity="${esc(cf.overallSeverity)}">
     <summary class="finding-header">
@@ -709,6 +716,7 @@ function renderConsolidatedFinding(cf: ConsolidatedFinding): string {
       </div>
       ${renderHowToInterpret(cf)}
       ${fpNotes}
+      ${businessContextNotes}
       ${renderRemediationBlock(cf)}
     </div>
   </details>`;

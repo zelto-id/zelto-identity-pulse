@@ -15,7 +15,7 @@ Implement the first read-only Ping Identity connector defined by the approved de
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `022 — Ping Identity Research and Design`
+- `025 — Ping Identity Connector`
 - This roadmap adds the explicit follow-on connector task after research completion.
 
 ## Relevant Agents

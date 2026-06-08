@@ -15,7 +15,7 @@ Strengthen shared provider contracts without flattening away provider-specific s
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P2 — Provider Scale Readiness`
-- `012 — Provider Abstraction Hardening`
+- `015 — Provider Abstraction Hardening`
 
 ## Relevant Agents
 - Orchestrator

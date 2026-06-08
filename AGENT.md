@@ -61,10 +61,11 @@ When asked to work on the project, Codex must:
 8. Inspect the existing codebase
 9. Create a short implementation plan
 10. Implement only the requested task scope
-11. Run required tests/build commands
-12. Fix task-related failures
-13. Update the task's Iteration Log if present
-14. Summarize files changed, tests run, and remaining risks
+11. Update `README.md` for every task so user-facing documentation stays current; if a task is truly internal-only, still review `README.md` and record that no README content change was needed
+12. Run required tests/build commands
+13. Fix task-related failures
+14. Update the task's Iteration Log if present
+15. Summarize files changed, tests run, documentation updates, and remaining risks
 
 ---
 
@@ -95,6 +96,7 @@ Codex must follow these rules:
 - Do not add new providers unless a task explicitly requests it.
 - Do not overbuild abstractions before they are needed.
 - Generated reports must not expose tokens, secrets, or unnecessary user identifiers.
+- `README.md` must be reviewed and kept current after every task, especially when CLI behavior, output formats, configuration, provider support, report content, security posture, or workflow changes.
 - If a discovered issue is unrelated to the active task, create a backlog task instead of expanding scope.
 
 ---
@@ -209,6 +211,21 @@ Reports must not:
 
 ---
 
+## Documentation Rules
+
+`README.md` is the canonical user-facing entry point for the repository.
+
+Codex must:
+
+- Review `README.md` during every task.
+- Update `README.md` whenever user-facing behavior, CLI commands, output formats, configuration files, provider support, examples, limitations, or security guidance changes.
+- Keep README examples aligned with the actual CLI.
+- Keep README limitations aligned with the current product state.
+- Avoid documenting backlog or planned features as implemented.
+- If no README changes are needed, state that explicitly in the final summary.
+
+---
+
 ## Iteration and Bug-Fix Loop
 
 For every active task, Codex must follow this loop:
@@ -242,6 +259,7 @@ A task is done only when:
 - build passes
 - tests pass
 - relevant report/fixture generation works if applicable
+- `README.md` was reviewed and updated, or explicitly confirmed unchanged because the task was internal-only
 - no secrets are exposed
 - task-related bugs are fixed or documented
 - final summary is provided
@@ -257,6 +275,7 @@ Summary
 Files changed
 Tests run
 Build result
+Documentation updated
 Known risks / follow-ups
 ```
 

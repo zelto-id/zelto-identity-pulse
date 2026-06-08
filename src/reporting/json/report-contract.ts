@@ -86,7 +86,8 @@ export function buildAuth0ReportContractV1(
           severity: item.severity
         }))
       }))
-    }
+    },
+    businessContext: report.businessContext
   };
 }
 
@@ -162,7 +163,8 @@ export function buildOktaReportContractV1(
           validationStep: item.validationStep
         }))
       }))
-    }
+    },
+    businessContext: report.businessContext
   };
 }
 
@@ -205,6 +207,10 @@ function mapAuth0Finding(
     recommendation: finding.recommendation,
     validationSteps: [...(finding.validationSteps ?? [])],
     falsePositiveNotes: [...(finding.falsePositiveNotes ?? [])],
+    businessContextNotes:
+      (finding.businessContextNotes ?? []).length > 0
+        ? [...(finding.businessContextNotes ?? [])]
+        : undefined,
     scoreImpact: finding.scoreImpact,
     productionEquivalentSeverity: finding.productionEquivalentSeverity,
     environmentAdjustedSeverity: finding.environmentAdjustedSeverity,
@@ -247,6 +253,10 @@ function mapOktaFinding(
     recommendation: finding.recommendation,
     validationSteps: [...(finding.validationSteps ?? [])],
     falsePositiveNotes: [...(finding.falsePositiveNotes ?? [])],
+    businessContextNotes:
+      (finding.businessContextNotes ?? []).length > 0
+        ? [...(finding.businessContextNotes ?? [])]
+        : undefined,
     scoreImpact: finding.scoreImpact,
     productionEquivalentSeverity: finding.productionEquivalentSeverity,
     environmentAdjustedSeverity: finding.environmentAdjustedSeverity,

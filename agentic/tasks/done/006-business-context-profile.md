@@ -1,7 +1,7 @@
 # Task: Business Context Profile
 
 ## Status
-backlog
+done
 
 ## Priority
 P0
@@ -62,7 +62,13 @@ Allow users to provide structured business context that deterministically influe
 _No bugs recorded yet._
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-06-08: Added a structured `businessContext` profile model covering organization type, environment, industry, regulated data, identity use case, user population, critical applications, risk tolerance, compliance drivers, and business priorities.
+- 2026-06-08: Integrated `businessContext` with `zelto-pulse.yml`; `businessContext.environment` can supply the scan environment when no explicit top-level or CLI environment is provided.
+- 2026-06-08: Passed business context into Auth0 and Okta analyzers, report objects, Markdown/HTML renderers, and Report Contract v1 JSON output.
+- 2026-06-08: Added deterministic business context assumptions and per-finding context notes without changing technical evidence or rule triggering.
+- 2026-06-08: Added tests for config parsing, environment fallback, report rendering impact, JSON contract output, and evidence stability.
+- 2026-06-08: Updated `README.md` and `zelto-pulse.example.yml`; ran build, tests, and Auth0/Okta fixture-based manual verification with temporary outputs under `/private/tmp`.
+- 2026-06-08: Extended business context with explicit design decisions so documented architecture choices, such as not using Auth0 roles by design, can suppress targeted deterministic findings without changing unrelated analysis.
 
 ## Definition of Done
 This task is done only when:

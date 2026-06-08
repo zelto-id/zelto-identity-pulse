@@ -15,7 +15,7 @@ Harden repository documentation, examples, and safety guidance for a public-frie
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P1 — Commercial Assessment Value`
-- `009 — OSS Release Hardening`
+- `012 — OSS Release Hardening`
 
 ## Relevant Agents
 - Orchestrator

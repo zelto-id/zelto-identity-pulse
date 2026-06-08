@@ -15,7 +15,7 @@ Implement a read-only Entra ID connector that produces a normalized snapshot sui
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `018 — Entra ID Connector`
+- `020 — Entra ID Connector`
 - Numbering is shifted in `/agentic/tasks` so provider readiness work stays ahead of new-provider implementation.
 
 ## Relevant Agents

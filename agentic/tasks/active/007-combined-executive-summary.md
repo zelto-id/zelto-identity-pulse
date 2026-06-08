@@ -1,7 +1,7 @@
 # Task: Combined Executive Summary
 
 ## Status
-backlog
+active
 
 ## Priority
 P1

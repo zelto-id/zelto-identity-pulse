@@ -1,7 +1,7 @@
 # Task: Report Config File
 
 ## Status
-backlog
+done
 
 ## Priority
 P0
@@ -56,7 +56,11 @@ Add a deterministic `zelto-pulse.yml` configuration model for scan and report se
 _No bugs recorded yet._
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-06-02: Added a dependency-free `zelto-pulse.yml` config loader with constrained YAML parsing, default config discovery, provider resolution, and rejection of likely credential fields.
+- 2026-06-02: Added deterministic config merge support for Auth0 and Okta scan options, including environment, output format/path, snapshot settings, masking options, bounded Okta collection settings, and future baseline fields.
+- 2026-06-02: Added config-driven `zelto-pulse scan --config <path>` provider dispatch while preserving existing `scan auth0` and `scan okta` commands with CLI flag precedence over config.
+- 2026-06-02: Added `zelto-pulse.example.yml` documenting secret-safe config patterns and added tests for parsing, precedence, provider resolution, and safe defaults.
+- 2026-06-02: Ran required build and test checks, then manually verified config-only Auth0 fixture scan and CLI override behavior using temporary configs in `/private/tmp`.
 
 ## Definition of Done
 This task is done only when:

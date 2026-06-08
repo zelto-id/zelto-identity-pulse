@@ -15,7 +15,7 @@ Research and, if justified later, define a safe external rule model for user-man
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P5 — Platform Bets`
-- `033 — External Rule DSL / Rule Packs`
+- `041 — External Rule DSL / Rule Packs`
 
 ## Relevant Agents
 - Orchestrator

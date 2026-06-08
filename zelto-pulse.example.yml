@@ -1,0 +1,88 @@
+# Zelto Identity Pulse example config.
+# Keep credentials out of this file. Use environment variables or hidden prompts:
+# - AUTH0_DOMAIN and AUTH0_MGMT_API_TOKEN for Auth0 live scans
+# - OKTA_ORG_URL plus OKTA_ACCESS_TOKEN or OKTA_API_TOKEN for Okta live scans
+#
+# The CLI intentionally rejects config keys that look like credentials.
+
+provider: auth0
+environment: production
+
+reports:
+  format:
+    - html
+    - json
+  output: reports/identity-posture.md
+
+masking:
+  includeIdentifiers: false
+  includeRaw: false
+
+scoring:
+  profile: standard
+
+businessContext:
+  organizationType: "B2B SaaS"
+  environment: production
+  industry: healthcare
+  regulatedData: true
+  identityUseCase: customer-identity
+  userPopulation:
+    customers: 50000
+    workforce: 300
+    admins: 15
+  criticalApplications:
+    - name: "Customer Portal"
+      provider: auth0
+      businessCriticality: high
+      dataSensitivity: regulated
+    - name: "Admin Console"
+      provider: okta
+      businessCriticality: critical
+      dataSensitivity: high
+  riskTolerance: standard
+  complianceDrivers:
+    - SOC2
+    - ISO27001
+    - HIPAA
+  businessPriorities:
+    - "reduce account takeover risk"
+    - "improve audit readiness"
+    - "validate MFA and logging posture"
+  designDecisions:
+    - id: auth0-roles-external-by-design
+      provider: auth0
+      effect: suppress-finding
+      decision: "Authorization is managed in the application domain model, not with Auth0 roles."
+      rationale: "Product entitlements are evaluated downstream and covered by separate access reviews."
+      owner: IAM Architecture
+      appliesTo:
+        findingIds:
+          - AUTH-RBAC-001
+
+collection:
+  includeUsers: bounded
+  maxUsers: 500
+  includeSystemLog: true
+  systemLogDays: 7
+  maxLogs: 1000
+
+baseline:
+  enabled: false
+  beforeReport: reports/baseline.json
+
+auth0:
+  # For fixture-based local verification. Remove for live scans.
+  fromSnapshot: fixtures/auth0/risky-tenant.snapshot.json
+  includeLegacyExtensibility: false
+
+okta:
+  # For fixture-based local verification. Remove for live scans.
+  fromSnapshot: fixtures/okta/risky-org.snapshot.json
+  authMode: oauth
+  includeUsers: bounded
+  maxUsers: 500
+  includeSystemLog: true
+  systemLogDays: 7
+  maxLogs: 1000
+  includeIdentifiers: false

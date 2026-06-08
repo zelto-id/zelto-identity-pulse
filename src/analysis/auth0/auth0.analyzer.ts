@@ -14,6 +14,13 @@
 import { randomBytes } from "crypto";
 import { Auth0TenantSnapshot } from "../../connectors/auth0/auth0.types";
 import {
+  BusinessContextProfile,
+  buildBusinessContextAssumptions,
+  buildBusinessContextFindingNotes,
+  findBusinessContextDesignDecisionForFinding,
+  hasBusinessContext
+} from "../../core/business-context";
+import {
   Auth0AnalysisReport,
   CategoryId,
   Environment,
@@ -34,6 +41,7 @@ import { consolidateFindings } from "./auth0.consolidation";
 
 export interface AnalyzeOptions {
   environment?: Environment;
+  businessContext?: BusinessContextProfile;
 }
 
 export function analyzeAuth0Snapshot(
@@ -41,9 +49,16 @@ export function analyzeAuth0Snapshot(
   options: AnalyzeOptions = {}
 ): Auth0AnalysisReport {
   const environment: Environment = options.environment ?? "unknown";
+  const businessContext = hasBusinessContext(options.businessContext)
+    ? options.businessContext
+    : undefined;
 
   const rawFindings = runAllRules(snapshot);
-  const findings = adjustFindings(rawFindings, { environment });
+  const adjustedFindings = adjustFindings(rawFindings, { environment });
+  const findings = applyBusinessContextToFindings(
+    filterFindingsSuppressedByDesign(adjustedFindings, businessContext),
+    businessContext
+  );
   const partial = snapshot.metadata.partial;
   const coverage = snapshot.coverage;
 
@@ -55,7 +70,7 @@ export function analyzeAuth0Snapshot(
   const partialScanImpact = buildPartialScanImpact(partial, coverage);
   const keyDecisions = buildKeyDecisions({ findings, environment, snapshot });
   const reRunValidation = buildReRunValidation(environment, scoring.categories);
-  const assumptions = buildAssumptions(environment, partial);
+  const assumptions = buildAssumptions(environment, partial, businessContext);
   const notAssessed = buildNotAssessed(snapshot, scoring.categories);
 
   return {
@@ -88,11 +103,16 @@ export function analyzeAuth0Snapshot(
       missingScopes: snapshot.metadata.missingScopes,
       failedCollectors: snapshot.metadata.failedCollectors,
       coverage
-    }
+    },
+    businessContext
   };
 }
 
-function buildAssumptions(environment: Environment, partial: boolean): string[] {
+function buildAssumptions(
+  environment: Environment,
+  partial: boolean,
+  businessContext?: BusinessContextProfile
+): string[] {
   const a: string[] = [];
   a.push(
     "Findings are produced by deterministic rules over a normalized snapshot of tenant configuration. They reflect configuration posture, not runtime behavior or user activity."
@@ -120,7 +140,49 @@ function buildAssumptions(environment: Environment, partial: boolean): string[] 
   a.push(
     "Recommendations cite Auth0 dashboard areas and Terraform fields where applicable so engineering teams can validate and apply changes consistently."
   );
+  a.push(...buildBusinessContextAssumptions(businessContext));
   return a;
+}
+
+function applyBusinessContextToFindings(
+  findings: Finding[],
+  businessContext?: BusinessContextProfile
+): Finding[] {
+  if (!hasBusinessContext(businessContext)) return findings;
+  return findings.map((finding) => {
+    const notes = buildBusinessContextFindingNotes({
+      provider: "auth0",
+      findingId: finding.id,
+      category: finding.category,
+      title: finding.title,
+      severity: finding.severity,
+      businessContext
+    });
+    return notes.length > 0
+      ? {
+          ...finding,
+          businessContextNotes: notes
+        }
+      : finding;
+  });
+}
+
+function filterFindingsSuppressedByDesign(
+  findings: Finding[],
+  businessContext?: BusinessContextProfile
+): Finding[] {
+  if (!hasBusinessContext(businessContext)) return findings;
+  return findings.filter(
+    (finding) =>
+      !findBusinessContextDesignDecisionForFinding({
+        provider: "auth0",
+        findingId: finding.id,
+        category: finding.category,
+        title: finding.title,
+        businessContext,
+        effect: "suppress-finding"
+      })
+  );
 }
 
 function buildNotAssessed(

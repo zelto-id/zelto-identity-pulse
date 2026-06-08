@@ -15,7 +15,7 @@ Add bounded historical activity analysis for identity posture context.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P4 — Advanced Workflows`
-- `029 — Historical User Activity Analysis`
+- `037 — Historical User Activity Analysis`
 
 ## Relevant Agents
 - Orchestrator

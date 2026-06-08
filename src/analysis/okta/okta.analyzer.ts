@@ -1,5 +1,12 @@
 import { randomBytes } from "crypto";
 import { OktaOrgSnapshot } from "../../connectors/okta/okta.types";
+import {
+  BusinessContextProfile,
+  buildBusinessContextAssumptions,
+  buildBusinessContextFindingNotes,
+  findBusinessContextDesignDecisionForFinding,
+  hasBusinessContext
+} from "../../core/business-context";
 import { Environment } from "../../reporting/markdown/report.types";
 import {
   OKTA_CATEGORY_NAMES,
@@ -21,13 +28,24 @@ import {
 
 export function analyzeOktaSnapshot(
   snapshot: OktaOrgSnapshot,
-  options: { environment?: Environment; includeIdentifiers?: boolean } = {}
+  options: {
+    environment?: Environment;
+    includeIdentifiers?: boolean;
+    businessContext?: BusinessContextProfile;
+  } = {}
 ): OktaAnalysisReport {
   const environment = options.environment ?? "unknown";
+  const businessContext = hasBusinessContext(options.businessContext)
+    ? options.businessContext
+    : undefined;
   const enrichedFindings = enrichOktaFindings(
     runAllOktaRules(snapshot, { includeIdentifiers: options.includeIdentifiers ?? false })
   );
-  const findings = adjustOktaFindings(enrichedFindings, { environment });
+  const adjustedFindings = adjustOktaFindings(enrichedFindings, { environment });
+  const findings = applyBusinessContextToFindings(
+    filterFindingsSuppressedByDesign(adjustedFindings, businessContext),
+    businessContext
+  );
   const scoring = scoreOktaFindings(findings, snapshot.metadata.partial, snapshot.coverage, {
     environment
   });
@@ -42,8 +60,12 @@ export function analyzeOktaSnapshot(
       connectorVersion: snapshot.metadata.connectorVersion ?? CONNECTOR_VERSION,
       includeIdentifiers: options.includeIdentifiers ?? false
     },
-    assumptions: buildAssumptions(environment, snapshot.metadata.partial),
-    conclusion: buildConclusion(findings.length, scoring.categories),
+    assumptions: buildAssumptions(
+      environment,
+      snapshot.metadata.partial,
+      businessContext
+    ),
+    conclusion: buildConclusion(findings.length, scoring.categories, businessContext),
     positiveSignals: buildOktaPositiveSignals(snapshot, findings),
     remediationPlan: buildOktaRemediationPlan(findings),
     analysisBoundaries,
@@ -62,11 +84,16 @@ export function analyzeOktaSnapshot(
       missingScopes: snapshot.metadata.missingScopes,
       failedCollectors: snapshot.metadata.failedCollectors,
       coverage: snapshot.coverage
-    }
+    },
+    businessContext
   };
 }
 
-function buildAssumptions(environment: Environment, partial: boolean): string[] {
+function buildAssumptions(
+  environment: Environment,
+  partial: boolean,
+  businessContext?: BusinessContextProfile
+): string[] {
   const assumptions = [
     "Findings are produced by deterministic rules over a normalized, redacted snapshot of Okta configuration. They reflect configuration posture, not full runtime or user-behavior analytics.",
     "The connector remains read-only and bounded by default for users and logs to preserve local safety and keep scans tractable on large workforce tenants.",
@@ -92,12 +119,14 @@ function buildAssumptions(environment: Environment, partial: boolean): string[] 
   assumptions.push(
     "User-level risk scoring, full assignment graphs, and long-range behavior analytics remain outside the initial Okta MVP scope."
   );
+  assumptions.push(...buildBusinessContextAssumptions(businessContext));
   return assumptions;
 }
 
 function buildConclusion(
   findingCount: number,
-  categories: OktaReportCategory[]
+  categories: OktaReportCategory[],
+  businessContext?: BusinessContextProfile
 ): string[] {
   const mediumConfidence = categories.filter((category) => category.confidence === "medium");
   const lowConfidence = categories.filter((category) => category.confidence === "low");
@@ -111,11 +140,57 @@ function buildConclusion(
       `Confidence was intentionally reduced in ${mediumConfidence.length + lowConfidence.length} category(s) where the MVP still relies on bounded samples, partial evidence, or incomplete policy modeling.`
     );
   }
+  if (hasBusinessContext(businessContext)) {
+    lines.push(
+      "Business context profile was applied deterministically to interpretation and remediation-priority language; technical evidence and rule triggering remain unchanged."
+    );
+  }
 
   lines.push(
     "The next analyzer passes should deepen Workforce-specific coverage in privileged access, authentication policy quality, assignment topology, user lifecycle hygiene, and API policy review."
   );
   return lines;
+}
+
+function applyBusinessContextToFindings(
+  findings: import("../../reporting/markdown/okta-report.types").OktaFinding[],
+  businessContext?: BusinessContextProfile
+): import("../../reporting/markdown/okta-report.types").OktaFinding[] {
+  if (!hasBusinessContext(businessContext)) return findings;
+  return findings.map((finding) => {
+    const notes = buildBusinessContextFindingNotes({
+      provider: "okta",
+      findingId: finding.id,
+      category: finding.category,
+      title: finding.title,
+      severity: finding.severity,
+      businessContext
+    });
+    return notes.length > 0
+      ? {
+          ...finding,
+          businessContextNotes: notes
+        }
+      : finding;
+  });
+}
+
+function filterFindingsSuppressedByDesign(
+  findings: import("../../reporting/markdown/okta-report.types").OktaFinding[],
+  businessContext?: BusinessContextProfile
+): import("../../reporting/markdown/okta-report.types").OktaFinding[] {
+  if (!hasBusinessContext(businessContext)) return findings;
+  return findings.filter(
+    (finding) =>
+      !findBusinessContextDesignDecisionForFinding({
+        provider: "okta",
+        findingId: finding.id,
+        category: finding.category,
+        title: finding.title,
+        businessContext,
+        effect: "suppress-finding"
+      })
+  );
 }
 
 function buildNotAssessed(

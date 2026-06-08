@@ -1,7 +1,7 @@
 # Task: Rule Catalog
 
 ## Status
-backlog
+done
 
 ## Priority
 P0
@@ -55,7 +55,10 @@ Expose rule metadata through CLI output and documentation for Auth0 and Okta.
 _No bugs recorded yet._
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-06-02: Added deterministic Auth0 and Okta rule catalog metadata for current rule IDs, including provider, category, severity logic, evidence used, confidence logic, remediation guidance, and false-positive notes.
+- 2026-06-02: Added top-level `rules` CLI commands for listing rules, filtering by provider, and explaining individual rule IDs.
+- 2026-06-02: Added tests for catalog ordering, provider filtering, rule explanations, and report-format traceability from findings to catalog rule IDs.
+- 2026-06-02: Updated `README.md` with rule catalog usage and ran build, tests, and manual CLI verification.
 
 ## Definition of Done
 This task is done only when:

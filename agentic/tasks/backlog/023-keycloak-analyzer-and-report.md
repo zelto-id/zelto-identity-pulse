@@ -15,7 +15,7 @@ Add Keycloak analysis, scoring, and report rendering on top of the connector out
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `021 — Keycloak Analyzer and Report`
+- `023 — Keycloak Analyzer and Report`
 
 ## Relevant Agents
 - Orchestrator

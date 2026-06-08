@@ -1,4 +1,5 @@
 import { CollectorFailure, ResourceCoverage } from "../../core/schema";
+import { BusinessContextProfile } from "../../core/business-context";
 import { Confidence, Environment, Grade, RemediationBucketId, Severity } from "./report.types";
 
 export type OktaFindingClassification =
@@ -64,6 +65,7 @@ export interface OktaFinding {
   terraformHint?: string;
   validationSteps?: string[];
   falsePositiveNotes?: string[];
+  businessContextNotes?: string[];
   remediation?: OktaRemediationDescriptor;
 }
 
@@ -133,6 +135,7 @@ export interface OktaAnalysisReport {
     failedCollectors: CollectorFailure[];
     coverage: ResourceCoverage[];
   };
+  businessContext?: BusinessContextProfile;
 }
 
 export const OKTA_CATEGORY_WEIGHTS = {

@@ -15,7 +15,7 @@ Export findings, resources, and remediation data as CSV without losing determini
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P1 — Commercial Assessment Value`
-- `010 — CSV Findings Export`
+- `013 — CSV Findings Export`
 
 ## Relevant Agents
 - Orchestrator

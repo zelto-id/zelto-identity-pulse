@@ -15,7 +15,7 @@ Define the target One Identity product scope, API approach, and first posture su
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `024 — One Identity Research and Scope Definition`
+- `028 — One Identity Research and Scope Definition`
 
 ## Relevant Agents
 - Orchestrator

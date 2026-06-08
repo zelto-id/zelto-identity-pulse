@@ -15,7 +15,7 @@ If ever pursued, design and implement tightly controlled remediation workflows o
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P5 — Platform Bets`
-- `036 — Automatic Remediation / Write Operations`
+- `044 — Automatic Remediation / Write Operations`
 
 ## Relevant Agents
 - Orchestrator

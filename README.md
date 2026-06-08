@@ -1,22 +1,33 @@
 # zelto-identity-pulse
 
-**Local-first, open-source CLI for identity-security posture analysis.**
-First MVP: Auth0.
+Local-first, read-only Node.js/TypeScript CLI for identity-security posture assessment.
 
-`zelto-identity-pulse` connects to an Auth0 tenant using a Management API token,
-fetches tenant configuration in **read-only** mode, normalizes it into a local
-snapshot, runs deterministic security/maturity rules, scores the tenant, and
-generates a markdown report.
+`zelto-identity-pulse` scans identity-provider configuration, normalizes it into local snapshots, runs deterministic posture analysis, and renders reports for engineers and stakeholders. Current first-class providers are Auth0 / CIAM and Okta Workforce Identity.
 
-> No telemetry. No cloud upload. No write operations. Tokens never persisted.
+No telemetry. No cloud upload. No SaaS backend. No write or remediation operations. Tokens are used only for read-only API calls and are never intentionally persisted.
 
 License: Apache-2.0.
 
 ---
 
+## Current Capabilities
+
+- Auth0 tenant scanning and reporting.
+- Okta Workforce org scanning and reporting.
+- Markdown, HTML, and structured JSON report output.
+- Report Contract v1 JSON with stable finding IDs and fingerprints.
+- Provider-agnostic delta comparison between two JSON reports.
+- Delta JSON and delta HTML output.
+- Optional `zelto-pulse.yml` config for repeatable local scan/report settings.
+- Structured business context profile support for deterministic report interpretation and remediation-priority wording.
+- Redacted snapshots when snapshot saving is explicitly requested.
+- Environment-aware deterministic scoring for `production`, `staging`, `development`, `sandbox`, and `unknown`.
+
+---
+
 ## Installation
 
-Requirements: Node.js >= 20, npm.
+Requirements: Node.js >= 20 and npm.
 
 ```bash
 git clone https://github.com/<your-org>/zelto-identity-pulse.git
@@ -40,20 +51,72 @@ zelto-pulse --help
 
 ---
 
-## Auth0 token and scopes
+## Safety Model
 
-Generate a **Management API access token** for the tenant you want to scan.
-The simplest path:
+- The product is local-first and runs on your machine.
+- Connectors use read-only provider API operations.
+- Tokens are accepted through environment variables or CLI flags; environment variables are recommended to avoid shell-history leakage.
+- Raw provider responses are not persisted by default.
+- `--include-raw` remains a no-op in the current MVP.
+- User identifiers are masked by default where supported; Okta full identifiers require explicit `--include-identifiers`.
+- `zelto-pulse.yml` intentionally rejects likely credential keys such as tokens, secrets, passwords, private keys, authorization headers, cookies, sessions, and credentials.
+- Business context in `zelto-pulse.yml` is used only locally for deterministic report interpretation; do not store secrets or confidential credentials in it.
 
-1. In the Auth0 Dashboard, go to **Applications → APIs → Auth0 Management API**.
-2. Create a new **Machine-to-Machine application** authorized to call this API.
-3. Grant it the read-only scopes listed below.
-4. Use the application's client to obtain an `access_token` for
-   `https://YOUR_DOMAIN/api/v2/`. Use that token as `AUTH0_MGMT_API_TOKEN`.
+---
 
-### Recommended read-only scopes (baseline)
+## Auth0 Usage
 
+Recommended credential pattern:
+
+```bash
+export AUTH0_DOMAIN=example.us.auth0.com
+export AUTH0_MGMT_API_TOKEN="$AUTH0_MGMT_API_TOKEN"
+zelto-pulse scan auth0 --environment production
 ```
+
+Direct flags also work, but are less safe for secrets:
+
+```bash
+zelto-pulse scan auth0 \
+  --domain example.us.auth0.com \
+  --token "$AUTH0_MGMT_API_TOKEN" \
+  --environment production \
+  --format html,json \
+  --output reports/auth0-posture.md
+```
+
+Analyze an existing local snapshot without live provider access:
+
+```bash
+zelto-pulse scan auth0 \
+  --from-snapshot fixtures/auth0/risky-tenant.snapshot.json \
+  --environment production \
+  --format all
+```
+
+### Auth0 Options
+
+| Option | Description |
+|---|---|
+| `--config <path>` | Load scan/report settings from `zelto-pulse.yml`. |
+| `--domain <domain>` | Auth0 tenant domain. Falls back to `AUTH0_DOMAIN`. |
+| `--token <token>` | Auth0 Management API token. Falls back to `AUTH0_MGMT_API_TOKEN`. Prefer the env var. |
+| `--environment <env>` | `production`, `staging`, `development`, `sandbox`, or `unknown`. |
+| `--format <format>` | `markdown`, `html`, `json`, `all`, or comma-separated values such as `html,json`. Default: `markdown`. |
+| `--output <path>` | Report output path. When multiple formats are requested, sibling files are created with matching extensions. |
+| `--snapshot-output <path>` | Redacted snapshot output path. Implies `--save-snapshot`. |
+| `--save-snapshot` | Save a redacted snapshot locally. |
+| `--include-raw [bool]` | MVP no-op; raw API responses are never enabled by this flag. |
+| `--fail-on <severity>` | Exit with code 2 if any finding at this severity or higher exists. |
+| `--from-snapshot <path>` | Skip live collection and analyze a saved snapshot. |
+| `--include-legacy-extensibility` | Collect Rules and Hooks and report legacy extensibility risk if present. |
+| `--verbose` | Verbose logging. |
+
+### Auth0 Read-Only Scopes
+
+Recommended baseline Auth0 Management API scopes:
+
+```text
 read:tenant_settings
 read:clients
 read:client_grants
@@ -74,110 +137,265 @@ read:logs
 read:organizations
 ```
 
-The scanner is **graceful about missing scopes**: a missing scope skips the
-relevant collector and is reported in the **Collection Status** section. It
-will not silently treat unscanned areas as safe.
+The scanner is graceful about missing scopes. Missing or failed collectors are reported as coverage gaps instead of being silently treated as safe.
 
 ---
 
-## Usage
+## Okta Workforce Usage
+
+Recommended OAuth credential pattern:
 
 ```bash
-zelto-pulse scan auth0 \
-  --domain example.us.auth0.com \
-  --token "$AUTH0_MGMT_API_TOKEN" \
-  --output reports/auth0-report.md
+export OKTA_ORG_URL=https://example.okta.com
+export OKTA_ACCESS_TOKEN="$OKTA_ACCESS_TOKEN"
+zelto-pulse scan okta --auth-mode oauth --environment production
 ```
 
-Or with environment variables (recommended — avoids shell history leaks):
+SSWS token mode is also supported:
 
 ```bash
-export AUTH0_DOMAIN=example.us.auth0.com
-export AUTH0_MGMT_API_TOKEN=eyJ...
-zelto-pulse scan auth0
+export OKTA_ORG_URL=https://example.okta.com
+export OKTA_API_TOKEN="$OKTA_API_TOKEN"
+zelto-pulse scan okta --auth-mode ssws --environment production
 ```
 
-Default behavior:
+Analyze an existing local fixture:
 
-- Markdown report written to `reports/auth0-report-<timestamp>.md`.
-- No snapshot saved unless `--save-snapshot` or `--snapshot-output` is passed.
-- Raw API responses are **never** persisted in the MVP.
-- The token is never written to disk and never logged.
+```bash
+zelto-pulse scan okta \
+  --from-snapshot fixtures/okta/risky-org.snapshot.json \
+  --environment production \
+  --format html,json
+```
 
-### Options
+### Okta Options
 
 | Option | Description |
 |---|---|
-| `--domain <domain>` | Auth0 tenant domain. Falls back to `AUTH0_DOMAIN`. |
-| `--token <token>` | Management API token. Falls back to `AUTH0_MGMT_API_TOKEN`. Prefer the env var. |
-| `--output <path>` | Markdown report path. Default: `reports/auth0-report-<ts>.md`. |
-| `--snapshot-output <path>` | Snapshot JSON path. Implies `--save-snapshot`. |
-| `--save-snapshot` | Save the (redacted) snapshot to `snapshots/auth0-snapshot-<ts>.json`. |
-| `--include-raw [bool]` | (MVP no-op) ignored; raw responses are never saved. |
-| `--fail-on <severity>` | Exit code 2 if any finding at this severity or higher is present. One of `critical`, `high`, `medium`, `low`. |
+| `--config <path>` | Load scan/report settings from `zelto-pulse.yml`. |
+| `--org-url <url>` | Okta org URL. Falls back to `OKTA_ORG_URL`. |
+| `--auth-mode <mode>` | `oauth` or `ssws`. Inferred from available token env vars when omitted. |
+| `--access-token <token>` | Okta OAuth token. Falls back to `OKTA_ACCESS_TOKEN`. Prefer the env var. |
+| `--api-token <token>` | Okta SSWS token. Falls back to `OKTA_API_TOKEN`. Prefer the env var. |
+| `--environment <env>` | `production`, `staging`, `development`, `sandbox`, or `unknown`. |
+| `--format <format>` | `markdown`, `html`, `json`, `all`, or comma-separated values. Default: `markdown`. |
+| `--output <path>` | Report output path. When multiple formats are requested, sibling files are created with matching extensions. |
+| `--snapshot-output <path>` | Redacted snapshot output path. Implies `--save-snapshot`. |
+| `--save-snapshot` | Save a redacted snapshot locally. |
+| `--include-raw [bool]` | MVP no-op; raw API responses are never enabled by this flag. |
+| `--fail-on <severity>` | Exit with code 2 if any finding at this severity or higher exists. |
+| `--from-snapshot <path>` | Skip live collection and analyze a saved snapshot. |
+| `--include-users <mode>` | `none`, `bounded`, or `full`. Default: `bounded`. |
+| `--max-users <number>` | Maximum users to collect in bounded mode. Default: `500`. |
+| `--include-system-log [bool]` | Collect bounded System Log summary. Default: `true`. |
+| `--system-log-days <number>` | System Log lookback window. Default: `7`. |
+| `--max-logs <number>` | Maximum System Log events to summarize. Default: `1000`. |
+| `--include-identifiers` | Include full user or principal identifiers instead of masked identifiers. |
 | `--verbose` | Verbose logging. |
-| `--from-snapshot <path>` | Skip live collection and analyze a previously saved snapshot (useful for fixtures or offline review). |
 
-### Examples
+---
+
+## Report Formats
+
+Scan commands support:
 
 ```bash
-# Live scan, save snapshot too
-zelto-pulse scan auth0 --save-snapshot
-
-# Fail CI if any high-severity finding exists
-zelto-pulse scan auth0 --fail-on high
-
-# Re-render a report from a saved snapshot
-zelto-pulse scan auth0 --from-snapshot snapshots/auth0-snapshot-2026-05-06.json
-
-# Try the demo with bundled fixtures
-zelto-pulse scan auth0 --from-snapshot fixtures/auth0/risky-tenant.snapshot.json
+--format markdown
+--format html
+--format json
+--format html,json
+--format all
 ```
 
-### Exit codes
+Default scan output is Markdown. JSON output uses Report Contract v1 and is intended for repeatable workflows, CI/CD, evidence packs, combined summaries, and delta comparison.
+
+When `--output reports/example.md --format html,json` is used, the CLI writes:
+
+```text
+reports/example.html
+reports/example.json
+```
+
+---
+
+## Delta Comparison
+
+Compare two structured JSON reports:
+
+```bash
+zelto-pulse compare \
+  --before reports/before.json \
+  --after reports/after.json \
+  --format html,json \
+  --output reports/delta.json
+```
+
+The delta engine:
+
+- compares only reports from the same provider
+- matches findings by stable fingerprint
+- classifies findings as new, resolved, unchanged, worsened, or improved
+- compares overall score, grade, category scores, and coverage changes
+- emits deterministic JSON and optional client-readable HTML
+
+With `--format html,json`, sibling files are created:
+
+```text
+reports/delta.json
+reports/delta.html
+```
+
+---
+
+## Rule Catalog
+
+Inspect deterministic rule metadata without running a scan:
+
+```bash
+zelto-pulse rules list
+zelto-pulse rules list --provider auth0
+zelto-pulse rules list --provider okta
+```
+
+Explain a single rule:
+
+```bash
+zelto-pulse rules explain AUTH-CLI-004
+zelto-pulse rules explain OKTA-APP-001
+```
+
+Rule explanations include provider, category, severity logic, evidence used, confidence logic, remediation guidance, and false-positive notes. Finding IDs in Markdown, HTML, and JSON reports are the same rule IDs used by the catalog, so a report finding can be traced back to deterministic rule metadata.
+
+---
+
+## Config File
+
+`zelto-pulse.yml` can make recurring scans repeatable. See [zelto-pulse.example.yml](zelto-pulse.example.yml).
+
+Run a config-driven scan:
+
+```bash
+zelto-pulse scan --config zelto-pulse.yml
+```
+
+Or use config with a provider subcommand:
+
+```bash
+zelto-pulse scan auth0 --config zelto-pulse.yml --environment sandbox
+```
+
+CLI flags override config values deterministically. Credentials should not be stored in config; use environment variables or prompts instead.
+
+Minimal example:
+
+```yaml
+provider: auth0
+environment: production
+
+reports:
+  format:
+    - html
+    - json
+  output: reports/identity-posture.md
+
+masking:
+  includeIdentifiers: false
+  includeRaw: false
+
+businessContext:
+  organizationType: "B2B SaaS"
+  environment: production
+  industry: healthcare
+  regulatedData: true
+  identityUseCase: customer-identity
+  userPopulation:
+    customers: 50000
+    workforce: 300
+    admins: 15
+  criticalApplications:
+    - name: "Customer Portal"
+      provider: auth0
+      businessCriticality: high
+      dataSensitivity: regulated
+  riskTolerance: standard
+  complianceDrivers:
+    - SOC2
+    - HIPAA
+  businessPriorities:
+    - "reduce account takeover risk"
+    - "improve audit readiness"
+  designDecisions:
+    - id: auth0-roles-external-by-design
+      provider: auth0
+      effect: suppress-finding
+      decision: "Authorization is managed in the application domain model, not with Auth0 roles."
+      rationale: "Product entitlements are evaluated downstream and covered by separate access reviews."
+      owner: IAM Architecture
+      appliesTo:
+        findingIds:
+          - AUTH-RBAC-001
+
+auth0:
+  fromSnapshot: fixtures/auth0/risky-tenant.snapshot.json
+```
+
+Supported config areas include provider selection, environment, output formats, masking options, output paths, business context, bounded Okta collection options, scoring profile metadata, and future baseline settings.
+
+### Business Context Profile
+
+`businessContext` is optional. When present, it is passed into the analyzer and report renderers so reports can explain risk and prioritization in customer terms without using AI-generated assumptions.
+
+Supported fields include:
+
+- `organizationType`
+- `environment`
+- `industry`
+- `regulatedData`
+- `identityUseCase`
+- `userPopulation`
+- `criticalApplications`
+- `riskTolerance`
+- `complianceDrivers`
+- `businessPriorities`
+- `designDecisions`
+
+Business context affects deterministic interpretation and remediation-priority wording. It does not change technical evidence, does not send data to external services, and does not enable telemetry. If top-level `environment` is omitted, `businessContext.environment` can provide the scan environment used for environment-aware severity calibration.
+
+Use `designDecisions` for intentional architecture choices that should not be reported as issues. For example, if Auth0 roles are intentionally unused because authorization is managed in the application or an external authorization service, target `AUTH-RBAC-001` with `effect: suppress-finding`. Suppression must target deterministic finding IDs, categories, or keywords; it is not free-form AI interpretation.
+
+---
+
+## Exit Codes
 
 | Code | Meaning |
 |---|---|
-| 0 | Scan completed |
-| 1 | Scan failed (config, auth, or unexpected error) |
-| 2 | Scan completed but `--fail-on` threshold matched |
+| 0 | Scan or comparison completed successfully. |
+| 1 | Command failed due to config, auth, input, or unexpected error. |
+| 2 | Scan completed but `--fail-on` threshold matched. |
 
 ---
 
-## What gets analyzed
+## What Gets Analyzed
 
-Categories (weights sum to 100):
+Auth0 categories include tenant baseline, applications/OAuth clients, connections/identity sources, APIs/resource servers, RBAC/authorization, Actions and extensibility, MFA and attack protection, monitoring/log streams, branding/login experience, and organizations/B2B.
 
-- Tenant Baseline (10)
-- Applications / OAuth Clients (15)
-- Connections / Identity Sources (15)
-- APIs / Resource Servers (10)
-- RBAC / Authorization (10)
-- Actions & Extensibility (10)
-- MFA & Attack Protection (10)
-- Monitoring & Log Streams (10)
-- Branding & Login Experience (5)
-- Organizations / B2B (5)
+Okta categories include org baseline, users and groups, applications, policies, authenticators, admin posture, network/security posture, authorization/logging, and lifecycle/operations coverage where available.
 
-Critical findings such as legacy Rules/Hooks usage, MFA disabled, attack
-protection disabled, or no active log stream **cap the achievable grade**
-independently of the numeric score. Partial scans cannot reach grade A.
-
-See [`design/auth0-tenant-check-framework.md`](design/auth0-tenant-check-framework.md)
-for the full framework that drives the rules.
+Scoring is deterministic and environment-aware. Missing data reduces coverage/confidence rather than being silently treated as safe. Partial scans cannot imply complete assurance.
 
 ---
 
-## Limitations (MVP)
+## Limitations
 
-- Auth0 only. Okta WIC and other providers are not in scope yet.
-- Markdown report only. No PDF / HTML / DOCX export.
-- No persistent workspace, database, or web UI.
-- No automatic remediation or write operations.
-- No AI-generated commentary in the report.
-- Bounded users/logs collection (PII-safe defaults).
-- Some fields require Auth0 features that aren't enabled on every tenant; the
-  scanner reports those as `skipped` rather than failing.
+- Current first-class providers are Auth0 and Okta Workforce only.
+- No SaaS backend, hosted dashboard, remote config, or telemetry.
+- No database or persistent scan history yet.
+- No automatic remediation or provider write operations.
+- No PDF or DOCX export.
+- No AI-generated findings or default AI narrative.
+- Config parsing intentionally supports a constrained YAML subset for the documented `zelto-pulse.yml` shape, not arbitrary YAML.
+- Okta user and System Log collection use bounded defaults to reduce privacy and runtime risk.
+- Reports are posture assessments based on collected configuration, not a guarantee that all identity risk has been eliminated.
 
 ---
 
@@ -185,29 +403,46 @@ for the full framework that drives the rules.
 
 ```bash
 npm install
-npm run build      # type-check + emit dist/
-npm test           # vitest
+npm run build
+npm test
 ```
 
 Project layout:
 
-```
+```text
 src/
-  cli/                # commander entry point + commands
-  connectors/auth0/   # Auth0 Management API client + collectors + redaction
-  analysis/auth0/     # rules, scoring, opportunities, analyzer
-  reporting/markdown/ # report types + markdown renderer
-  core/               # logger, errors, fs, schema
-fixtures/auth0/       # snapshot fixtures used in tests + demos
-tests/auth0/          # vitest tests
+  cli/                 commander entry point and commands
+  config/              local zelto-pulse.yml parsing and merge helpers
+  core/                logger, errors, filesystem, schemas, business context
+  connectors/auth0/    Auth0 read-only connector, collectors, redaction
+  connectors/okta/     Okta read-only connector, collectors, redaction
+  analysis/auth0/      Auth0 deterministic rules, scoring, analyzer
+  analysis/okta/       Okta deterministic rules, scoring, analyzer
+  reporting/markdown/  Markdown renderers and report types
+  reporting/html/      HTML report renderers
+  reporting/json/      Report Contract v1 JSON
+  reporting/delta/     Provider-agnostic delta comparison
+  analysis/rules/      Rule catalog metadata
+fixtures/
+  auth0/               Auth0 snapshot fixtures
+  okta/                Okta snapshot fixtures
+tests/
+  auth0/
+  okta/
+  delta/
+  config/
+  reporting/
+  rules/
 ```
+
+Agentic delivery docs live under [agentic](agentic). The current implementation queue is [agentic/tasks](agentic/tasks).
 
 ---
 
-## See also
+## See Also
 
-- [`SECURITY.md`](SECURITY.md) — security model, token handling, responsible disclosure.
-- [`design/auth0-tenant-check-framework.md`](design/auth0-tenant-check-framework.md) — full scoring framework.
-- [`design/auth0-connector-module-design.md`](design/auth0-connector-module-design.md) — connector design notes.
-- [`design/zelto-identity-pulse-post-mvp-backlog.md`](design/zelto-identity-pulse-post-mvp-backlog.md) — explicitly-out-of-scope items.
-# zelto-identity-pulse
+- [SECURITY.md](SECURITY.md) - security model, token handling, responsible disclosure.
+- [AGENT.md](AGENT.md) - repository agent workflow and delivery rules.
+- [agentic/tasks/README.md](agentic/tasks/README.md) - task workflow.
+- [design/auth0-tenant-check-framework.md](design/auth0-tenant-check-framework.md) - Auth0 scoring framework.
+- [design/okta-workforce-connector-module-design.md](design/okta-workforce-connector-module-design.md) - Okta connector/reporting design.

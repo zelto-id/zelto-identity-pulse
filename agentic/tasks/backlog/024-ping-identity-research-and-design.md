@@ -15,7 +15,7 @@ Define the initial Ping Identity product scope, API approach, posture surface, a
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `022 — Ping Identity Research and Design`
+- `024 — Ping Identity Research and Design`
 
 ## Relevant Agents
 - Orchestrator

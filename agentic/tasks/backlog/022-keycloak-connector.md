@@ -15,7 +15,7 @@ Implement a read-only Keycloak connector with normalized snapshot output.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `020 — Keycloak Connector`
+- `022 — Keycloak Connector`
 
 ## Relevant Agents
 - Orchestrator

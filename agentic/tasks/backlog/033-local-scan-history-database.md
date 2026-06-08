@@ -15,7 +15,7 @@ Add local-only report history storage for trends and recurring assessment workfl
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P4 — Advanced Workflows`
-- `025 — Local Scan History Database`
+- `033 — Local Scan History Database`
 - Numbering is shifted in `/agentic/tasks` to preserve the expanded roadmap sequence.
 
 ## Relevant Agents

@@ -15,7 +15,7 @@ Add Entra ID analysis, scoring, and report rendering on top of the normalized co
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P3 — New Provider Expansion`
-- `019 — Entra ID Analyzer and Report`
+- `021 — Entra ID Analyzer and Report`
 
 ## Relevant Agents
 - Orchestrator

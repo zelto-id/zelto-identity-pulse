@@ -15,7 +15,7 @@ Define baseline policy profiles for common environment and identity patterns.
 ## Relevant Backlog Source
 `design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
 - `P4 — Advanced Workflows`
-- `028 — Baseline Policy Profiles`
+- `036 — Baseline Policy Profiles`
 
 ## Relevant Agents
 - Orchestrator
