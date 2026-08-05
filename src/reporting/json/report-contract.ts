@@ -1,4 +1,8 @@
 import { createHash } from "crypto";
+import {
+  ComplianceFramework,
+  mapReportToCompliance
+} from "../../compliance";
 import { Auth0TenantSnapshot } from "../../connectors/auth0/auth0.types";
 import { OktaOrgSnapshot } from "../../connectors/okta/okta.types";
 import {
@@ -24,15 +28,20 @@ import {
   StructuredReportV1
 } from "./report-contract.types";
 
+export interface ReportContractBuildOptions {
+  complianceFrameworks?: ComplianceFramework[];
+}
+
 export function buildAuth0ReportContractV1(
   report: Auth0AnalysisReport,
-  snapshot: Auth0TenantSnapshot
+  snapshot: Auth0TenantSnapshot,
+  options: ReportContractBuildOptions = {}
 ): StructuredReportV1 {
   const categoryConfidence = new Map(
     report.categories.map((category) => [category.id, category.confidence])
   );
 
-  return {
+  const structuredReport: StructuredReportV1 = {
     schemaVersion: REPORT_CONTRACT_V1_SCHEMA_VERSION,
     provider: {
       id: "auth0",
@@ -89,17 +98,26 @@ export function buildAuth0ReportContractV1(
     },
     businessContext: report.businessContext
   };
+
+  if (options.complianceFrameworks) {
+    structuredReport.compliance = mapReportToCompliance(structuredReport, {
+      frameworks: options.complianceFrameworks
+    });
+  }
+
+  return structuredReport;
 }
 
 export function buildOktaReportContractV1(
   report: OktaAnalysisReport,
-  snapshot: OktaOrgSnapshot
+  snapshot: OktaOrgSnapshot,
+  options: ReportContractBuildOptions = {}
 ): StructuredReportV1 {
   const categoryConfidence = new Map(
     report.categories.map((category) => [category.id, category.confidence])
   );
 
-  return {
+  const structuredReport: StructuredReportV1 = {
     schemaVersion: REPORT_CONTRACT_V1_SCHEMA_VERSION,
     provider: {
       id: "okta",
@@ -166,6 +184,14 @@ export function buildOktaReportContractV1(
     },
     businessContext: report.businessContext
   };
+
+  if (options.complianceFrameworks) {
+    structuredReport.compliance = mapReportToCompliance(structuredReport, {
+      frameworks: options.complianceFrameworks
+    });
+  }
+
+  return structuredReport;
 }
 
 export function renderReportContractV1Json(

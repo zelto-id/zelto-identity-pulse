@@ -42,6 +42,7 @@ describe("Okta JSON report contract", () => {
     expect(contractA.coverage.collectors.length).toBeGreaterThan(0);
     expect(contractA.positiveSignals.length).toBeGreaterThan(0);
     expect(contractA.opportunities).toEqual([]);
+    expect(contractA.compliance).toBeUndefined();
     expect(contractA.findings[0].classification).toMatch(
       /confirmed-risk|requires-validation|advisory|positive-signal/
     );
@@ -57,6 +58,22 @@ describe("Okta JSON report contract", () => {
         fingerprint: finding.fingerprint
       }))
     );
+  });
+
+  it("can include opt-in structured compliance mapping", () => {
+    const snapshot = loadSnapshot("risky-org.snapshot.json");
+    const contract = buildOktaReportContractV1(
+      analyzeOktaSnapshot(snapshot, {
+        environment: "production",
+        includeIdentifiers: false
+      }),
+      snapshot,
+      { complianceFrameworks: ["iso27001"] }
+    );
+
+    expect(contract.compliance?.frameworks).toEqual(["iso27001"]);
+    expect(contract.compliance?.summary.mappedFindings).toBeGreaterThan(0);
+    expect(contract.compliance?.limitations.join(" ")).toMatch(/manual evidence/i);
   });
 
   it("does not leak raw secret-like snapshot fields into JSON output", () => {

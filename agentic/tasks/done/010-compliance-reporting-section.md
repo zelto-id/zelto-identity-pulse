@@ -1,7 +1,7 @@
 # Task: Compliance Reporting Section
 
 ## Status
-backlog
+done
 
 ## Priority
 P1
@@ -71,3 +71,24 @@ Recommended wording:
 - Report sections can become noisy if every weak mapping is shown by default.
 - Control names and references must stay conservative and maintainable.
 - JSON structure may need versioning if compliance output becomes part of the stable report contract.
+
+## Bug Queue
+_No bugs recorded yet._
+
+## Iteration Log
+- 2026-06-10: Added opt-in Compliance Evidence Mapping sections for HTML and Markdown outputs.
+- 2026-06-10: Extended JSON report output with structured compliance mapping only when compliance reporting is enabled.
+- 2026-06-10: Added CLI and config controls for `--compliance`, `--framework`, and `compliance.enabled` / `compliance.frameworks`.
+- 2026-06-10: Added tests for compliance option parsing, config validation, JSON contract inclusion, and compliance report rendering.
+- 2026-06-10: Verified `npm run build`, `npm test`, Auth0 fixture output, Okta fixture output, and default opt-out behavior.
+
+## Definition of Done
+This task is done only when:
+- scope is implemented
+- out-of-scope items were not implemented
+- acceptance criteria pass
+- build passes
+- tests pass
+- task-related bugs are fixed or documented
+- no secrets are exposed
+- final summary is provided

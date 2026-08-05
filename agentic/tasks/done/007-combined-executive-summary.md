@@ -1,7 +1,7 @@
 # Task: Combined Executive Summary
 
 ## Status
-active
+done
 
 ## Priority
 P1
@@ -55,7 +55,9 @@ Generate a combined summary across multiple provider JSON reports.
 _No bugs recorded yet._
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-06-10: Implemented local combined executive summary generation from multiple Report Contract v1 JSON inputs.
+- 2026-06-10: Added grouped cross-provider risk themes, provider comparison, unified remediation priorities, positive signals, coverage/limitations, and finding ID/fingerprint traceability.
+- 2026-06-10: Added mixed Auth0/Okta tests, HTML redaction checks, README usage docs, and manual fixture-based verification.
 
 ## Definition of Done
 This task is done only when:

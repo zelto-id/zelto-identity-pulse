@@ -6,10 +6,15 @@ import * as path from "path";
 import * as readline from "readline/promises";
 import { Command } from "commander";
 
+import { resolveComplianceOptions } from "../compliance-options";
 import { runAuth0Connector } from "../../connectors/auth0/auth0.connector";
 import { analyzeAuth0Snapshot } from "../../analysis/auth0/auth0.analyzer";
 import { renderAuth0Report } from "../../reporting/markdown/auth0-report.renderer";
 import { renderAuth0ReportHtml } from "../../reporting/html/auth0-report.html-renderer";
+import {
+  appendComplianceMappingHtml,
+  renderComplianceMappingMarkdown
+} from "../../reporting/compliance/compliance-report.renderer";
 import { createLogger } from "../../core/logger";
 import { ConfigError, AuthenticationError } from "../../core/errors";
 import {
@@ -58,6 +63,8 @@ export interface ScanAuth0Options {
   environment?: string;
   includeLegacyExtensibility?: boolean;
   format?: string;
+  compliance?: boolean | string;
+  framework?: string;
 }
 
 export function registerScanAuth0Command(program: Command): void {
@@ -93,6 +100,15 @@ export function registerScanAuth0Command(program: Command): void {
       "--format <format>",
       "Output format: markdown | html | json | all, or a comma-separated combination. Default: markdown.",
       "markdown"
+    )
+    .option(
+      "--compliance [bool]",
+      "Include opt-in Compliance Evidence Mapping sections and JSON compliance mappings.",
+      undefined
+    )
+    .option(
+      "--framework <frameworks>",
+      "Compliance frameworks to include: nis2 | iso27001 | soc2 | all, or comma-separated values. Enables compliance reporting."
     )
     .action(async (options: ScanAuth0Options, command: Command) => {
       try {
@@ -192,11 +208,25 @@ export async function runScanAuth0(
   const wantHtml = formats.includes("html");
   const wantJson = formats.includes("json");
   const multipleOutputs = formats.length > 1;
+  const complianceOptions = resolveComplianceOptions(options);
+  const structuredReport =
+    wantJson || complianceOptions.enabled
+      ? buildAuth0ReportContractV1(report, snapshot, {
+          complianceFrameworks: complianceOptions.enabled
+            ? complianceOptions.frameworks
+            : undefined
+        })
+      : undefined;
+  const complianceMapping = structuredReport?.compliance;
 
   // 4a. Render & write markdown.
   const writtenPaths: string[] = [];
   if (wantMarkdown) {
-    const md = renderAuth0Report(report);
+    const md =
+      renderAuth0Report(report) +
+      (complianceMapping
+        ? `\n${renderComplianceMappingMarkdown(complianceMapping)}`
+        : "");
     const mdPath = resolveReportOutputPath({
       requestedOutput: options.output,
       format: "markdown",
@@ -211,7 +241,9 @@ export async function runScanAuth0(
 
   // 4b. Render & write HTML.
   if (wantHtml) {
-    const html = renderAuth0ReportHtml(report);
+    const html = complianceMapping
+      ? appendComplianceMappingHtml(renderAuth0ReportHtml(report), complianceMapping)
+      : renderAuth0ReportHtml(report);
     const htmlPath = resolveReportOutputPath({
       requestedOutput: options.output,
       format: "html",
@@ -225,7 +257,6 @@ export async function runScanAuth0(
   }
 
   if (wantJson) {
-    const structuredReport = buildAuth0ReportContractV1(report, snapshot);
     const jsonPath = resolveReportOutputPath({
       requestedOutput: options.output,
       format: "json",
@@ -233,7 +264,7 @@ export async function runScanAuth0(
       defaultPath: path.join("reports", `auth0-report-${stamp}.json`)
     });
     ensureDirSync(path.dirname(jsonPath));
-    writeFileSync(jsonPath, renderReportContractV1Json(structuredReport));
+    writeFileSync(jsonPath, renderReportContractV1Json(structuredReport!));
     logger.info(`${reportFormatLabel("json")} report written to ${jsonPath}`);
     writtenPaths.push(jsonPath);
   }

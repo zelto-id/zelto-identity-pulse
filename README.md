@@ -18,6 +18,7 @@ License: Apache-2.0.
 - Report Contract v1 JSON with stable finding IDs and fingerprints.
 - Provider-agnostic delta comparison between two JSON reports.
 - Delta JSON and delta HTML output.
+- Combined executive HTML summary across multiple provider JSON reports.
 - Optional `zelto-pulse.yml` config for repeatable local scan/report settings.
 - Structured business context profile support for deterministic report interpretation and remediation-priority wording.
 - Redacted snapshots when snapshot saving is explicitly requested.
@@ -103,6 +104,8 @@ zelto-pulse scan auth0 \
 | `--token <token>` | Auth0 Management API token. Falls back to `AUTH0_MGMT_API_TOKEN`. Prefer the env var. |
 | `--environment <env>` | `production`, `staging`, `development`, `sandbox`, or `unknown`. |
 | `--format <format>` | `markdown`, `html`, `json`, `all`, or comma-separated values such as `html,json`. Default: `markdown`. |
+| `--compliance [bool]` | Include opt-in Compliance Evidence Mapping sections and structured JSON compliance mapping. |
+| `--framework <frameworks>` | Compliance frameworks to include: `nis2`, `iso27001`, `soc2`, `all`, or comma-separated values. Enables compliance reporting. |
 | `--output <path>` | Report output path. When multiple formats are requested, sibling files are created with matching extensions. |
 | `--snapshot-output <path>` | Redacted snapshot output path. Implies `--save-snapshot`. |
 | `--save-snapshot` | Save a redacted snapshot locally. |
@@ -179,6 +182,8 @@ zelto-pulse scan okta \
 | `--api-token <token>` | Okta SSWS token. Falls back to `OKTA_API_TOKEN`. Prefer the env var. |
 | `--environment <env>` | `production`, `staging`, `development`, `sandbox`, or `unknown`. |
 | `--format <format>` | `markdown`, `html`, `json`, `all`, or comma-separated values. Default: `markdown`. |
+| `--compliance [bool]` | Include opt-in Compliance Evidence Mapping sections and structured JSON compliance mapping. |
+| `--framework <frameworks>` | Compliance frameworks to include: `nis2`, `iso27001`, `soc2`, `all`, or comma-separated values. Enables compliance reporting. |
 | `--output <path>` | Report output path. When multiple formats are requested, sibling files are created with matching extensions. |
 | `--snapshot-output <path>` | Redacted snapshot output path. Implies `--save-snapshot`. |
 | `--save-snapshot` | Save a redacted snapshot locally. |
@@ -247,6 +252,30 @@ reports/delta.html
 
 ---
 
+## Combined Executive Summary
+
+Combine multiple Report Contract v1 JSON reports into one local HTML executive summary:
+
+```bash
+zelto-pulse summary \
+  --reports reports/auth0-posture.json reports/okta-posture.json \
+  --output reports/combined-executive-summary.html
+```
+
+The summary command:
+
+- reads existing local JSON reports only
+- does not contact identity providers
+- compares provider posture side by side
+- groups repeated risk themes across providers
+- produces unified remediation priorities
+- keeps provider-specific finding IDs and fingerprints traceable
+- redacts secret-like values before rendering HTML
+
+Use this after generating Auth0 and Okta JSON reports with `--format json` or `--format html,json`.
+
+---
+
 ## Rule Catalog
 
 Inspect deterministic rule metadata without running a scan:
@@ -265,6 +294,31 @@ zelto-pulse rules explain OKTA-APP-001
 ```
 
 Rule explanations include provider, category, severity logic, evidence used, confidence logic, remediation guidance, and false-positive notes. Finding IDs in Markdown, HTML, and JSON reports are the same rule IDs used by the catalog, so a report finding can be traced back to deterministic rule metadata.
+
+---
+
+## Compliance and Audit-Readiness Design
+
+The repository includes a conservative identity-control mapping document for future compliance reporting and evidence-pack work:
+
+- [docs/compliance/identity-control-matrix.md](docs/compliance/identity-control-matrix.md)
+
+This document maps Auth0 and Okta identity-system evidence to selected NIS2, SOC 2, and ISO/IEC 27001/27002 control areas. It is a design foundation only; Zelto Identity Pulse does not certify compliance, prove operating effectiveness, or replace auditor judgment.
+
+The codebase also includes a deterministic internal compliance mapping layer under `src/compliance`. It defines machine-readable NIS2, SOC 2, and ISO/IEC 27001/27002 control registries plus finding-to-control mappings for compliance report sections, JSON output extensions, and future evidence packs. These mappings are not rendered unless compliance reporting is explicitly enabled.
+
+Compliance report sections are opt-in so normal technical posture reports stay focused:
+
+```bash
+zelto-pulse scan auth0 \
+  --from-snapshot fixtures/auth0/risky-tenant.snapshot.json \
+  --environment production \
+  --format html,json \
+  --compliance \
+  --framework nis2,soc2
+```
+
+When enabled, Markdown and HTML reports include a `Compliance Evidence Mapping` section. JSON reports include a structured `compliance` object derived from the same local Report Contract v1 data. The section separates automated identity evidence from manual evidence requirements and repeats the limitation that the report does not certify compliance or prove operating effectiveness.
 
 ---
 
@@ -297,6 +351,13 @@ reports:
     - html
     - json
   output: reports/identity-posture.md
+
+compliance:
+  enabled: false
+  frameworks:
+    - nis2
+    - iso27001
+    - soc2
 
 masking:
   includeIdentifiers: false
@@ -414,6 +475,7 @@ src/
   cli/                 commander entry point and commands
   config/              local zelto-pulse.yml parsing and merge helpers
   core/                logger, errors, filesystem, schemas, business context
+  compliance/          Machine-readable compliance control registry and mappings
   connectors/auth0/    Auth0 read-only connector, collectors, redaction
   connectors/okta/     Okta read-only connector, collectors, redaction
   analysis/auth0/      Auth0 deterministic rules, scoring, analyzer
@@ -422,6 +484,7 @@ src/
   reporting/html/      HTML report renderers
   reporting/json/      Report Contract v1 JSON
   reporting/delta/     Provider-agnostic delta comparison
+  reporting/combined/  Multi-provider executive summary model
   analysis/rules/      Rule catalog metadata
 fixtures/
   auth0/               Auth0 snapshot fixtures
@@ -429,10 +492,15 @@ fixtures/
 tests/
   auth0/
   okta/
+  combined/
+  compliance/
   delta/
   config/
   reporting/
   rules/
+docs/
+  compliance/          Audit-readiness and identity control mapping design
+  manual-e2e-test-scenarios.md
 ```
 
 Agentic delivery docs live under [agentic](agentic). The current implementation queue is [agentic/tasks](agentic/tasks).
@@ -442,6 +510,7 @@ Agentic delivery docs live under [agentic](agentic). The current implementation 
 ## See Also
 
 - [SECURITY.md](SECURITY.md) - security model, token handling, responsible disclosure.
+- [docs/manual-e2e-test-scenarios.md](docs/manual-e2e-test-scenarios.md) - manual end-to-end QA scenarios for the full CLI workflow.
 - [AGENT.md](AGENT.md) - repository agent workflow and delivery rules.
 - [agentic/tasks/README.md](agentic/tasks/README.md) - task workflow.
 - [design/auth0-tenant-check-framework.md](design/auth0-tenant-check-framework.md) - Auth0 scoring framework.

@@ -1,7 +1,7 @@
 # Task: Compliance Mapping Layer
 
 ## Status
-backlog
+done
 
 ## Priority
 P1
@@ -82,6 +82,15 @@ type FindingComplianceMapping = {
 - Mapping layer depends on the research output from task `008`.
 - Future implementation can support report rendering, evidence packs, and JSON output.
 - Tests are defined for mapping correctness and overclaim prevention.
+
+## Bug Queue
+_No bugs recorded yet._
+
+## Iteration Log
+- 2026-06-10: Added compliance mapping types, framework control registries, finding-to-control mappings, and a structured report mapper.
+- 2026-06-10: Added NIS2, ISO/IEC 27001/27002, and SOC 2 machine-readable controls based on `docs/compliance/identity-control-matrix.md`.
+- 2026-06-10: Added compliance mapper tests covering control registry integrity, explicit mapping references, overclaim prevention, framework filtering, fixture-derived Auth0/Okta reports, and deterministic JSON serialization.
+- 2026-06-10: Fixed duplicate control references when combining logging and incident-support mappings.
 
 ## Risks / Caveats
 - Control mappings can drift if framework interpretation is not maintained.

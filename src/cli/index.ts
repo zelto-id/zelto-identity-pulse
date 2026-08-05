@@ -9,6 +9,7 @@ import { registerRulesCommand } from "./commands/rules";
 import { registerConfiguredScanAction } from "./commands/scan-configured";
 import { registerScanAuth0Command } from "./commands/scan-auth0";
 import { registerScanOktaCommand } from "./commands/scan-okta";
+import { registerSummaryCommand } from "./commands/summary";
 import { loadDotEnv } from "../core/dotenv";
 
 function main(): void {
@@ -32,6 +33,7 @@ function main(): void {
   registerScanAuth0Command(scan);
   registerScanOktaCommand(scan);
   registerCompareCommand(program);
+  registerSummaryCommand(program);
   registerRulesCommand(program);
 
   program.parseAsync(process.argv).catch((err) => {

@@ -35,6 +35,7 @@ describe("Auth0 JSON report contract", () => {
     expect(contractA.coverage.collectors.length).toBeGreaterThan(0);
     expect(contractA.limitations.length).toBeGreaterThan(0);
     expect(contractA.positiveSignals.length).toBeGreaterThan(0);
+    expect(contractA.compliance).toBeUndefined();
     expect(contractA.findings[0]).toMatchObject({
       provider: "auth0"
     });
@@ -57,6 +58,19 @@ describe("Auth0 JSON report contract", () => {
         fingerprint: finding.fingerprint
       }))
     );
+  });
+
+  it("can include opt-in structured compliance mapping", () => {
+    const snapshot = loadSnapshot("risky-tenant.snapshot.json");
+    const contract = buildAuth0ReportContractV1(
+      analyzeAuth0Snapshot(snapshot, { environment: "production" }),
+      snapshot,
+      { complianceFrameworks: ["nis2", "soc2"] }
+    );
+
+    expect(contract.compliance?.frameworks).toEqual(["nis2", "soc2"]);
+    expect(contract.compliance?.summary.mappedFindings).toBeGreaterThan(0);
+    expect(contract.compliance?.limitations.join(" ")).toMatch(/do not certify/i);
   });
 
   it("does not leak raw secret-like snapshot fields into JSON output", () => {

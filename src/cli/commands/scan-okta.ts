@@ -2,6 +2,7 @@ import * as path from "path";
 import * as readline from "readline/promises";
 import { Command } from "commander";
 
+import { resolveComplianceOptions } from "../compliance-options";
 import { analyzeOktaSnapshot } from "../../analysis/okta/okta.analyzer";
 import { runOktaConnector } from "../../connectors/okta/okta.connector";
 import {
@@ -17,6 +18,10 @@ import {
   writeFileSync
 } from "../../core/filesystem";
 import { createLogger } from "../../core/logger";
+import {
+  appendComplianceMappingHtml,
+  renderComplianceMappingMarkdown
+} from "../../reporting/compliance/compliance-report.renderer";
 import { renderOktaReportHtml } from "../../reporting/html/okta-report.html-renderer";
 import {
   buildOktaReportContractV1,
@@ -69,6 +74,8 @@ export interface ScanOktaOptions {
   systemLogDays?: string;
   maxLogs?: string;
   includeIdentifiers?: boolean;
+  compliance?: boolean | string;
+  framework?: string;
 }
 
 export function registerScanOktaCommand(program: Command): void {
@@ -119,6 +126,15 @@ export function registerScanOktaCommand(program: Command): void {
       "--include-identifiers",
       "Include full user or principal identifiers in generated reports instead of masking them by default.",
       false
+    )
+    .option(
+      "--compliance [bool]",
+      "Include opt-in Compliance Evidence Mapping sections and JSON compliance mappings.",
+      undefined
+    )
+    .option(
+      "--framework <frameworks>",
+      "Compliance frameworks to include: nis2 | iso27001 | soc2 | all, or comma-separated values. Enables compliance reporting."
     )
     .action(async (options: ScanOktaOptions, command: Command) => {
       try {
@@ -217,10 +233,24 @@ export async function runScanOkta(
   const wantHtml = formats.includes("html");
   const wantJson = formats.includes("json");
   const multipleOutputs = formats.length > 1;
+  const complianceOptions = resolveComplianceOptions(options);
+  const structuredReport =
+    wantJson || complianceOptions.enabled
+      ? buildOktaReportContractV1(report, snapshot, {
+          complianceFrameworks: complianceOptions.enabled
+            ? complianceOptions.frameworks
+            : undefined
+        })
+      : undefined;
+  const complianceMapping = structuredReport?.compliance;
   const writtenPaths: string[] = [];
 
   if (wantMarkdown) {
-    const markdown = renderOktaReport(report);
+    const markdown =
+      renderOktaReport(report) +
+      (complianceMapping
+        ? `\n${renderComplianceMappingMarkdown(complianceMapping)}`
+        : "");
     const reportPath = resolveReportOutputPath({
       requestedOutput: options.output,
       format: "markdown",
@@ -234,7 +264,9 @@ export async function runScanOkta(
   }
 
   if (wantHtml) {
-    const html = renderOktaReportHtml(report);
+    const html = complianceMapping
+      ? appendComplianceMappingHtml(renderOktaReportHtml(report), complianceMapping)
+      : renderOktaReportHtml(report);
     const htmlPath = resolveReportOutputPath({
       requestedOutput: options.output,
       format: "html",
@@ -248,7 +280,6 @@ export async function runScanOkta(
   }
 
   if (wantJson) {
-    const structuredReport = buildOktaReportContractV1(report, snapshot);
     const jsonPath = resolveReportOutputPath({
       requestedOutput: options.output,
       format: "json",
@@ -256,7 +287,7 @@ export async function runScanOkta(
       defaultPath: path.join("reports", `okta-report-${stamp}.json`)
     });
     ensureDirSync(path.dirname(jsonPath));
-    writeFileSync(jsonPath, renderReportContractV1Json(structuredReport));
+    writeFileSync(jsonPath, renderReportContractV1Json(structuredReport!));
     logger.info(`${reportFormatLabel("json")} report written to ${jsonPath}`);
     writtenPaths.push(jsonPath);
   }

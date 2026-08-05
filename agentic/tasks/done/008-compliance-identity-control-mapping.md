@@ -1,7 +1,7 @@
 # Task: Compliance Identity Control Mapping
 
 ## Status
-backlog
+done
 
 ## Priority
 P1
@@ -83,6 +83,14 @@ Identity domains to map:
 - Each mapping separates automated identity evidence from manual evidence.
 - The document is usable as the foundation for implementation tasks `009-compliance-mapping-layer.md` and `010-compliance-reporting-section.md`.
 - No overclaiming of compliance certification.
+
+## Bug Queue
+_No bugs recorded yet._
+
+## Iteration Log
+- 2026-06-10: Added `docs/compliance/identity-control-matrix.md` with NIS2, ISO/IEC 27001/27002, and SOC 2 identity evidence mappings.
+- 2026-06-10: Included automated evidence strength, manual evidence requirements, caveats, and safe report wording for each mapped control area.
+- 2026-06-10: Updated README with a design-only compliance/audit-readiness reference.
 
 ## Risks / Caveats
 - Framework language can be jurisdiction- and auditor-dependent.

@@ -181,6 +181,60 @@ auth0:
     expect(merged.includeLegacyExtensibility).toBe(true);
   });
 
+  it("merges compliance reporting settings explicitly", () => {
+    const loaded = {
+      path: "/tmp/zelto-pulse.yml",
+      config: parseConfigYaml(`
+provider: auth0
+compliance:
+  enabled: true
+  frameworks:
+    - nis2
+    - soc2
+auth0:
+  fromSnapshot: fixtures/auth0/risky-tenant.snapshot.json
+`)
+    };
+
+    const merged = mergeAuth0ScanOptions(
+      {
+        config: loaded.path
+      },
+      source([]),
+      loaded
+    );
+
+    expect(merged.compliance).toBe(true);
+    expect(merged.framework).toBe("nis2,soc2");
+  });
+
+  it("does not enable compliance from framework defaults when disabled", () => {
+    const loaded = {
+      path: "/tmp/zelto-pulse.yml",
+      config: parseConfigYaml(`
+provider: okta
+compliance:
+  enabled: false
+  frameworks:
+    - nis2
+    - soc2
+okta:
+  fromSnapshot: fixtures/okta/risky-org.snapshot.json
+`)
+    };
+
+    const merged = mergeOktaScanOptions(
+      {
+        config: loaded.path
+      },
+      source([]),
+      loaded
+    );
+
+    expect(merged.compliance).toBe(false);
+    expect(merged.framework).toBeUndefined();
+  });
+
   it("merges Okta bounded collection and masking settings", () => {
     const loaded = {
       path: "/tmp/zelto-pulse.yml",
@@ -249,6 +303,19 @@ businessContext:
 `);
     expect(() => loadReportConfig({ configPath, cwd: "/" })).toThrow(
       /Invalid businessContext.environment/
+    );
+  });
+
+  it("rejects invalid compliance framework values", () => {
+    const configPath = tempConfig(`
+provider: auth0
+compliance:
+  enabled: true
+  frameworks:
+    - pci
+`);
+    expect(() => loadReportConfig({ configPath, cwd: "/" })).toThrow(
+      /Invalid compliance framework/
     );
   });
 

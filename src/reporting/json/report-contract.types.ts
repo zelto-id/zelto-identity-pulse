@@ -1,5 +1,6 @@
 import { CollectorFailure, ResourceCoverage } from "../../core/schema";
 import { BusinessContextProfile } from "../../core/business-context";
+import type { ComplianceMappingResult } from "../../compliance/compliance.types";
 import { Confidence, Environment, Grade, Severity } from "../markdown/report.types";
 import { OktaFindingClassification } from "../markdown/okta-report.types";
 
@@ -147,4 +148,5 @@ export interface StructuredReportV1 {
   positiveSignals: StructuredReportPositiveSignal[];
   remediationPlan: StructuredReportRemediationPlan;
   businessContext?: BusinessContextProfile;
+  compliance?: ComplianceMappingResult;
 }

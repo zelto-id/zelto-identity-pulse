@@ -10,7 +10,7 @@ The `/agentic/tasks` directory is the execution backlog for `zelto-identity-puls
 - Each task file is the source of truth for scope, out-of-scope boundaries, and validation requirements.
 
 ## Current Roadmap Order
-- `007-combined-executive-summary.md` is the active task.
+- `011-audit-evidence-pack-generation.md` is the active task.
 - Compliance/audit-readiness tasks `008` through `011` come next so NIS2, SOC 2, and ISO 27001 evidence mapping is established before evidence packs and provider expansion.
 - Entra ID starts at `020-entra-id-connector.md`; provider connector expansion should not move ahead of compliance mapping, provider abstraction hardening, or the provider onboarding kit.
 - Late platform bets, including SaaS backend, Web UI, AI-generated enhancements, external rule DSL, and automatic remediation/write operations, remain late backlog items.

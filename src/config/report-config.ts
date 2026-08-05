@@ -30,6 +30,10 @@ export interface ReportConfig {
   scoring?: {
     profile?: string;
   };
+  compliance?: {
+    enabled?: boolean;
+    frameworks?: string | string[];
+  };
   businessContext?: BusinessContextProfile;
   collection?: {
     includeUsers?: string;
@@ -93,6 +97,8 @@ export interface Auth0ConfigurableOptions {
   environment?: string;
   includeLegacyExtensibility?: boolean;
   format?: string;
+  compliance?: boolean | string;
+  framework?: string;
 }
 
 export interface OktaConfigurableOptions {
@@ -114,6 +120,8 @@ export interface OktaConfigurableOptions {
   systemLogDays?: string;
   maxLogs?: string;
   includeIdentifiers?: boolean;
+  compliance?: boolean | string;
+  framework?: string;
 }
 
 const DEFAULT_CONFIG_FILENAMES = ["zelto-pulse.yml", "zelto-pulse.yaml"];
@@ -294,6 +302,10 @@ export function mergeAuth0ScanOptions(
 ): Auth0ConfigurableOptions {
   const config = loaded ?? loadReportConfig({ configPath: options.config });
   const provider = config.config.auth0 ?? {};
+  const complianceFrameworks =
+    config.config.compliance?.enabled === false
+      ? undefined
+      : config.config.compliance?.frameworks;
 
   return {
     ...options,
@@ -353,6 +365,20 @@ export function mergeAuth0ScanOptions(
         config.config.reports?.format,
         config.config.format
       )
+    ),
+    compliance: pickOption(
+      options,
+      source,
+      "compliance",
+      config.config.compliance?.enabled
+    ),
+    framework: formatValue(
+      pickOption(
+        options,
+        source,
+        "framework",
+        complianceFrameworks
+      )
     )
   };
 }
@@ -365,6 +391,10 @@ export function mergeOktaScanOptions(
   const config = loaded ?? loadReportConfig({ configPath: options.config });
   const provider = config.config.okta ?? {};
   const collection = config.config.collection ?? {};
+  const complianceFrameworks =
+    config.config.compliance?.enabled === false
+      ? undefined
+      : config.config.compliance?.frameworks;
 
   return {
     ...options,
@@ -455,6 +485,20 @@ export function mergeOktaScanOptions(
         config.config.reports?.format,
         config.config.format
       )
+    ),
+    compliance: pickOption(
+      options,
+      source,
+      "compliance",
+      config.config.compliance?.enabled
+    ),
+    framework: formatValue(
+      pickOption(
+        options,
+        source,
+        "framework",
+        complianceFrameworks
+      )
     )
   };
 }
@@ -489,7 +533,37 @@ function validateReportConfig(config: ReportConfig, configPath: string): void {
     );
   }
 
+  validateComplianceConfig(config, configPath);
   validateBusinessContext(config, configPath);
+}
+
+function validateComplianceConfig(config: ReportConfig, configPath: string): void {
+  if (!config.compliance) return;
+  if (!isPlainObject(config.compliance)) {
+    throw new ConfigError(
+      `Invalid compliance in ${configPath}: expected a mapping object.`
+    );
+  }
+  if (
+    config.compliance.enabled !== undefined &&
+    typeof config.compliance.enabled !== "boolean"
+  ) {
+    throw new ConfigError(
+      `Invalid compliance.enabled in ${configPath}: expected true or false.`
+    );
+  }
+  const frameworks = config.compliance.frameworks;
+  if (frameworks === undefined) return;
+  const values = Array.isArray(frameworks) ? frameworks : [frameworks];
+  const allowed = new Set(["nis2", "iso27001", "soc2", "all"]);
+  for (const framework of values) {
+    const normalized = String(framework).toLowerCase();
+    if (!allowed.has(normalized)) {
+      throw new ConfigError(
+        `Invalid compliance framework in ${configPath}: ${String(framework)}. Expected nis2, iso27001, soc2, or all.`
+      );
+    }
+  }
 }
 
 function validateBusinessContext(config: ReportConfig, configPath: string): void {
