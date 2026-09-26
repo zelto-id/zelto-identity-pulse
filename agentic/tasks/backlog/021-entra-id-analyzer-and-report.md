@@ -1,21 +1,74 @@
-# Task: Entra ID Analyzer and Report
+# Task 021: Implement Entra controls and reports for the approved scope
 
 ## Status
 backlog
 
 ## Priority
-P3
+P2
 
-## Product Rationale
-A connector alone does not create assessment value; Entra ID needs deterministic rules, scoring, and report support to become commercially useful.
+## Milestone
+M4 expansion
 
-## Goal
-Add Entra ID analysis, scoring, and report rendering on top of the normalized connector output.
+## Type and readiness
+Type: implementation.
+Readiness: human-dependent.
 
-## Relevant Backlog Source
-`design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
-- `P3 — New Provider Expansion`
-- `021 — Entra ID Analyzer and Report`
+Existing ID retained; priority/scope reconciled with current implementation. See the reconciliation record.
+
+## Problem and customer value
+A collector alone is not usable assessment coverage. Entra needs a small set of validated questions based only on evidence the approved connector can support.
+
+## Scope
+- Derive a reviewed initial control list from 066/customer reference configurations, with evidence prerequisites, outcomes and uncertainty.
+- Implement analyzer/guidance and current report/manifest/delta contracts; separate technical findings from any reviewed framework mappings.
+- Validate score/grade explanations and cross-provider summary caveats.
+
+## Out of scope
+- No manufactured rule-count target, full policy simulator, cross-system access graph or KSC/compliance claim from a connector.
+
+## Dependencies
+- [020 — Implement the approved narrow Entra read-only connector](020-entra-id-connector.md)
+
+## Human decisions and external prerequisites
+Entra/IAM reviewer and authorized reference tenant; follow expansion decision and contract gates.
+
+## Affected components / verified starting points
+Paths below exist at the reviewed baseline. New modules mentioned in acceptance criteria are proposals, not implemented capabilities.
+
+- [src/analysis/rules/rule-catalog.ts](../../../src/analysis/rules/rule-catalog.ts)
+- [src/reporting/json/report-contract.types.ts](../../../src/reporting/json/report-contract.types.ts)
+- [src/reporting/report-output.ts](../../../src/reporting/report-output.ts)
+- [src/reporting/combined/combined-summary.ts](../../../src/reporting/combined/combined-summary.ts)
+- [tests](../../../tests)
+
+## Acceptance criteria
+- Proposed new Entra analyzer has positive/negative/unknown/applicability cases for each approved control, with source references and complete guidance.
+- Offline HTML/Markdown/JSON, replay and comparable config-only reassessment work with explicit license/API gaps.
+- Human reference results are recorded separately from fixtures before Entra is added to supported-provider claims.
+
+## Verification
+- Conformance and report/delta regression tests plus authorized reference validation; assert individual findings and evidence.
+- Check no incomplete policy inventory is interpreted as effective user enforcement.
+
+For code-changing execution, run source build, the existing test suite, test type-check and meaningful lint after task 045 restores them. Record exact commands, exits and fixture/mock/live provenance. For research/documentation-only execution, validate references and review decisions; do not invent a test run or live result.
+
+## Security, privacy and compatibility
+- Preserve the local, read-only, no-telemetry CLI boundary; active tests/writes require a separately approved operating model and per-run authorization.
+- Use synthetic/sanitized examples; do not store credentials, customer values or unnecessary personal identifiers in the repository. Apply task 049 policy where relevant.
+- Version changed data contracts and document legacy input behavior. Never reinterpret missing evidence as a successful assessment, remediation or compliance.
+
+## Documentation
+Review README.md and update affected CLI examples, limitations, methodology and security guidance when behavior changes. Update the control-validation matrix/coverage documentation where applicable. Record the reviewed docs or explain why no user-facing change is needed. Keep planning claims distinct from shipped capability.
+
+## Completion evidence
+Pending. This 2026-09-26 update changes planning only; no acceptance criterion is recorded as implemented by this edit. Before completion, attach reviewed changes/artifact references, verification command results, observed acceptance outcomes, compatibility notes and any required human approval. Do not mark human-dependent work complete from fixtures or desk research alone.
+
+## Planning references
+- [Roadmap and release gates](../ROADMAP.md)
+- [Assessment findings and verification](../ASSESSMENT-2026-09-26.md)
+- [Existing-task reconciliation](../RECONCILIATION.md)
+- [Initial control validation set](../CONTROL-VALIDATION.md)
+- [Human decisions](../HUMAN-DECISIONS.md)
 
 ## Relevant Agents
 - Orchestrator
@@ -25,42 +78,11 @@ Add Entra ID analysis, scoring, and report rendering on top of the normalized co
 - Security & Privacy Reviewer
 - QA & Test Engineer
 
-## Scope
-- Add Entra ID analyzer rules, scoring categories, findings, HTML and JSON report support, rule catalog entries, fixtures, and tests.
-
-## Out of Scope
-- New provider connector work beyond Entra ID inputs.
-- Write operations.
-- AI-generated findings.
-
-## Acceptance Criteria
-- Entra ID findings use the shared report contract.
-- Scoring is deterministic and explainable.
-- HTML and JSON reports include Entra ID output.
-- Rule catalog entries and fixtures are included.
-
-## Required Test Commands
-- `npm run build`
-- `npm test`
-
-## Manual Verification
-- Generate an Entra ID report from fixtures and review findings, scores, and coverage.
-- Confirm rule IDs and remediation text are traceable.
-- Verify no secrets or raw tokens appear in outputs.
-
 ## Bug Queue
-_No bugs recorded yet._
+Historical placeholder: no implementation bugs were logged in this task. Current baseline issues and corrective ownership are in the assessment record.
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-09-26 — Planning reconciliation at `3ba2626747a870c510162060fd6f3ba7849d07af`; scope/dependencies updated, implementation not executed. Completed-task history preserved separately.
 
-## Definition of Done
-This task is done only when:
-- scope is implemented
-- out-of-scope items were not implemented
-- acceptance criteria pass
-- build passes
-- tests pass
-- task-related bugs are fixed or documented
-- no secrets are exposed
-- final summary is provided
+## Definition of done
+Meet the acceptance criteria and existing repository definition of done; preserve explicit unverified limitations and record completion evidence above. Deferred work also requires its activation evidence.

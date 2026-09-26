@@ -1,4 +1,4 @@
-# Task: Google Cloud Identity Research
+# Task 030: Google Cloud Identity / Workspace scope research
 
 ## Status
 backlog
@@ -6,16 +6,70 @@ backlog
 ## Priority
 P3
 
-## Product Rationale
-Google Cloud Identity and Google Workspace are part of the broader identity landscape, but the product needs a clear read-only posture surface before any implementation.
+## Milestone
+Later growth
 
-## Goal
-Research the most useful Google identity posture scope and produce a design recommendation.
+## Type and readiness
+Type: research.
+Readiness: deferred.
 
-## Relevant Backlog Source
-`design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
-- `P3 — New Provider Expansion`
-- `Provider Expansion Strategy: Google Workspace / Cloud Identity`
+Existing ID retained; priority/scope reconciled with current implementation. See the reconciliation record.
+
+## Problem and customer value
+Google Cloud Identity / Workspace is a visible expansion candidate with no implementation; customer value and access must precede build scope.
+
+## Scope
+- Select domain/admin/security-policy questions and distinguish Directory/Admin API coverage, license boundaries and delegated access.
+- Inventory current primary API documentation, read privileges, license/rate limits, normalization/evidence fit and authorized validation cost.
+
+## Out of scope
+- No implementation or external access before activation and a focused scope decision; no change to the near-term local read-only architecture.
+- No credentials/customer data in planning artifacts; no presumed provider-write authorization.
+
+## Dependencies
+- [065 — Make evidence-based pilot release and expansion decisions](065-pilot-release-and-expansion-decision.md)
+
+## Human decisions and external prerequisites
+Product owner and a committed customer/design partner; authorized test access for any future integration.
+
+## Affected components / verified starting points
+Paths below exist at the reviewed baseline. New modules mentioned in acceptance criteria are proposals, not implemented capabilities.
+
+- [src/connectors](../../../src/connectors)
+- [src/core/schema.ts](../../../src/core/schema.ts)
+- [src/reporting/json/report-contract.types.ts](../../../src/reporting/json/report-contract.types.ts)
+
+## Acceptance criteria
+- A dated activation/defer decision names the customer problem, evidence of demand, prerequisites, success metrics and scope boundaries.
+- Research distinguishes implemented capability from documented API capability and unverified assumptions; any build is scoped as a separate approved follow-up.
+- Produce a narrow build/no-build decision and permission/evidence matrix; do not claim connector support from research.
+
+## Verification
+- Review relevant current source/fixtures and primary provider documentation when the task is activated.
+- For a subsequent implementation, add meaningful fixture/mock/contract regressions and separately authorized reference integration; no fabricated validation results.
+
+For code-changing execution, run source build, the existing test suite, test type-check and meaningful lint after task 045 restores them. Record exact commands, exits and fixture/mock/live provenance. For research/documentation-only execution, validate references and review decisions; do not invent a test run or live result.
+
+## Security, privacy and compatibility
+- Preserve the local, read-only, no-telemetry CLI boundary; active tests/writes require a separately approved operating model and per-run authorization.
+- Use synthetic/sanitized examples; do not store credentials, customer values or unnecessary personal identifiers in the repository. Apply task 049 policy where relevant.
+- Version changed data contracts and document legacy input behavior. Never reinterpret missing evidence as a successful assessment, remediation or compliance.
+
+## Documentation
+Review README.md and update affected CLI examples, limitations, methodology and security guidance when behavior changes. Update the control-validation matrix/coverage documentation where applicable. Record the reviewed docs or explain why no user-facing change is needed. Keep planning claims distinct from shipped capability.
+
+## Completion evidence
+Pending. This 2026-09-26 update changes planning only; no acceptance criterion is recorded as implemented by this edit. Before completion, attach reviewed changes/artifact references, verification command results, observed acceptance outcomes, compatibility notes and any required human approval. Do not mark human-dependent work complete from fixtures or desk research alone.
+
+## Planning references
+- [Roadmap and release gates](../ROADMAP.md)
+- [Assessment findings and verification](../ASSESSMENT-2026-09-26.md)
+- [Existing-task reconciliation](../RECONCILIATION.md)
+- [Initial control validation set](../CONTROL-VALIDATION.md)
+- [Human decisions](../HUMAN-DECISIONS.md)
+
+## Activation / subsequent scope
+A committed customer needs Google Cloud Identity / Workspace evidence unavailable from supported connectors and provides product/API/test-access details.
 
 ## Relevant Agents
 - Orchestrator
@@ -23,44 +77,11 @@ Research the most useful Google identity posture scope and produce a design reco
 - Connector Engineer
 - Security & Privacy Reviewer
 
-## Scope
-- Identify the right initial Google identity surface.
-- Evaluate APIs, permissions, and read-only constraints.
-- Define posture signals, exclusions, and likely report implications.
-- Produce a scoped design for follow-on implementation.
-
-## Out of Scope
-- Immediate connector implementation.
-- Broad Google platform coverage beyond identity posture.
-- Write operations.
-
-## Acceptance Criteria
-- The initial Google identity scope is explicitly chosen.
-- Read-only access strategy and safe data boundaries are documented.
-- A follow-on implementation task can start from the research outcome.
-
-## Required Test Commands
-- `npm run build`
-- `npm test`
-
-## Manual Verification
-- Review the research against product principles and confirm it remains local-first and read-only.
-- Confirm risky or ambiguous data surfaces are excluded.
-- Verify the plan does not imply secret access or tenant writes.
-
 ## Bug Queue
-_No bugs recorded yet._
+Historical placeholder: no implementation bugs were logged in this task. Current baseline issues and corrective ownership are in the assessment record.
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-09-26 — Planning reconciliation at `3ba2626747a870c510162060fd6f3ba7849d07af`; scope/dependencies updated, implementation not executed. Completed-task history preserved separately.
 
-## Definition of Done
-This task is done only when:
-- scope is implemented
-- out-of-scope items were not implemented
-- acceptance criteria pass
-- build passes
-- tests pass
-- task-related bugs are fixed or documented
-- no secrets are exposed
-- final summary is provided
+## Definition of done
+Meet the acceptance criteria and existing repository definition of done; preserve explicit unverified limitations and record completion evidence above. Deferred work also requires its activation evidence.

@@ -1,4 +1,4 @@
-# Task: User Risk Scoring
+# Task 038: User risk scoring research after validated identity evidence
 
 ## Status
 backlog
@@ -6,16 +6,70 @@ backlog
 ## Priority
 P4
 
-## Product Rationale
-User-level risk can be valuable for prioritization, but it must avoid false precision, surveillance-style behavior, and privacy leakage.
+## Milestone
+Later growth
 
-## Goal
-Add conservative user risk indicators grounded in explicit posture evidence.
+## Type and readiness
+Type: research.
+Readiness: deferred.
 
-## Relevant Backlog Source
-`design/zelto-identity-pulse-post-mvp-backlog-updated-prioritized-business-context.md`:
-- `P4 — Advanced Workflows`
-- `038 — User Risk Scoring`
+Existing ID retained; priority/scope reconciled with current implementation. See the reconciliation record.
+
+## Problem and customer value
+Per-user risk aggregation could mislabel people if identity linking, evidence completeness and intended action are undefined.
+
+## Scope
+- Define the IAM decision, explainable signals, aggregation limits, false-positive evaluation and privacy/retention requirements.
+- Keep account/security posture separate from employee behavior or productivity judgments.
+
+## Out of scope
+- No implementation or external access before activation and a focused scope decision; no change to the near-term local read-only architecture.
+- No credentials/customer data in planning artifacts; no presumed provider-write authorization.
+
+## Dependencies
+- [037 — Historical user/activity trends after collection validation](037-historical-user-activity-analysis.md)
+- [068 — Research cross-system identity and access relationships](068-cross-system-identity-and-access-research.md)
+
+## Human decisions and external prerequisites
+Product owner and a committed customer/design partner; authorized test access for any future integration.
+
+## Affected components / verified starting points
+Paths below exist at the reviewed baseline. New modules mentioned in acceptance criteria are proposals, not implemented capabilities.
+
+- [src/analysis/okta/okta.rules.ts](../../../src/analysis/okta/okta.rules.ts)
+- [src/reporting/json/report-contract.types.ts](../../../src/reporting/json/report-contract.types.ts)
+
+## Acceptance criteria
+- A dated activation/defer decision names the customer problem, evidence of demand, prerequisites, success metrics and scope boundaries.
+- Research distinguishes implemented capability from documented API capability and unverified assumptions; any build is scoped as a separate approved follow-up.
+- No opaque ML score or unvalidated identity join; require human review for consequential account decisions.
+
+## Verification
+- Review relevant current source/fixtures and primary provider documentation when the task is activated.
+- For a subsequent implementation, add meaningful fixture/mock/contract regressions and separately authorized reference integration; no fabricated validation results.
+
+For code-changing execution, run source build, the existing test suite, test type-check and meaningful lint after task 045 restores them. Record exact commands, exits and fixture/mock/live provenance. For research/documentation-only execution, validate references and review decisions; do not invent a test run or live result.
+
+## Security, privacy and compatibility
+- Preserve the local, read-only, no-telemetry CLI boundary; active tests/writes require a separately approved operating model and per-run authorization.
+- Use synthetic/sanitized examples; do not store credentials, customer values or unnecessary personal identifiers in the repository. Apply task 049 policy where relevant.
+- Version changed data contracts and document legacy input behavior. Never reinterpret missing evidence as a successful assessment, remediation or compliance.
+
+## Documentation
+Review README.md and update affected CLI examples, limitations, methodology and security guidance when behavior changes. Update the control-validation matrix/coverage documentation where applicable. Record the reviewed docs or explain why no user-facing change is needed. Keep planning claims distinct from shipped capability.
+
+## Completion evidence
+Pending. This 2026-09-26 update changes planning only; no acceptance criterion is recorded as implemented by this edit. Before completion, attach reviewed changes/artifact references, verification command results, observed acceptance outcomes, compatibility notes and any required human approval. Do not mark human-dependent work complete from fixtures or desk research alone.
+
+## Planning references
+- [Roadmap and release gates](../ROADMAP.md)
+- [Assessment findings and verification](../ASSESSMENT-2026-09-26.md)
+- [Existing-task reconciliation](../RECONCILIATION.md)
+- [Initial control validation set](../CONTROL-VALIDATION.md)
+- [Human decisions](../HUMAN-DECISIONS.md)
+
+## Activation / subsequent scope
+A committed customer needs individual access-risk prioritization, supplies reviewed reference outcomes and accepts privacy constraints.
 
 ## Relevant Agents
 - Orchestrator
@@ -24,44 +78,11 @@ Add conservative user risk indicators grounded in explicit posture evidence.
 - Security & Privacy Reviewer
 - QA & Test Engineer
 
-## Scope
-- Add conservative indicators such as privileged admin plus no MFA, stale privileged users, or privileged app access where known.
-- Mask identifiers by default.
-- Keep the model explainable and low-precision by design.
-
-## Out of Scope
-- Behavioral ML.
-- Employee surveillance.
-- Full UEBA.
-
-## Acceptance Criteria
-- Risk indicators are explainable and conservative.
-- Identifier masking remains on by default.
-- Reports distinguish indicators from definitive user compromise claims.
-- Tests cover representative indicator combinations.
-
-## Required Test Commands
-- `npm run build`
-- `npm test`
-
-## Manual Verification
-- Review sample user-risk outputs and confirm wording avoids false precision.
-- Confirm masked identifiers remain the default.
-- Verify the feature does not present itself as behavioral monitoring.
-
 ## Bug Queue
-_No bugs recorded yet._
+Historical placeholder: no implementation bugs were logged in this task. Current baseline issues and corrective ownership are in the assessment record.
 
 ## Iteration Log
-_No iterations recorded yet._
+- 2026-09-26 — Planning reconciliation at `3ba2626747a870c510162060fd6f3ba7849d07af`; scope/dependencies updated, implementation not executed. Completed-task history preserved separately.
 
-## Definition of Done
-This task is done only when:
-- scope is implemented
-- out-of-scope items were not implemented
-- acceptance criteria pass
-- build passes
-- tests pass
-- task-related bugs are fixed or documented
-- no secrets are exposed
-- final summary is provided
+## Definition of done
+Meet the acceptance criteria and existing repository definition of done; preserve explicit unverified limitations and record completion evidence above. Deferred work also requires its activation evidence.

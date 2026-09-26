@@ -10,10 +10,15 @@ The `/agentic/tasks` directory is the execution backlog for `zelto-identity-puls
 - Each task file is the source of truth for scope, out-of-scope boundaries, and validation requirements.
 
 ## Current Roadmap Order
-- `011-audit-evidence-pack-generation.md` is the active task.
-- Compliance/audit-readiness tasks `008` through `011` come next so NIS2, SOC 2, and ISO 27001 evidence mapping is established before evidence packs and provider expansion.
-- Entra ID starts at `020-entra-id-connector.md`; provider connector expansion should not move ahead of compliance mapping, provider abstraction hardening, or the provider onboarding kit.
-- Late platform bets, including SaaS backend, Web UI, AI-generated enhancements, external rule DSL, and automatic remediation/write operations, remain late backlog items.
+- **Next executable task:** [045 — Restore trustworthy local and CI verification](active/045-verification-toolchain.md); this is the only active task.
+- Next engineering priorities: [046 — Contain credentials and bound HTTP collection](backlog/046-http-origin-and-pagination-safety.md), then [047 — Preserve security configuration while removing secrets](backlog/047-semantic-redaction.md) after 045.
+- [011 — Minimal local audit evidence pack](backlog/011-audit-evidence-pack-generation.md) has moved to backlog and is blocked on collection, assessment, traceability and reviewed evidence prerequisites.
+- [Roadmap, milestones, gates and complete index](ROADMAP.md).
+- [Reconciliation of every original task 001–044](RECONCILIATION.md).
+- [Verified baseline, defects and check results](ASSESSMENT-2026-09-26.md).
+- [18 existing controls selected for deeper validation](CONTROL-VALIDATION.md).
+- [Human decisions and external dependencies](HUMAN-DECISIONS.md).
+- Discovery task [063](backlog/063-pilot-customer-and-auditor-discovery.md) and authorized-validation process preparation in [064](backlog/064-authorized-tenant-reference-validation.md) can start alongside engineering; they require human participation and are not recorded as completed.
 
 ## Promoting a Backlog Task to Active
 1. Confirm the current active task is complete or intentionally paused.

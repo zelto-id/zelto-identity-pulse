@@ -503,7 +503,7 @@ docs/
   manual-e2e-test-scenarios.md
 ```
 
-Agentic delivery docs live under [agentic](agentic). The current implementation queue is [agentic/tasks](agentic/tasks).
+Agentic delivery docs live under [agentic](agentic). The current implementation queue is [agentic/tasks](agentic/tasks). The [verified roadmap](agentic/tasks/ROADMAP.md) prioritizes security and correctness for Auth0/Okta before evidence packs or provider expansion; these planned capabilities are not implemented. See the [assessment and verification limits](agentic/tasks/ASSESSMENT-2026-09-26.md) for the current baseline.
 
 ---
 
@@ -513,5 +513,5 @@ Agentic delivery docs live under [agentic](agentic). The current implementation 
 - [docs/manual-e2e-test-scenarios.md](docs/manual-e2e-test-scenarios.md) - manual end-to-end QA scenarios for the full CLI workflow.
 - [AGENT.md](AGENT.md) - repository agent workflow and delivery rules.
 - [agentic/tasks/README.md](agentic/tasks/README.md) - task workflow.
-- [design/auth0-tenant-check-framework.md](design/auth0-tenant-check-framework.md) - Auth0 scoring framework.
-- [design/okta-workforce-connector-module-design.md](design/okta-workforce-connector-module-design.md) - Okta connector/reporting design.
+- [agentic/tasks/CONTROL-VALIDATION.md](agentic/tasks/CONTROL-VALIDATION.md) - proposed validation set drawn from implemented rules.
+- [agentic/tasks/RECONCILIATION.md](agentic/tasks/RECONCILIATION.md) - task history, revised priorities and deferred work.
