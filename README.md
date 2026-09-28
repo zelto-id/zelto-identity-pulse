@@ -10,6 +10,14 @@ License: Apache-2.0.
 
 ---
 
+## Interactive Presentation Demo
+
+The [Identity Pulse demo](outputs/identity-pulse-demo/README.md) includes a clickable assessment workspace, an animated data-flow diagram, and a technical API/payload inspector using the [Zelto](https://zelto.id/) brand palette.
+
+Open [the offline workspace](outputs/identity-pulse-demo/offline/index.html) in a browser, or share the [demo ZIP](outputs/identity-pulse-demo/identity-pulse-demo.zip). The UI is a proposed experience; its embedded Auth0/Okta scores, findings and coverage come from synthetic repository fixtures. It makes no provider requests and performs no remediation. See the [presentation guide](outputs/identity-pulse-demo/demo-guide.md) and [editable architecture diagrams](outputs/identity-pulse-demo/architecture-diagrams.md).
+
+---
+
 ## Current Capabilities
 
 - Auth0 tenant scanning and reporting.

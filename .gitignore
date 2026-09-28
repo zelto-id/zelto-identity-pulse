@@ -1,5 +1,7 @@
 node_modules/
 dist/
+!outputs/identity-pulse-demo/dist/
+!outputs/identity-pulse-demo/dist/**
 *.log
 .env
 .env.local
