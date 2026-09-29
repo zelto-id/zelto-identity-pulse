@@ -12,9 +12,9 @@ License: Apache-2.0.
 
 ## Interactive Presentation Demo
 
-The [Identity Pulse demo](outputs/identity-pulse-demo/README.md) includes Business User and Tech SPOC views, a sample NIS2 evidence-pack preview/download, an animated data-flow diagram with explicit stage progress, and a technical API/payload inspector with a first-visit guide using the [Zelto](https://zelto.id/) brand palette.
+The [Identity Pulse demo](outputs/identity-pulse-demo/README.md) opens with a single Business User or Tech SPOC choice, followed by a tailored workspace. The business workspace leads with NIS2 evidence preparation, priority decisions, action ownership and collection gaps. It includes a sample evidence-pack preview/download, an animated data-flow diagram with explicit stage progress, and a technical API/payload inspector with a first-visit guide using the [Zelto](https://zelto.id/) brand palette.
 
-Open [the offline workspace](outputs/identity-pulse-demo/offline/index.html) in a browser, or share the [demo ZIP](outputs/identity-pulse-demo/identity-pulse-demo.zip). The UI is a proposed experience; its embedded Auth0/Okta scores, findings and coverage come from synthetic repository fixtures. The sample evidence pack is a browser-only mockup, not a CLI export or NIS2 compliance verdict; it distinguishes observed settings from recommendations and unverified remediation. It makes no provider requests and performs no remediation. See the [presentation guide](outputs/identity-pulse-demo/demo-guide.md) and [editable architecture diagrams](outputs/identity-pulse-demo/architecture-diagrams.md).
+Open [the offline entry page](outputs/identity-pulse-demo/offline/index.html) in a browser, or share the [demo ZIP](outputs/identity-pulse-demo/identity-pulse-demo.zip). The UI is a proposed experience; its embedded Auth0/Okta scores, findings and coverage come from synthetic repository fixtures. The sample evidence pack is a browser-only mockup, not a CLI export or NIS2 compliance verdict; it distinguishes observed settings from recommendations and unverified remediation. It makes no provider requests and performs no remediation. See the [presentation guide](outputs/identity-pulse-demo/demo-guide.md) and [editable architecture diagrams](outputs/identity-pulse-demo/architecture-diagrams.md).
 
 ---
 

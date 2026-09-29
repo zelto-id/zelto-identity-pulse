@@ -8,7 +8,7 @@ Colors were read from the live [zelto.id](https://zelto.id/) CSS variables on 20
 
 ## Open the demo
 
-Open `offline/index.html` directly in a browser. Its sibling pages are `offline/data-flow.html` and `offline/technical-flow.html`. Each page contains its own CSS and JavaScript; keep all three together so navigation works. No installation, external assets, account, token or API connection is needed. Clipboard support depends on the browser; selecting the payload text also works.
+Open `offline/index.html` directly in a browser. It presents only two choices: Business User or Tech SPOC. Both lead to `offline/workspace.html`; the diagrams are `offline/data-flow.html` and `offline/technical-flow.html`. Each page contains its own CSS and JavaScript; keep all four together so navigation works. No installation, external assets, account, token or API connection is needed. Clipboard support depends on the browser; selecting the payload text also works.
 
 For a local preview of the editable sources:
 
@@ -20,7 +20,9 @@ Open http://127.0.0.1:8793. The server binds only to loopback. Stop it with Ctrl
 
 ## What to explore
 
-- **Assessment workspace:** Business User View opens by default with Findings, Action Plans and NIS2 Material. Tech SPOC View also includes Overview and Coverage, with evidence, classification, confidence and validation details. Both views use the same selected report. Auth0 or Okta; at-risk, hardened or limited-permission fixtures; score and engine grade; finding detail; search and severity filter; collector coverage; recommended action plan; sample JSON download; simulated assessment replay.
+- **Entry page:** the only place to choose Business User or Tech SPOC. It always shows both choices, including on return visits. “Change view” returns here; there are no audience toggles inside the application. Provider and sample selection are carried through the links.
+- **Business workspace:** opens on NIS2 Material with a prominent sample evidence-pack action and a checklist separating available identity evidence from missing remediation and policy records. Priority findings, action counts and collection gaps use the original report. Leading findings have plain-language summaries and a next decision; original technical titles and evidence remain available in finding detail. The three sections are NIS2 Material, Findings and Action Plans. The collection date stays visible; technical diagrams are secondary, under “How the assessment works.”
+- **Tech SPOC workspace:** retains Overview, Findings, Coverage, Action Plans and NIS2 Material, along with the numeric score, engine grade, classification, confidence, validation, JSON download and simulated assessment replay. Both audiences use the same six Auth0/Okta reports.
 - **Animated flow:** provider selection; read-only API assessment, offline snapshot input, 403 permission gap, 401 abort and 429 retry; play/pause/replay; manual stage selection; a prominent Step X of Y indicator, explicit Completed/Current/Upcoming labels and contrasted active nodes. Diagrams reflow on mobile and suppress moving packets for reduced-motion preferences.
 - **Technical architecture:** provider selection and Okta OAuth/SSWS modes; collection, errors and local reporting sequences; inspect requests, responses, authentication, state effects, payloads and implementation references. Play through each sequence or select a message. A dismissible four-step guide opens on the first visit and can be reopened with “How to use this page.”
 
@@ -30,7 +32,15 @@ In **NIS2 Material**, choose **Generate evidence pack**, expand the four preview
 
 This is an implemented browser mockup of a proposed workflow, not an evidence-pack backend or CLI command. No owners, completed changes or validation outcomes are invented. Organizational policy documents and bot protection configuration are not supplied in these fixtures and are marked **Not assessed**. Available MFA, attack-protection, session and authentication-policy settings are observations, not proof of enforcement. The pack supports auditor review; it does not certify NIS2 compliance.
 
-Only the audience preference and architecture-guide dismissal are saved in browser local storage, when available. No assessment data is stored there. Navigation also carries the audience in the page URL. If storage is disabled, navigation still works and the guide may appear again on a later visit.
+Only the audience preference and architecture-guide dismissal are saved in browser local storage, when available. No assessment data is stored there. Navigation also carries the audience, provider and sample in the page URL. The entry page does not bypass the choice based on a saved preference. These are presentation views, not access-control roles. If storage is disabled, navigation still works and the guide may appear again on a later visit.
+
+## Business design rationale
+
+The business view prioritizes four questions: what needs attention; what decision and accountable owner are needed; what evidence is available; and what remains unknown. NIS2 preparation is the first destination, with Findings and Action Plans alongside it. A posture score is available in the technical view and evidence pack, but is not presented as a business compliance score.
+
+Priority counts include critical/high findings and distinguish confirmed configuration risks from validation/advisory review. Decision cards show up to three distinct assessment areas, ordered by severity and then classification; they do not change the rules or risk assessment. Action counts come from the report's remediation buckets, so advisory findings may still need review outside that plan. No owners, target dates, completion records or monetary impacts are invented.
+
+[ENISA’s NIS2 implementation guidance](https://www.enisa.europa.eu/publications/nis2-technical-implementation-guidance) provides examples of evidence and mappings for its covered entities. It informed the evidence-oriented presentation. This mockup does not determine legal applicability or assess the full range of NIS2 obligations; an incomplete evidence checklist remains incomplete even for the hardened fixture.
 
 ## Provenance and scope
 
@@ -66,7 +76,7 @@ python3 outputs/identity-pulse-demo/support/generate-controls.py
 python3 outputs/identity-pulse-demo/support/package.py
 ```
 
-Run those commands from the repository root. Packaging alone can be run from any directory. `generate-controls.py` projects only named MFA, attack-protection, session and policy fields from the six fixtures; it does not copy user identities or credentials. Provider, assessment target, collection date and collector status must match before settings are labeled observed. Existing sample reports were retained for this UI update. Fixture generation uses no provider credentials and reads no repository `.env` file; it invokes snapshot mode from a temporary working directory. Timestamps and scan IDs may change between generations, and time-sensitive rules can change their result.
+Run those commands from the repository root. Packaging alone can be run from any directory. It refreshes content-based revisions in source asset links for local preview caching, then inlines assets into the four portable pages. `generate-controls.py` projects only named MFA, attack-protection, session and policy fields from the six fixtures; it does not copy user identities or credentials. Provider, assessment target, collection date and collector status must match before settings are labeled observed. Existing sample reports were retained for this UI update. Fixture generation uses no provider credentials and reads no repository `.env` file; it invokes snapshot mode from a temporary working directory. Timestamps and scan IDs may change between generations, and time-sensitive rules can change their result.
 
 ## Validation
 

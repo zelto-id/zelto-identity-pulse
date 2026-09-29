@@ -6,12 +6,12 @@ Identity Pulse turns identity-provider configuration into a local assessment tha
 
 ## Three-minute walkthrough
 
-1. **Start in Business User View.** Select Auth0 and the at-risk configuration. Show the three tabs: Findings, Action Plans and NIS2 Material. Explain that this is a synthetic sample, not a customer assessment.
-2. **Open one finding.** Use “Brute-force protection is disabled.” Follow the evidence through business risk, recommendation and validation steps. The selling point is traceability from configuration to a decision.
-3. **Switch to limited API permissions.** Highlight the partial-coverage notice and skipped collectors. A high score does not settle what was not collected.
-4. **Show Action Plans and NIS2 Material.** Owners are unassigned and validation is not verified. Generate the sample evidence pack, expand its four sections and download the HTML. Missing attack-protection settings in the limited-permission sample remain unassessed. The pack supports evidence preparation; it does not certify compliance.
-5. **Switch to Tech SPOC View, then play the animated flow.** The assessment and score stay the same; technical coverage is now a dedicated tab. In the flow, point to Step X of Y, Completed/Current/Upcoming labels and active nodes. Switch to offline snapshot mode to illustrate the local analysis path.
-6. **Open technical architecture.** Use the first-visit guide or reopen it with “How to use this page.” Select an application read and toggle between request and response. Show scopes/authentication, pagination and the local collector contract. Use the 403 or 429 scenario for a technical audience.
+1. **Choose Business User on the entry page.** This is the only audience-selection screen. Start with Auth0 and the at-risk sample; explain that all data is synthetic.
+2. **Start with NIS2 Material.** Show the prominent evidence-pack action and available/missing evidence checklist. Generate the sample pack and expand its sections. Approved organizational policies and completed remediation are not supplied; the pack does not certify compliance.
+3. **Explain the business decisions.** Show priority findings, recommended actions and collection gaps. Open a leading decision card: the business impact and next decision come first, with original technical evidence available on demand.
+4. **Open Action Plans and the limited-permission sample.** Owners and target dates are not recorded. Show how missing collection changes what can be concluded, even when the score in the technical report is high. The business workspace keeps the collection date visible.
+5. **Return through “Change view” and choose Tech SPOC.** The provider and sample stay selected. Inspect Coverage and Findings, then open the animated flow and its explicit stage progress.
+6. **Open technical architecture.** Reopen “How to use this page” if needed, select an exchange and inspect request/response, scopes, authentication and failure handling. Use “Change view” to return to the two-choice entry page.
 
 ## Messages by audience
 

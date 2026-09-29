@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#141429"><meta name="description" content="Identity Pulse: local, read-only assessment architecture and data flow."><title>Identity Pulse — Technical architecture</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141429'/%3E%3Cpath d='M4 17h6l3-8 6 16 3-8h6' fill='none' stroke='%237addc6' stroke-width='2.5'/%3E%3C/svg%3E"><style>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#141429"><meta name="description" content="Explore an Identity Pulse assessment with synthetic Auth0 and Okta reports, evidence, coverage and remediation priorities."><title>Identity Pulse — Assessment workspace</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141429'/%3E%3Cpath d='M4 17h6l3-8 6 16 3-8h6' fill='none' stroke='%237addc6' stroke-width='2.5'/%3E%3C/svg%3E"><style>
 /* Zelto brand palette: https://zelto.id — verified 2026-09-28.
    Primary #7ADDC6 · Secondary #83219B · Accent #E1F297
    Background #141429 · Surface #262659. */
@@ -43,19 +43,7 @@ body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=busi
 @media(max-width:680px){.business-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.business-summary article{padding:13px 10px}.business-summary article>div{display:block}.business-summary span{font-size:13px;line-height:1.5}.business-summary p{display:none}.business-summary .textlink{font-size:12px;text-align:left;line-height:1.5}.business-summary strong{font-size:27px}body[data-audience=business] .contextbar{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}body[data-audience=business] .contextbar label{font-size:12px}body[data-audience=business] .contextbar select{font-size:13px;padding-right:20px}body[data-audience=business] .context-note{grid-column:1/-1;font-size:12px;max-width:none}body[data-audience=business] .context-note br{display:none}}
 @media(max-width:680px){.entry-main{padding-top:12px}.entry-main h1{font-size:36px;line-height:1.15;letter-spacing:-1px}.entry-main>.eyebrow{margin-bottom:12px}.entry-intro{font-size:15px;margin:14px 0 24px}.entry-card{padding:20px}.entry-card-label{font-size:12px;letter-spacing:.7px}.entry-card h2{font-size:26px;margin:10px 0}.entry-card p{font-size:16px}.entry-card ul{display:none}.entry-cta{margin-top:18px;font-size:14px;padding:12px}.entry-options{gap:16px}.entry-brand{padding-bottom:20px}.entry-footnote{margin-top:20px}}
 
-</style><style>
-.flow-toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:18px 23px;background:var(--raised);border-radius:10px 10px 0 0}.flow-toolbar .contextbar{padding:0;margin:0;border:0;background:transparent}.flow-toolbar label{min-width:160px}.playback{display:flex;align-items:center;gap:9px}.flow-shell{border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden}.flow-diagram{position:relative;display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:75px;padding:32px 28px;isolation:isolate}.flow-wires{position:absolute;inset:0;width:100%;height:100%;z-index:-1;overflow:visible}.flow-wires path.wire{fill:none;stroke:#707096;stroke-width:1.5}.flow-wires path.active-wire{stroke:var(--primary);stroke-width:2.5}.packet{fill:var(--accent);stroke:var(--canvas);stroke-width:2;offset-rotate:0deg;animation:travel 1.8s ease-in-out infinite}.flow-diagram.paused .packet{animation-play-state:paused}@keyframes travel{from{offset-distance:0%}to{offset-distance:100%}}.column-title{font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:23px;line-height:1.8}.column-title span{color:var(--primary);margin-right:8px}.provider-nodes{display:grid;gap:18px;margin-top:40px}.diagram-node{display:block;text-align:left;width:100%;padding:19px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;transition:border-color .25s,box-shadow .25s}.diagram-node.selected{border-color:var(--primary);box-shadow:0 0 0 3px #7addc61a}.diagram-node strong{display:block;font-size:17px;line-height:1.4}.diagram-node p{font-size:13px;color:var(--muted);margin-top:8px}.node-meta{display:block;font-size:12px;color:var(--primary);margin-top:13px}.provider-letter{width:33px;height:33px;display:grid;place-items:center;border-radius:8px;background:var(--info-bg);color:var(--info);margin-bottom:13px;font-size:18px;font-weight:600}.provider-letter.auth0{background:var(--amber-bg);color:var(--amber)}.local-boundary{background:var(--surface);padding:23px;border-radius:12px;color:var(--ink);position:relative}.local-boundary h2{font-size:23px;margin:7px 0 5px}.local-boundary>p{font-size:13px;color:var(--muted)}.boundary-label{font-size:12px;color:var(--primary);letter-spacing:1.2px;text-transform:uppercase}.engine-nodes{margin-top:23px;display:grid;gap:14px}.engine-node{padding:17px;background:var(--raised);border:1px solid #535383;border-radius:7px;color:var(--ink)}.engine-node strong{font-size:15px}.engine-node p{color:var(--muted);font-size:13px;margin-top:6px}.engine-node.selected{border-color:var(--primary);box-shadow:0 0 0 2px #7addc61a}.engine-node .node-meta{color:var(--primary)}.boundary-foot{margin-top:18px;padding-top:15px;border-top:1px solid #ffffff20;font-size:12px;color:var(--muted);line-height:1.7}.output-nodes{display:grid;gap:16px;margin-top:40px}.diagram-note{font-size:12px;color:var(--muted);margin-top:19px;line-height:1.8}.stage-strip{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--line);background:var(--raised)}.stage-strip button{background:transparent;color:var(--muted);padding:16px 10px;text-align:left;border-right:1px solid var(--line);font-size:13px;line-height:1.5}.stage-strip button:last-child{border:0}.stage-strip button span{display:block;font-size:12px;margin-bottom:5px;color:var(--primary)}.stage-strip button[aria-current=step]{background:var(--selected);color:var(--accent)}.stage-detail{padding:23px 28px;display:flex;justify-content:space-between;gap:22px;align-items:center}.stage-detail p{font-size:14px;color:var(--muted);margin-top:8px;max-width:800px}.stage-detail .actions{flex-shrink:0}.boundary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:29px}.boundary-row article{border-top:2px solid var(--line);padding-top:17px}.boundary-row h3{font-size:16px;margin:8px 0}.boundary-row p{font-size:14px;color:var(--muted)}.boundary-row small{font-size:12px;color:var(--primary);letter-spacing:1px}.tech-workspace{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}.tech-toolbar{padding:17px 23px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--raised)}.segmented{display:flex;gap:6px;flex-wrap:wrap}.segmented button{padding:10px 12px;background:transparent;border-radius:6px;color:var(--muted);font-size:14px}.segmented button[aria-pressed=true]{background:var(--primary);color:var(--canvas)}.tech-context{display:flex;gap:20px;align-items:end;padding:17px 23px;flex-wrap:wrap}.tech-context label{font-size:12px;color:var(--muted);display:grid;gap:8px}.tech-context select{padding:9px 30px 9px 11px;font-size:14px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);max-width:100%}.tech-context>p{margin-left:auto;font-size:12px;color:var(--muted);max-width:380px;line-height:1.6}.tech-split{display:grid;grid-template-columns:1.12fr 1fr;border-top:1px solid var(--line)}.sequence{padding:24px;min-width:0}.sequence h2{margin-bottom:10px}.sequence>p{font-size:14px;color:var(--muted)}.actors{display:grid;grid-template-columns:repeat(4,1fr);margin-top:25px;gap:10px;text-align:center}.actors div{background:var(--raised);padding:12px 4px;border-radius:5px;line-height:1.5;font-size:12px}.actors b{display:block;font-size:13px}.message-list{position:relative;margin:0 0 20px;background:repeating-linear-gradient(to right,transparent 0,transparent calc(25% - 1px),var(--line) calc(25% - 1px),var(--line) 25%)}.message{width:100%;background:#1c1c38e6;color:var(--ink);text-align:left;padding:15px 10px;border-bottom:1px solid var(--line)}.message[aria-pressed=true]{background:var(--selected)}.message-caption{display:flex;gap:9px;align-items:baseline;font-size:13px;line-height:1.55}.message-caption small{color:var(--primary);font-size:12px;flex-shrink:0}.message-line{position:relative;height:20px;margin-top:12px}.message-arrow{position:absolute;top:10px;height:1px;background:#8b8bae}.message-arrow:after{content:"";position:absolute;right:-1px;top:-4px;border-left:6px solid #8b8bae;border-top:4px solid transparent;border-bottom:4px solid transparent}.message-arrow.reverse:after{left:-1px;right:auto;border-left:0;border-right:6px solid #8b8bae}.message[aria-pressed=true] .message-arrow{background:var(--primary);height:2px}.message[aria-pressed=true] .message-arrow:after{border-left-color:var(--primary);border-right-color:var(--primary)}.message-kind{position:absolute;right:3px;top:-5px;color:var(--muted);font-size:11px;background:var(--panel);padding:0 5px}.inspector{padding:25px;background:var(--raised);border-left:1px solid var(--line);min-width:0}.inspector h2{font-size:21px;line-height:1.4;margin:12px 0}.contract-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13px;line-height:1.6;margin:20px 0}.contract-meta dt{font-size:12px;color:var(--muted)}.contract-meta dd{margin:5px 0 0;overflow-wrap:anywhere}.payload-tabs{display:flex;justify-content:space-between;align-items:center;margin:20px 0 12px;gap:12px;flex-wrap:wrap}.code-panel{background:var(--deep);color:#c1f1e5;border-radius:8px;padding:20px;font-size:12px;line-height:1.85;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;max-height:480px;tab-size:2}.contract-details h3{font-size:14px;margin:20px 0 6px}.contract-details p{font-size:14px;color:var(--muted);line-height:1.7}.source-note{font-size:12px;color:var(--muted);overflow-wrap:anywhere;border-top:1px solid var(--line);padding-top:16px;margin-top:24px;line-height:1.8}.sequence-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px;color:var(--muted)}.tech-topology{display:flex;align-items:center;gap:20px;justify-content:space-between;background:var(--surface);color:var(--ink);border-radius:9px;padding:22px 26px;margin-bottom:22px}.tech-topology strong{font-size:16px}.tech-topology small{font-size:12px;display:block;color:var(--muted);margin-top:7px}.tech-topology .connector{font-size:23px;color:var(--primary)}
-@media(max-width:1100px){.flow-diagram{gap:45px;padding:25px 20px;grid-template-columns:1fr 1.35fr 1fr}.local-boundary{padding:18px}.diagram-node{padding:15px}.tech-split{grid-template-columns:1fr 1fr}.sequence,.inspector{padding:20px}}@media(max-width:800px){.flow-diagram{grid-template-columns:1fr;gap:40px;padding:24px}.provider-nodes,.output-nodes{grid-template-columns:1fr 1fr;margin:0}.output-nodes .diagram-node:last-child{grid-column:1/-1}.column-title{margin-bottom:16px}.diagram-note{margin-top:12px}.flow-wires{display:none}.flow-diagram>section+section:before{content:"↓";position:absolute;margin-top:-34px;left:50%;color:var(--primary);font-size:23px}.stage-strip{grid-template-columns:repeat(3,1fr)}.stage-detail{align-items:flex-start}.tech-split{grid-template-columns:1fr}.inspector{border-left:0;border-top:1px solid var(--line)}.tech-context>p{margin-left:0}.boundary-row{grid-template-columns:1fr;gap:20px}.tech-topology{flex-wrap:wrap}.stage-strip button:nth-child(3){border-right:0}.stage-strip button:nth-child(-n+3){border-bottom:1px solid var(--line)}}@media(max-width:520px){.flow-toolbar{padding:17px}.flow-toolbar .contextbar{width:100%}.playback{flex-wrap:wrap}.flow-diagram{padding:20px 16px}.provider-nodes{gap:12px}.diagram-node strong{font-size:15px}.diagram-node p{font-size:12px}.output-nodes{grid-template-columns:1fr}.stage-detail{padding:20px;flex-direction:column}.stage-strip button{font-size:12px}.tech-toolbar,.tech-context{padding:17px}.tech-context label{width:100%;min-width:0}.tech-context select{width:100%}.tech-topology{display:grid;gap:12px}.tech-topology .connector{transform:rotate(90deg);width:24px}.contract-meta{grid-template-columns:1fr}.actors{gap:5px}.actors div{font-size:11px}.actors b{font-size:12px}.sequence,.inspector{padding:17px}.message-caption{font-size:12px}.code-panel{padding:15px;font-size:12px}}
-
-.local-boundary{box-shadow:inset 0 0 0 1px var(--secondary)}.engine-node.selected{border-color:var(--accent)}.message[aria-pressed=true] .message-caption small{color:var(--accent)}.diagram-node.selected{border-color:var(--primary)}
-
-/* Keep the current step unmistakable, including when animation is paused. */
-.stage-progress{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--surface);border-top:3px solid var(--primary);padding:22px 28px}.stage-progress .eyebrow{display:block;margin-bottom:8px}.stage-progress strong{display:block;font-size:24px;line-height:1.35;color:var(--accent)}
-.stage-strip{gap:8px;padding:12px;background:var(--deep);border-top:1px solid var(--line)}.stage-strip button{border:1px solid var(--line)!important;border-radius:7px;background:var(--panel);padding:15px 12px;min-width:0}.stage-strip button strong{font-size:14px;font-weight:600;display:block}.stage-strip button small{display:block;margin-top:7px;font-size:12px}.stage-strip .stage-number{font-size:18px;font-weight:600;margin-bottom:12px}.stage-strip button.stage-complete{border-color:#467d73!important;background:#203d40;color:var(--ink)}.stage-strip button[aria-current=step]{background:var(--primary);border-color:var(--primary)!important;color:var(--canvas);box-shadow:0 0 0 2px var(--accent)}.stage-strip button[aria-current=step] span{color:var(--canvas)}.stage-strip button.stage-complete span{color:var(--primary)}
-.diagram-node.selected,.engine-node.selected{background:#244b49;border:2px solid var(--primary);box-shadow:0 0 0 3px #7addc62b}.diagram-node.selected p,.engine-node.selected p{color:#d3e9e4}.node-stage{display:inline-block;font-size:12px;font-weight:650;color:var(--canvas);background:var(--accent);padding:4px 8px;border-radius:4px;margin-top:13px}.flow-wires path.active-wire{stroke:var(--accent);stroke-width:4}
-@media(max-width:560px){.stage-progress{padding:20px;align-items:flex-start;flex-direction:column}.stage-progress strong{font-size:22px}.stage-strip{gap:6px;padding:10px}.stage-strip button{padding:12px 8px}.stage-strip button strong{font-size:13px}.stage-strip button small{font-size:12px}}
-
-</style></head><body class="diagram-page"><a class="skip" href="#main">Skip to diagram</a><header class="topbar"><a class="brand" href="workspace.html"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></a><nav aria-label="Demo navigation"><a href="workspace.html">Assessment workspace</a><a href="data-flow.html">Animated flow</a><a class="active" aria-current="page" href="technical-flow.html">Technical architecture</a></nav><span class="pill">Offline presentation demo</span></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow">Technical architecture</p><h1>Every connection. Every payload.</h1><p>Inspect the read-only exchanges and the local contracts behind an assessment.</p></div><div class="actions"><button class="button primary" id="open-guide">How to use this page</button><a class="button" href="data-flow.html">Animated overview ↗</a></div></div><div class="tech-topology"><div><strong>Operator / local CLI</strong><small>Settings + externally supplied credential</small></div><span class="connector" aria-hidden="true">⇄</span><div><strong>Auth0 or Okta API</strong><small>HTTPS GET · scoped read permissions</small></div><span class="connector" aria-hidden="true">→</span><div><strong>Local evidence & reports</strong><small>Normalized snapshot → rules → structured report</small></div></div><div class="notice neutral"><strong>Based on the current implementation.</strong> Payloads are shortened synthetic examples, not live captures. The demo displays credential placeholders only.</div><section class="tech-workspace" aria-label="Interactive technical sequence"><div class="tech-toolbar"><div class="segmented" role="group" aria-label="Technical scenario"><button data-scenario="collect" aria-pressed="true">01 · API collection</button><button data-scenario="failure" aria-pressed="false">02 · Failure handling</button><button data-scenario="reports" aria-pressed="false">03 · Local analysis & reports</button></div><button class="button" id="sequence-play">▷ Play sequence</button></div><div class="tech-context"><label>Provider<select id="tech-provider"><option value="auth0">Auth0 · Management API</option><option value="okta">Okta · Management API</option></select></label><label id="auth-label" hidden>Okta authentication<select id="auth-mode"><option value="oauth">OAuth Bearer</option><option value="ssws">SSWS API token</option></select></label><label id="error-label" hidden>API outcome<select id="error-mode"><option value="403">403 · Denied permission</option><option value="429">429 · Rate limited</option><option value="401">401 · Unauthorized</option></select></label><p>Authentication happens before the scan. Identity Pulse consumes a token; it does not perform an interactive login or mint a token.</p></div><div class="tech-split"><section class="sequence"><p class="eyebrow">Message sequence</p><h2 id="sequence-title"></h2><p id="sequence-caption"></p><div class="actors"><div><b>Operator</b>Local settings</div><div><b>Pulse CLI</b>Collector / engine</div><div><b>Provider</b>HTTPS API</div><div><b>Artifacts</b>Local files</div></div><div class="message-list" id="message-list" aria-label="Select an exchange"></div><div class="sequence-controls"><span id="sequence-count" role="status"></span><div class="actions"><button class="button" id="sequence-prev" aria-label="Previous exchange">←</button><button class="button" id="sequence-next" aria-label="Next exchange">→</button></div></div><p class="source-note">Solid arrows: external HTTPS or local flow, explicitly identified per message. No browser-to-provider connection is made by this presentation.</p></section><section class="inspector" aria-labelledby="contract-title"><span class="eyebrow">Payload inspector</span><h2 id="contract-title"></h2><span class="pill" id="contract-kind"></span><dl class="contract-meta"><div><dt>From → To</dt><dd id="contract-route"></dd></div><div><dt>Protocol / operation</dt><dd id="contract-protocol"></dd></div><div><dt>Authentication</dt><dd id="contract-auth"></dd></div><div><dt>State effect</dt><dd id="contract-state"></dd></div></dl><div class="payload-tabs"><div class="segmented" role="group" aria-label="Payload direction"><button data-payload="request" aria-pressed="true">Request / input</button><button data-payload="response" aria-pressed="false">Response / output</button></div><button class="textlink" id="copy-payload">Copy example</button></div><pre class="code-panel"><code id="contract-code"></code></pre><p id="copy-status" role="status" class="section-note"></p><div class="contract-details"><h3>What moves</h3><p id="contract-data"></p><h3>Handling & limitations</h3><p id="contract-handling"></p></div><p class="source-note" id="contract-source"></p></section></div></section><section class="boundary-row"><article><small>IMPLEMENTED</small><h3>Two provider connectors.</h3><p>Auth0 and Okta collect configuration, normalize snapshots and report collector status. Both clients implement retry and pagination behavior.</p></article><article><small>IMPLEMENTED WITH LIMITATIONS</small><h3>Evidence and comparison.</h3><p>Structured reports, delta comparison and optional framework mappings exist. Missing findings alone do not prove remediation; framework mappings are not a compliance verdict.</p></article><article><small>PROPOSED EXPERIENCE</small><h3>The interactive workspace.</h3><p>This presentation is a UI concept over CLI capabilities. No hosted backend, continuous monitoring or automatic remediation is implemented here.</p></article></section><footer class="footer"><span>Current CLI architecture · simplified synthetic examples · no live requests<br>The workspace is a UI concept; the collection and analysis pipeline exists in the repository.</span><a href="workspace.html">Explore the assessment workspace ↗</a></footer></main><dialog class="dialog guide-dialog" id="guide-dialog" aria-labelledby="guide-title"><div class="dialog-header"><span class="eyebrow">Technical architecture · quick guide</span><button class="button" id="close-guide">Skip guide</button></div><div class="dialog-content"><p class="guide-count" id="guide-count" role="status"></p><div class="guide-visual" aria-hidden="true"><span>Choose</span><b>→</b><span>Inspect</span><b>→</b><span>Review</span></div><h2 id="guide-title"></h2><p id="guide-text"></p><div class="guide-tip" id="guide-tip"></div><div class="guide-actions"><button class="button" id="guide-back">Back</button><button class="button primary" id="guide-next">Next</button></div></div></dialog><noscript><p>Enable JavaScript to explore the diagram. No identity provider is connected.</p></noscript><script>
+</style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></a><div class="workspace">Demo assessment workspace<small>Auth0 CIAM + Okta Workforce</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business"><p class="navlabel">Business workspace</p></div><div data-audience-only="tech"><p class="navlabel">Technical workspace</p><nav class="sidenav" aria-label="Demo navigation"><a class="active" aria-current="page" href="workspace.html"><span class="num">01</span> Assessment workspace</a><a href="data-flow.html"><span class="num">02</span> Animated data flow</a><a href="technical-flow.html"><span class="num">03</span> Technical architecture</a></nav></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="sidefoot">See the risk.<br>Trace the evidence.<br>Decide what changes.<small>LOCAL-FIRST · READ-ONLY<br>Interactive concept / synthetic data</small></div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p><span class="pill">Product concept · offline demo</span></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Your identity posture, in focus.</h1><p id="workspace-intro">From configuration to evidence and a clear next action.</p></div><button class="button primary" id="run-demo" data-audience-only="tech">▷ Replay assessment</button></div><div class="contextbar"><label>Identity provider<select id="provider"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Sample configuration<select id="scenario"><option value="risk">At-risk configuration</option><option value="healthy">Hardened configuration</option><option value="partial">Limited API permissions</option></select></label><div class="context-note" id="sample-context">Production context · synthetic fixture<br> Generated by the current CLI engine</div></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business"></section><section class="summary-grid" data-audience-only="tech" aria-label="Assessment summary"><div class="posture"><div class="score-ring" id="score-ring" style="--score:15"><div class="score-value"><strong id="score">15</strong><small>out of 100</small></div></div><div><span class="pill light">Identity posture score</span><h2 id="score-title">Review priority risks</h2><p id="score-description">Evidence-led assessment of the collected configuration.</p><p class="grade" id="grade"></p></div></div><div class="panel"><div class="panel-head"><h2>What needs attention</h2><span class="pill" id="finding-total"></span></div><div class="statrow" id="stats"></div><div class="coverage-strip"><span id="coverage-summary"></span><button class="textlink" id="review-coverage" data-view="coverage">Review coverage ↗</button></div></div></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span>Proposed workspace over the existing CLI. Scores and findings come from repository fixtures.<br>Scenario changes select independent samples; they do not prove remediation.</span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog" id="finding-dialog" aria-labelledby="finding-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding detail / evidence</span><button class="button" id="close-finding">Close ×</button></div><div class="dialog-content" id="finding-detail"></div></dialog><dialog class="dialog" id="scan-dialog" aria-labelledby="scan-title"><div class="dialog-header"><h2 id="scan-title">Assessment walkthrough</h2><span class="pill">Simulation</span></div><div class="dialog-content"><p class="muted">Replay how a local assessment reaches a report. This demo reads embedded sample data and makes no provider requests.</p><div class="progress-track" role="progressbar" aria-label="Simulated assessment progress" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="scan-progress" style="width:0%"></span></div><ol class="scan-list" id="scan-steps"></ol><p id="scan-status" class="section-note" role="status"></p><div class="scan-actions"><button class="button primary" id="scan-pause">Pause</button><button class="button" id="scan-close">Close walkthrough</button></div></div></dialog><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
 /* Audience is chosen on the entry page, then carried through the workspace. */
 (() => {
   'use strict';
@@ -4180,60 +4168,665 @@ window.PULSE_REPORTS = {
 
 </script>
 <script>
-'use strict';
-const $=id=>document.getElementById(id),esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const state={provider:window.PulseExperience.context.provider,scenario:'collect',error:'403',auth:'oauth',step:0,payload:'request'};let timer=null;
-const pretty=o=>JSON.stringify(o,null,2);
-function messages(){const auth0=state.provider==='auth0',p=auth0?'Auth0':'Okta',collection=auth0?'clients':'apps',scope=auth0?'read:clients':'okta.apps.read',auth=auth0||state.auth==='oauth'?'Bearer <token supplied locally>':'SSWS <token supplied locally>',host=auth0?'demo.eu.auth0.com':'demo.okta.com',endpoint=auth0?'/api/v2/clients?page=0&per_page=100&include_totals=false':'/api/v1/apps?limit=200',source=`src/connectors/${state.provider}/${state.provider}`,sample=auth0?[{client_id:'demo-spa',name:'Customer portal',app_type:'spa',grant_types:['authorization_code','implicit','refresh_token'],token_endpoint_auth_method:'none'}]:[{id:'demo-app',label:'Workforce portal',status:'ACTIVE',signOnMode:'OPENID_CONNECT',settings:{oauthClient:{application_type:'web',grant_types:['authorization_code','implicit','refresh_token']}}}];const header=`GET ${endpoint} HTTP/1.1\nHost: ${host}\nAuthorization: ${auth}\nAccept: application/json\n\n(no request body)`;const item=(title,from,to,protocol,authentication,effect,input,output,data,handling,sourcePath,kind='Current code · simplified example')=>({title,from,to,protocol,authentication,effect,input,output,data,handling,sourcePath,kind});const setup=item('Provide the scan context',0,1,'Local process / CLI',`Externally supplied ${auth0?'Management API token':state.auth==='oauth'?'OAuth access token':'SSWS API token'}`,'Configuration in local memory',`# Supply credentials through the environment.\n# Placeholder only; this demo never uses a token.\n${auth0?'AUTH0_DOMAIN=demo.eu.auth0.com\nAUTH0_MGMT_API_TOKEN=<provided outside demo>':`OKTA_ORG_URL=https://demo.okta.com\n${state.auth==='oauth'?'OKTA_ACCESS_TOKEN':'OKTA_API_TOKEN'}=<provided outside demo>`}\n\nzelto-pulse scan ${state.provider}${auth0?'':` --auth-mode ${state.auth}`} \\\n  --environment production --format html,json`,pretty({provider:state.provider,environment:'production',formats:['html','json'],saveSnapshot:false}),'Tenant or org address, environment and output settings. The token is consumed in memory by the API client.','The CLI does not mint tokens or perform an interactive login. Use pre-authorized provider access; the demo itself sends no requests.',`src/cli/commands/scan-${state.provider}.ts`);
-if(state.scenario==='failure'){const e=state.error;if(e==='401')return [setup,item('Request configuration',1,2,'HTTPS GET',auth,'Read attempt only',header,'HTTP/1.1 401 Unauthorized\nContent-Type: application/json\n\n'+pretty(auth0?{statusCode:401,error:'Unauthorized',message:'Invalid token'}:{errorCode:'E0000011',errorSummary:'Invalid token provided'}),'A provider rejects an expired, invalid or mismatched credential.','401 raises AuthenticationError instead of becoming a skipped collector.',source+'.client.ts'),item('Abort the assessment',1,1,'Local exception propagation','None','No completed scan report','AuthenticationError','Scan aborted; operator must correct the credential.','An authentication failure reaches the scan command.','Do not display an incomplete scan as a successfully completed assessment. There is no automatic credential refresh.',`src/cli/commands/scan-${state.provider}.ts`)];
-if(e==='429')return [setup,item('Receive a rate-limit response',1,2,'HTTPS GET',auth,'No provider changes',header,`HTTP/1.1 429 Too Many Requests\nRetry-After: 2\n${auth0?'x-ratelimit-remaining':'x-rate-limit-remaining'}: 0`,'Rate-limit headers and response status.','The client interprets rate-limit headers or falls back to exponential backoff. Five retries are configured by default; this is not an unlimited retry loop.',source+'.client.ts'),item('Retry the read after backoff',1,2,'HTTPS GET · same request',auth,'Local wait, then read again',header,'HTTP/1.1 200 OK\nContent-Type: application/json\n\n'+pretty(sample),'The same configuration is requested again. This example assumes the retry succeeds.','On retry exhaustion the client throws HttpError; safeCollect reports a failed collector. Other collectors can continue.',source+'.client.ts'),item('Retain collector outcome',1,1,'Local collector contract','None','Snapshot collection status',pretty(sample),pretty({name:collection,status:'success',requiredScopes:[scope],count:1,data:sample}),'The successful response is wrapped in a CollectorResult.','A successful retry does not establish complete coverage of every resource or nested request.',source+'.collectors.ts')];
-return [setup,item('Receive a denied-permission response',1,2,'HTTPS GET',auth,'Read rejected',header,'HTTP/1.1 403 Forbidden\nContent-Type: application/json\n\n'+pretty(auth0?{statusCode:403,error:'Forbidden',message:'Insufficient scope'}:{errorCode:'E0000006',errorSummary:'You do not have permission to perform the requested action'}),'An endpoint rejects the available scope or role permissions.','403 is surfaced without HTTP retry. The collector records the coverage gap instead of silently treating the resource as safe.',source+'.client.ts'),item('Mark this collector skipped',1,1,'Local CollectorResult','None','Missing evidence is recorded','HttpError: 403',pretty({name:collection,status:'skipped',requiredScopes:[scope],...(auth0||state.auth==='oauth'?{missingScopes:[scope]}:{}),errors:[auth0?'HTTP 403 — missing scope':state.auth==='oauth'?'HTTP 403 — missing scope or denied permission':'HTTP 403 — permission denied for SSWS/admin context']}),'Collector status, required scopes and a diagnostic message. No app list was collected.','For Okta SSWS, missing OAuth scopes are not inferred. Permission checks depend on the API token’s admin context.',source+'.collectors.ts'),item('Carry the gap into the report',1,3,'Local report serialization','None','Local report includes coverage',pretty({collector:collection,status:'skipped'}),pretty({coverage:{partial:true,missingScopes:auth0||state.auth==='oauth'?[scope]:[],collectors:[{collector:collection,status:'skipped',requiredScopes:[scope]}]}}),'Coverage fields accompany the score and findings. Shown here as a report excerpt.','The rest of the assessment may continue. Missing evidence cannot support a safe-control conclusion or a verified resolution.','src/reporting/json/report-contract.ts')];}
-if(state.scenario==='reports'){const r=window.PULSE_REPORTS[state.provider].risk,f=r.findings.find(x=>x.severity==='high')||r.findings[0];return [item('Read a local snapshot',3,1,'Local JSON file / --from-snapshot','No provider credential needed','Local input file → memory',`zelto-pulse scan ${state.provider} \\\n  --from-snapshot sample.snapshot.json \\\n  --environment production --format html,json`,pretty({provider:state.provider,collectors:{[collection]:{name:collection,status:'success',requiredScopes:[scope],count:1,data:sample}}}),'Normalized provider configuration and collector results. This is a shortened snapshot excerpt.','The existing import path uses a JSON cast; runtime validation and import sanitization are backlog work. Only trusted synthetic fixtures are used here.',`src/cli/commands/scan-${state.provider}.ts`),item('Evaluate deterministic rules',1,1,'Local function call','None','Structured finding in memory',`analyze${auth0?'Auth0':'Okta'}Snapshot(snapshot, options)\n\n# Conceptual invocation; no HTTP request`,pretty({id:f.id,title:f.title,severity:f.severity,classification:f.classification,confidence:f.confidence,evidence:f.evidence,recommendation:f.recommendation,validationSteps:f.validationSteps,scoreImpact:f.scoreImpact}),'Evidence becomes a finding with confidence, classification and recommended action. This finding comes from the risky fixture report.','Recommendations and validation details vary by provider and rule. No changes are applied automatically.',`src/analysis/${state.provider}/${state.provider}.analyzer.ts`),item('Serialize Report Contract v1',1,3,'Local JSON write','None','Report file on the operator machine',pretty({output:'assessment.json',format:'json'}),pretty({schemaVersion:r.schemaVersion,provider:r.provider,tenant:r.tenant,environment:r.environment,score:r.score,coverage:r.coverage,findings:[{id:f.id,fingerprint:f.fingerprint,title:f.title}]}),'A report carries provider identity, environment, score, finding fingerprints and collection coverage. This is an excerpt, not a complete valid report.','HTML and Markdown are rendered locally as well. Report and snapshot privacy controls have known gaps; the demo includes only synthetic fixtures.','src/reporting/json/report-contract.types.ts'),item('Compare baseline and follow-up',3,1,'Local CLI / two JSON reports','None','Delta object in memory','zelto-pulse compare \\\n  --before baseline.json --after follow-up.json \\\n  --format all --output change',pretty({schemaVersion:'1.0.0',deltaEngineVersion:'1.0.0',summary:{scoreChange:0,newFindings:0,resolvedFindings:0,unchangedFindings:r.findings.length,worsenedFindings:0,improvedFindings:0,coverageChanged:false}}),'Example: comparing a report with itself yields no change. Comparisons use finding fingerprints and structured coverage.','Current delta logic can call missing fingerprints resolved even after scope loss. An engineer must verify comparable coverage; this is not proof of remediation.','src/reporting/delta/delta-compare.ts'),item('Render review artifacts',1,3,'Local HTML / JSON / Markdown','None','Files remain local',pretty({inputs:['assessment.json','change.json'],optional:'Combine provider JSON reports with the summary command'}),'assessment.html\nassessment.json\nassessment.md\nchange.html\nchange.json\ncombined-executive-summary.html','Reports serve engineers and stakeholders. Optional evidence mappings are available for the configured frameworks.','Framework mappings do not establish certification or legal compliance. These CLI commands do not create a hosted backend, a NIS2 evidence-pack export or automatic remediation. The workspace sample pack is a separate browser mockup.','src/reporting/html/ · src/reporting/combined/')];}
-return [setup,item('Read application configuration',1,2,'HTTPS GET',auth,'Provider data read only',header,'HTTP/1.1 200 OK\nContent-Type: application/json\n\n'+pretty(sample),`Application settings and OAuth configuration. ${auth0?'Required scope: read:clients.':'OAuth scope: okta.apps.read; SSWS access depends on its admin context.'}`,'Request bodies are empty. The example response deliberately omits identifiers and fields not needed to explain the contract.',source+'.collectors.ts'),item(auth0?'Request the next offset page':'Follow the next-page Link',1,2,'HTTPS GET',auth,'More resources added in memory',auth0?`GET /api/v2/clients?page=1&per_page=100&include_totals=false HTTP/1.1\nHost: ${host}\nAuthorization: ${auth}`:`# A previous response advertised this next URL:\nLink: <https://${host}/api/v1/apps?after=demo-cursor&limit=200>; rel="next"\n\nGET /api/v1/apps?after=demo-cursor&limit=200 HTTP/1.1\nHost: ${host}\nAuthorization: ${auth}`,'HTTP/1.1 200 OK\nContent-Type: application/json\n\n[]',auth0?'Auth0 uses page/per_page offsets. This conditional next-page example assumes the preceding full page had 100 items.':'Okta follows the next URL advertised in the HTTP Link header. The cursor is a synthetic placeholder.',auth0?'The general pagination helper stops on a short page and defaults to a 50-page cap. Individual collectors may set lower bounds.':'The current client follows absolute Link URLs without an origin guard. Origin validation, repeated-link detection and safer timeout behavior are tracked in task 046.',source+'.client.ts'),item('Wrap the collector result',1,1,'Local normalization','None','CollectorResult in memory',pretty(sample),pretty({name:collection,status:'success',requiredScopes:[scope],count:1,data:sample}),`Configuration enters the provider snapshot through the ${collection} collector. Count 1 illustrates the shortened sample, not the pagination branch above.`,'API response shapes and provider-specific normalization are isolated from analyzers. Nested requests and bounded samples can still limit completeness.',source+'.collectors.ts'),item('Analyze and render reports',1,3,'Local analysis / file writes','None','Local assessment artifacts',pretty({snapshot:state.provider+'-normalized-snapshot',environment:'production',formats:['html','json'],saveSnapshot:false}),'assessment.html\nassessment.json\n\nOptional, explicitly requested:\nredacted.snapshot.json','The structured report connects findings with evidence, confidence, scores, recommendations and coverage.','Snapshot saving requires explicit opt-in. Privacy/redaction, scoring and coverage hardening remain in the repository backlog.',`src/cli/commands/scan-${state.provider}.ts`)];}
-function stop(){clearInterval(timer);timer=null;$('sequence-play').textContent='▷ Play sequence';}
-function render(){const list=messages();state.step=Math.min(state.step,list.length-1);$('auth-label').hidden=state.provider!=='okta';$('error-label').hidden=state.scenario!=='failure';document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scenario===state.scenario)));const titles={collect:'Collect configuration, read-only',failure:'Make failure states explicit',reports:'From local evidence to a report'};$('sequence-title').textContent=titles[state.scenario];$('sequence-caption').textContent=state.scenario==='collect'?'Select a message to inspect its request, response and behavior.':state.scenario==='failure'?'See how permissions, rate limits and authentication affect the assessment.':'No provider API calls are required to analyze a trusted local snapshot.';$('message-list').innerHTML=list.map((m,i)=>{const left=(Math.min(m.from,m.to)+.5)*25,right=(Math.max(m.from,m.to)+.5)*25;return `<button type="button" class="message" data-step="${i}" aria-pressed="${i===state.step}"><span class="message-caption"><small>${String(i+1).padStart(2,'0')}</small>${esc(m.title)}</span><span class="message-line" style="display:block"><span class="message-arrow ${m.from>m.to?'reverse':''}" style="left:${m.from===m.to?left-5:left}%;width:${m.from===m.to?10:right-left}%"></span><span class="message-kind">${m.protocol.startsWith('HTTPS')?'HTTPS':'LOCAL'}</span></span></button>`;}).join('');$('sequence-count').textContent=`Exchange ${state.step+1} / ${list.length}${timer?' · Playing':''}`;$('sequence-prev').disabled=state.step===0;$('sequence-next').disabled=state.step===list.length-1;renderContract();}
-function renderContract(){const m=messages()[state.step],actors=['Operator','Local Pulse CLI',state.provider==='auth0'?'Auth0 API':'Okta API','Local files'];$('contract-title').textContent=m.title;$('contract-kind').textContent=m.kind;$('contract-route').textContent=actors[m.from]+' → '+actors[m.to];$('contract-protocol').textContent=m.protocol;$('contract-auth').textContent=m.authentication;$('contract-state').textContent=m.effect;$('contract-code').textContent=state.payload==='request'?m.input:m.output;$('contract-data').textContent=m.data;$('contract-handling').textContent=m.handling;$('contract-source').textContent='Implementation reference: '+m.sourcePath;$('copy-status').textContent='';document.querySelectorAll('[data-payload]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.payload===state.payload)));}
-document.addEventListener('click',e=>{const s=e.target.closest('[data-scenario]'),m=e.target.closest('[data-step]'),p=e.target.closest('[data-payload]');if(s){stop();state.scenario=s.dataset.scenario;state.step=0;render();}if(m){stop();state.step=Number(m.dataset.step);render();}if(p){state.payload=p.dataset.payload;renderContract();}});for(const [id,key] of [['tech-provider','provider'],['error-mode','error'],['auth-mode','auth']])$(id).onchange=e=>{stop();state[key]=e.target.value;if(key==='provider')window.PulseExperience.updateContext(state.provider);state.step=0;render();};$('sequence-prev').onclick=()=>{stop();state.step--;render();};$('sequence-next').onclick=()=>{stop();state.step++;render();};$('sequence-play').onclick=()=>{if(timer){stop();render();return;}if(state.step===messages().length-1)state.step=0;timer=setInterval(()=>{state.step++;if(state.step===messages().length-1)stop();render();},2800);$('sequence-play').textContent='Ⅱ Pause sequence';render();};$('copy-payload').onclick=async()=>{try{$('copy-status').textContent='Copying example…';await Promise.race([navigator.clipboard.writeText($('contract-code').textContent),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Clipboard timeout')),1500))]);$('copy-status').textContent='Example copied.';}catch{$('copy-status').textContent='Clipboard unavailable. Select the example text to copy it.';}};$('tech-provider').value=state.provider;render();
+window.PULSE_CONTROLS = {
+  "auth0": {
+    "risk": {
+      "source": "fixtures/auth0/risky-tenant.snapshot.json",
+      "provider": "auth0",
+      "target": "risky.us.auth0.com",
+      "collectedAt": "2026-05-01T10:00:00.000Z",
+      "controls": [
+        {
+          "name": "Multi-factor authentication (MFA)",
+          "collector": "guardian",
+          "sourcePath": "guardian",
+          "status": "Observed configuration",
+          "settings": {
+            "policy": "never",
+            "factors": []
+          },
+          "note": "Configured policy and factors; runtime enforcement and enrollment have not been verified."
+        },
+        {
+          "name": "Breached-password detection",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.breached_password_detection",
+          "status": "Observed configuration",
+          "settings": {
+            "enabled": false
+          },
+          "note": "Configuration observation only; effectiveness has not been tested."
+        },
+        {
+          "name": "Brute-force protection",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.brute_force_protection",
+          "status": "Observed configuration",
+          "settings": {
+            "enabled": false
+          },
+          "note": "Configuration observation only; effectiveness has not been tested."
+        },
+        {
+          "name": "Suspicious-IP throttling",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.suspicious_ip_throttling",
+          "status": "Observed configuration",
+          "settings": {
+            "enabled": false
+          },
+          "note": "Configuration observation only; effectiveness has not been tested."
+        },
+        {
+          "name": "Session policy",
+          "collector": "tenant",
+          "sourcePath": "tenant.session_lifetime / tenant.idle_session_lifetime",
+          "status": "Observed configuration",
+          "settings": {
+            "session_lifetime": 8760,
+            "idle_session_lifetime": 720
+          },
+          "note": "Lifetime values are in hours. Application-specific behavior has not been validated."
+        },
+        {
+          "name": "Bot protection configuration",
+          "collector": "not_collected",
+          "sourcePath": "Not present in these fixtures",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Approved organizational security policies",
+          "collector": "not_collected",
+          "sourcePath": "Not supplied",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        }
+      ]
+    },
+    "healthy": {
+      "source": "fixtures/auth0/healthy-tenant.snapshot.json",
+      "provider": "auth0",
+      "target": "healthy.us.auth0.com",
+      "collectedAt": "2026-05-01T10:00:00.000Z",
+      "controls": [
+        {
+          "name": "Multi-factor authentication (MFA)",
+          "collector": "guardian",
+          "sourcePath": "guardian",
+          "status": "Observed configuration",
+          "settings": {
+            "policy": "all-applications",
+            "factors": [
+              {
+                "name": "otp",
+                "enabled": true
+              }
+            ]
+          },
+          "note": "Configured policy and factors; runtime enforcement and enrollment have not been verified."
+        },
+        {
+          "name": "Breached-password detection",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.breached_password_detection",
+          "status": "Observed configuration",
+          "settings": {
+            "enabled": true,
+            "shields": [
+              "block",
+              "admin_notification"
+            ]
+          },
+          "note": "Configuration observation only; effectiveness has not been tested."
+        },
+        {
+          "name": "Brute-force protection",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.brute_force_protection",
+          "status": "Observed configuration",
+          "settings": {
+            "enabled": true,
+            "shields": [
+              "block"
+            ]
+          },
+          "note": "Configuration observation only; effectiveness has not been tested."
+        },
+        {
+          "name": "Suspicious-IP throttling",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.suspicious_ip_throttling",
+          "status": "Observed configuration",
+          "settings": {
+            "enabled": true
+          },
+          "note": "Configuration observation only; effectiveness has not been tested."
+        },
+        {
+          "name": "Session policy",
+          "collector": "tenant",
+          "sourcePath": "tenant.session_lifetime / tenant.idle_session_lifetime",
+          "status": "Observed configuration",
+          "settings": {
+            "session_lifetime": 168,
+            "idle_session_lifetime": 72
+          },
+          "note": "Lifetime values are in hours. Application-specific behavior has not been validated."
+        },
+        {
+          "name": "Bot protection configuration",
+          "collector": "not_collected",
+          "sourcePath": "Not present in these fixtures",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Approved organizational security policies",
+          "collector": "not_collected",
+          "sourcePath": "Not supplied",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        }
+      ]
+    },
+    "partial": {
+      "source": "fixtures/auth0/partial-scope.snapshot.json",
+      "provider": "auth0",
+      "target": "partial.us.auth0.com",
+      "collectedAt": "2026-05-01T10:00:00.000Z",
+      "controls": [
+        {
+          "name": "Multi-factor authentication (MFA)",
+          "collector": "guardian",
+          "sourcePath": "guardian",
+          "status": "Observed configuration",
+          "settings": {
+            "policy": "all-applications",
+            "factors": [
+              {
+                "name": "otp",
+                "enabled": true
+              }
+            ]
+          },
+          "note": "Configured policy and factors; runtime enforcement and enrollment have not been verified."
+        },
+        {
+          "name": "Breached-password detection",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.breached_password_detection",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Brute-force protection",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.brute_force_protection",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Suspicious-IP throttling",
+          "collector": "attack_protection",
+          "sourcePath": "attackProtection.suspicious_ip_throttling",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Session policy",
+          "collector": "tenant",
+          "sourcePath": "tenant.session_lifetime / tenant.idle_session_lifetime",
+          "status": "Observed configuration",
+          "settings": {
+            "session_lifetime": 168,
+            "idle_session_lifetime": 72
+          },
+          "note": "Lifetime values are in hours. Application-specific behavior has not been validated."
+        },
+        {
+          "name": "Bot protection configuration",
+          "collector": "not_collected",
+          "sourcePath": "Not present in these fixtures",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Approved organizational security policies",
+          "collector": "not_collected",
+          "sourcePath": "Not supplied",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        }
+      ]
+    }
+  },
+  "okta": {
+    "risk": {
+      "source": "fixtures/okta/risky-org.snapshot.json",
+      "provider": "okta",
+      "target": "https://risky.okta.com",
+      "collectedAt": "2026-05-18T10:00:00.000Z",
+      "controls": [
+        {
+          "name": "MFA authenticators",
+          "collector": "authenticators",
+          "sourcePath": "authenticators",
+          "status": "Observed configuration",
+          "settings": [
+            {
+              "key": "sms",
+              "name": "SMS",
+              "status": "ACTIVE"
+            }
+          ],
+          "note": "Available authenticators do not prove MFA is required for all users or applications."
+        },
+        {
+          "name": "Authentication policies",
+          "collector": "policies",
+          "sourcePath": "policies.all",
+          "status": "Observed configuration",
+          "settings": [],
+          "note": "Policy inventory only. Rule conditions, enforcement and organizational approval are not verified. An empty list means no policies were returned in this fixture."
+        },
+        {
+          "name": "Bot protection configuration",
+          "collector": "not_collected",
+          "sourcePath": "Not present in these fixtures",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Approved organizational security policies",
+          "collector": "not_collected",
+          "sourcePath": "Not supplied",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        }
+      ]
+    },
+    "healthy": {
+      "source": "fixtures/okta/healthy-org.snapshot.json",
+      "provider": "okta",
+      "target": "https://healthy.okta.com",
+      "collectedAt": "2026-05-18T10:00:00.000Z",
+      "controls": [
+        {
+          "name": "MFA authenticators",
+          "collector": "authenticators",
+          "sourcePath": "authenticators",
+          "status": "Observed configuration",
+          "settings": [
+            {
+              "key": "okta_verify",
+              "name": "Okta Verify",
+              "status": "ACTIVE"
+            }
+          ],
+          "note": "Available authenticators do not prove MFA is required for all users or applications."
+        },
+        {
+          "name": "Authentication policies",
+          "collector": "policies",
+          "sourcePath": "policies.all",
+          "status": "Observed configuration",
+          "settings": [
+            {
+              "name": "Global Session",
+              "type": "OKTA_SIGN_ON",
+              "status": "ACTIVE",
+              "rules": [
+                {
+                  "name": "Default",
+                  "status": "ACTIVE"
+                }
+              ]
+            },
+            {
+              "name": "App Sign-In",
+              "type": "ACCESS_POLICY",
+              "status": "ACTIVE",
+              "rules": [
+                {
+                  "name": "Default",
+                  "status": "ACTIVE"
+                }
+              ]
+            }
+          ],
+          "note": "Policy inventory only. Rule conditions, enforcement and organizational approval are not verified. An empty list means no policies were returned in this fixture."
+        },
+        {
+          "name": "Bot protection configuration",
+          "collector": "not_collected",
+          "sourcePath": "Not present in these fixtures",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Approved organizational security policies",
+          "collector": "not_collected",
+          "sourcePath": "Not supplied",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        }
+      ]
+    },
+    "partial": {
+      "source": "fixtures/okta/partial-scope-org.snapshot.json",
+      "provider": "okta",
+      "target": "https://partial.okta.com",
+      "collectedAt": "2026-05-18T10:00:00.000Z",
+      "controls": [
+        {
+          "name": "MFA authenticators",
+          "collector": "authenticators",
+          "sourcePath": "authenticators",
+          "status": "Observed configuration",
+          "settings": [
+            {
+              "key": "okta_verify",
+              "name": "Okta Verify",
+              "status": "ACTIVE"
+            }
+          ],
+          "note": "Available authenticators do not prove MFA is required for all users or applications."
+        },
+        {
+          "name": "Authentication policies",
+          "collector": "policies",
+          "sourcePath": "policies.all",
+          "status": "Observed configuration",
+          "settings": [
+            {
+              "name": "Global Session",
+              "type": "OKTA_SIGN_ON",
+              "status": "ACTIVE",
+              "rules": [
+                {
+                  "name": "Default",
+                  "status": "ACTIVE"
+                }
+              ]
+            }
+          ],
+          "note": "Policy inventory only. Rule conditions, enforcement and organizational approval are not verified. An empty list means no policies were returned in this fixture."
+        },
+        {
+          "name": "Bot protection configuration",
+          "collector": "not_collected",
+          "sourcePath": "Not present in these fixtures",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        },
+        {
+          "name": "Approved organizational security policies",
+          "collector": "not_collected",
+          "sourcePath": "Not supplied",
+          "status": "Not assessed",
+          "settings": null,
+          "note": "No collected settings are available for this control."
+        }
+      ]
+    }
+  }
+};
 
 </script>
 <script>
+/* Browser-only sample export. This does not add an evidence-pack CLI command. */
 (() => {
   'use strict';
-  const el = id => document.getElementById(id);
-  const key = 'pulse-demo-architecture-guide-v1';
-  const steps = [
-    ['Start with a question', 'Choose Auth0 or Okta, then select API collection, Failure handling or Local analysis & reports. Each scenario explains a different part of the assessment.', 'Business users: start with Failure handling to understand what missing permissions mean for the assessment.'],
-    ['Select an exchange', 'Click a message in the sequence, or use the next and previous controls. The inspector shows where information moves and what the local CLI does with it.', 'Tech SPOCs: inspect the protocol, authentication and state effect before reviewing the payload.'],
-    ['Compare request and response', 'Use Request / input and Response / output to see both sides of the selected exchange. Authentication uses placeholders; nothing is sent to a provider.', 'Read Handling & limitations for permission gaps, retry behavior and other boundaries. Payloads are shortened synthetic examples.'],
-    ['Know what to take away', 'Business users can focus on where evidence comes from, what remains unknown and which decisions need technical review. Tech SPOCs can trace scopes, payloads, failure states and implementation references.', 'Reopen this guide with “How to use this page” whenever you need it. The assessment workspace keeps the findings and action plans together.'],
-  ];
-  let step = 0;
-  function draw() {
-    const [title, text, tip] = steps[step];
-    el('guide-count').textContent = `Step ${step + 1} of ${steps.length}`;
-    el('guide-title').textContent = title;
-    el('guide-text').textContent = text;
-    el('guide-tip').textContent = tip;
-    el('guide-back').disabled = step === 0;
-    el('guide-next').textContent = step === steps.length - 1 ? 'Explore architecture' : 'Next';
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const list = (values, empty = 'Not supplied.') => values.length ? `<ul>${values.map(v => `<li>${esc(v)}</li>`).join('')}</ul>` : `<p>${esc(empty)}</p>`;
+  function build(report, evidence, scenario) {
+    const r = JSON.parse(JSON.stringify(report));
+    const matchingSource = evidence?.provider === r.provider.id && evidence?.target === r.tenant.primaryIdentifier && evidence?.collectedAt === r.provider.collectedAt;
+    const recommendations = r.remediationPlan.buckets.flatMap(bucket => bucket.items.map(item => ({...item, window: bucket.window})));
+    return {
+      sample: true,
+      generatedAt: new Date().toISOString(),
+      scenario,
+      source: matchingSource ? evidence.source : 'No matching control snapshot',
+      report: r,
+      controls: (evidence?.controls || []).map(control => {
+        const covered = r.coverage.collectors.some(c => c.collector === control.collector && c.status === 'success');
+        return matchingSource && covered ? {...control} : {...control, status:'Not assessed', settings:null, note:'Matching, successfully collected evidence is not available.'};
+      }),
+      actions: r.findings.map(f => ({
+        findingId:f.id, title:f.title,
+        recommendation:recommendations.find(i => i.findingId === f.id)?.action || f.recommendation,
+        window:recommendations.find(i => i.findingId === f.id)?.window || 'Not supplied',
+        owner:'Unassigned', status:'Recommended — no completion recorded',
+        reportedCompletion:'Not supplied', remediationEvidence:'Not supplied', verification:'Not verified',
+        validationSteps:f.validationSteps || [],
+      })),
+    };
   }
-  function open() {
-    // Pause an existing sequence so it does not advance underneath the guide.
-    if (el('sequence-play').textContent.includes('Pause')) el('sequence-play').click();
-    step = 0; draw(); el('guide-dialog').showModal();
+  function content(pack, compact = false) {
+    const r = pack.report;
+    const unassessed = r.categories.filter(c => !c.assessed).map(c => c.name);
+    const markup = `<div class="pack-document">
+      <div class="pack-banner"><strong>SAMPLE EVIDENCE PACK</strong><p>Synthetic assessment · auditor-supporting material · not NIS2 certification or proof of compliance.</p></div>
+      <p class="pack-provenance">Prepared ${esc(pack.generatedAt)}<br>Report generated ${esc(r.generatedAt)}<br>Configuration collected ${esc(r.provider.collectedAt)}<br>Source: ${esc(pack.source)}</p>
+      <section><h2>01 · What was checked</h2>
+        <dl class="pack-facts"><div><dt>Provider</dt><dd>${esc(r.provider.displayName || r.provider.id)}</dd></div><div><dt>Environment</dt><dd>${esc(r.environment)} · synthetic</dd></div><div><dt>Assessment target</dt><dd>${esc(r.tenant.displayName || r.tenant.primaryIdentifier)}</dd></div><div><dt>Sample</dt><dd>${esc(pack.scenario)}</dd></div><div><dt>Posture score</dt><dd>${esc(r.score.overall)} / 100 · ${esc(r.score.grade)}</dd></div></dl>
+        <p>Scope: configuration represented by the collectors below, evaluated with the current provider-specific rules. This is not an exhaustive assessment of NIS2 obligations.</p>
+        <h3>Assessed categories</h3>${list(r.categories.filter(c => c.assessed).map(c => c.name))}
+        <div class="table-wrap"><table><thead><tr><th>Collector</th><th>State</th><th>Resources</th><th>Required scopes</th></tr></thead><tbody>${r.coverage.collectors.map(c => `<tr><td>${esc(c.collector)}</td><td>${esc(c.status)}</td><td>${esc(c.count ?? 'Not supplied')}</td><td>${esc((c.requiredScopes || []).join(', ') || 'Not supplied')}</td></tr>`).join('')}</tbody></table></div>
+        <p>Collector success does not establish exhaustive coverage. A score is a posture indicator, not a compliance verdict.</p>
+      </section>
+      <section><h2>02 · Gaps and unassessed areas</h2>
+        <p><strong>${r.findings.length} findings · ${r.coverage.partial ? 'partial coverage reported' : 'no collector gaps reported'}</strong></p>
+        <h3>Unassessed categories</h3>${list(unassessed, 'No categories marked unassessed by the report. Other limitations still apply.')}
+        <h3>Unsuccessful collectors</h3>${list(r.coverage.collectors.filter(c => c.status !== 'success').map(c => `${c.collector}: ${c.status}${c.notes ? ' — ' + c.notes : ''}`), 'None reported.')}
+        <h3>Missing scopes</h3>${list(r.coverage.missingScopes, 'None reported; this does not establish complete access.')}
+        <h3>Assessment limitations</h3>${list(r.limitations)}
+        <h3>Assumptions</h3>${list(r.assumptions || [])}
+        ${r.findings.map(f => `<article class="pack-entry"><h3>${esc(f.title)}</h3><p class="pack-label">${esc(f.id)} · ${esc(f.severity)} · ${esc(f.classification)} · ${esc(f.confidence)} confidence</p><p><strong>Observed evidence:</strong> ${esc(f.evidence.summary)}</p><p><strong>Business risk:</strong> ${esc(f.businessRisk)}</p>${f.falsePositiveNotes.length ? `<p><strong>Context and exceptions</strong></p>${list(f.falsePositiveNotes)}` : ''}</article>`).join('') || '<p>No findings in this fixture. This does not prove absence of risk.</p>'}
+      </section>
+      <section><h2>03 · How gaps were addressed</h2><p>No completed remediation or validation results are recorded in these samples. The entries below are recommendations awaiting ownership and verification.</p>
+        ${pack.actions.map(a => `<article class="pack-entry"><h3>${esc(a.findingId)} · ${esc(a.title)}</h3><p><strong>Recommended action:</strong> ${esc(a.recommendation)}</p><p><strong>Suggested timing:</strong> ${esc(a.window)}</p><dl class="pack-facts"><div><dt>Owner</dt><dd>${esc(a.owner)}</dd></div><div><dt>Status</dt><dd>${esc(a.status)}</dd></div><div><dt>Reported completion</dt><dd>${esc(a.reportedCompletion)}</dd></div><div><dt>Remediation evidence</dt><dd>${esc(a.remediationEvidence)}</dd></div><div><dt>Verification</dt><dd>${esc(a.verification)}</dd></div></dl><p><strong>Suggested validation steps</strong></p>${list(a.validationSteps, 'No rule-specific steps supplied; engineering review is required.')}</article>`).join('') || '<p>No finding-linked recommendations in this fixture. Remediation history is not supplied.</p>'}
+      </section>
+      <section><h2>04 · Security controls and policies</h2><p>These are observed settings from the matching synthetic snapshot. A configuration observation is separate from a recommendation, a reported change or a verified outcome. Runtime effectiveness and organizational policy approval have not been verified.</p>
+        ${pack.controls.map(c => `<article class="pack-entry"><h3>${esc(c.name)}</h3><p class="pack-label">${esc(c.status)}</p>${c.settings !== null ? `<pre>${esc(JSON.stringify(c.settings, null, 2))}</pre>` : '<p>No evidence available. Do not infer that this control is enabled or disabled.</p>'}<p>${esc(c.note)}</p><p class="pack-provenance">Source field: ${esc(c.sourcePath)} · collector: ${esc(c.collector)}</p></article>`).join('')}
+      </section>
+    </div>`;
+    if (!compact) return markup;
+    let index = 0;
+    return markup.replace(/<section><h2>(.*?)<\/h2>/g, (_, title) => `<details class="pack-section" ${index++ === 0 ? 'open' : ''}><summary>${title}</summary><div>`).replace(/<\/section>/g, '</div></details>');
   }
-  el('open-guide').onclick = open;
-  el('close-guide').onclick = () => el('guide-dialog').close();
-  el('guide-back').onclick = () => { step = Math.max(0, step - 1); draw(); };
-  el('guide-next').onclick = () => {
-    if (step === steps.length - 1) el('guide-dialog').close();
-    else { step++; draw(); }
-  };
-  el('guide-dialog').addEventListener('close', () => {
-    window.PulseExperience.write(key, 'seen');
-    el('open-guide').focus();
-  });
-  if (window.PulseExperience.read(key) !== 'seen') open();
+  const exportStyles = `body{font:16px/1.65 system-ui,sans-serif;color:#141429;background:#fff;margin:0}main{max-width:960px;margin:auto;padding:40px 24px}h1{font-size:30px}h2{margin:0 0 16px;font-size:24px}h3{font-size:17px;margin:18px 0 8px}p{margin:8px 0}section{margin-top:36px;padding-top:24px;border-top:2px solid #83219b}.pack-banner{padding:20px;background:#141429;color:#fff;border-left:6px solid #7addc6}.pack-provenance,.pack-label{font-size:13px;color:#4a4a65;overflow-wrap:anywhere}.pack-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.pack-facts dt{font-size:13px;color:#4a4a65}.pack-facts dd{margin:2px 0;overflow-wrap:anywhere}.pack-entry{padding:14px 0;border-top:1px solid #c9c9d8;break-inside:avoid}table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:10px;border:1px solid #c9c9d8;text-align:left;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f0f6;padding:16px;font-size:13px}.table-wrap{overflow:auto}@media(max-width:500px){.pack-facts{grid-template-columns:1fr}main{padding:24px 16px}}@media print{main{padding:0}.table-wrap{overflow:visible}a{color:inherit}}`;
+  function html(pack) {
+    return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Identity Pulse — sample evidence pack</title><style>${exportStyles}</style></head><body><main><h1>Identity Pulse · NIS2 Material</h1>${content(pack)}</main></body></html>`;
+  }
+  window.PulseEvidence = {build, content, html};
 })();
+
+</script>
+<script>
+/* Plain-language presentation of existing findings, without changing their assessment. */
+(() => {
+  'use strict';
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const briefs = {
+    'AUTH-CLI-004': ['Stolen access could last too long', 'Ask the identity team to confirm the risk and propose a safe limit on long-lived access.'],
+    'AUTH-CLI-005': ['An application is missing its expected identity check', 'Assign an application owner to restore the appropriate authentication method and validate access.'],
+    'AUTH-EXT-001': ['Legacy login components need a migration plan', 'Agree ownership and a migration plan before the support deadline stated in the finding.'],
+    'AUTH-SEC-004': ['Password-guessing protection is switched off', 'Prioritize restoring this protection and ask for evidence that login still works correctly.'],
+    'AUTH-SEC-005': ['Compromised-password protection is switched off', 'Agree how compromised passwords should be blocked and how the change will be checked.'],
+    'AUTH-SEC-006': ['Automated attack protection needs review', 'Ask the identity team to review IP throttling and justify any exception before accepting the risk.'],
+    'AUTH-SEC-001': ['Sensitive customer actions need an MFA review', 'Agree which sensitive journeys need a second factor; ask the team to verify those controls.'],
+    'AUTH-OBS-001': ['Security logs lack an external destination', 'Agree where security logs should be retained and who will monitor them.'],
+    'AUTH-COV-001': ['Some security controls could not be checked', 'Ask the assessment owner to resolve collection gaps before drawing conclusions about these controls.'],
+    'OKTA-COV-001': ['Some security controls could not be checked', 'Ask the assessment owner to resolve collection gaps before drawing conclusions about these controls.'],
+    'OKTA-MON-001': ['Security logs lack an external destination', 'Agree where security logs should be retained and who will monitor them.'],
+    'OKTA-APP-001': ['Some applications use older sign-in methods', 'Ask the application owners to confirm which methods are needed and plan any migration.'],
+    'OKTA-POL-002': ['Stronger sign-in protection needs review', 'Ask the team to confirm available authenticators and the requirements for sensitive sign-ins.'],
+    'OKTA-ADM-001': ['Powerful administrator access needs review', 'Confirm who needs high-level access and who owns the access-review process.'],
+    'OKTA-NET-001': ['A trusted destination uses an unencrypted connection', 'Ask the application owner to review the insecure origin and plan a move to HTTPS.'],
+    'OKTA-HOOK-001': ['Identity events may travel without encryption', 'Ask the integration owner to review the destination and secure the connection.'],
+    'OKTA-USR-002': ['Unused accounts may still have access', 'Ask account owners to confirm whether dormant accounts still need access.'],
+  };
+  const title = finding => briefs[finding.id]?.[0] || finding.title;
+  const decision = finding => briefs[finding.id]?.[1] || 'Ask your technical contact to confirm the recommendation, assign an owner and agree how the result will be verified.';
+  const impacts = {
+    'AUTH-CLI-004': 'Compromised access could remain usable for a long time after an account is breached.',
+    'AUTH-CLI-005': 'An application may be impersonated, exposing the services it can access.',
+    'AUTH-EXT-001': 'Unsupported login components can disrupt customer journeys and create last-minute migration work.',
+    'AUTH-SEC-004': 'Attackers can repeatedly guess passwords, increasing the chance of account takeover.',
+    'AUTH-SEC-005': 'Reused, leaked passwords can leave customer accounts exposed.',
+    'AUTH-SEC-006': 'Automated attacks may be harder to slow down before they affect customers.',
+    'AUTH-SEC-001': 'Sensitive customer actions may depend on a password alone unless additional controls are in place.',
+    'AUTH-OBS-001': 'Missing externally retained logs can make security incidents harder to investigate.',
+    'OKTA-MON-001': 'Missing externally retained logs can make security incidents harder to investigate.',
+    'AUTH-COV-001': 'Unchecked controls remain unknown, even when the posture score looks strong.',
+    'OKTA-COV-001': 'Unchecked controls remain unknown, even when the posture score looks strong.',
+    'OKTA-APP-001': 'Older sign-in methods can make access credentials easier to steal.',
+    'OKTA-POL-002': 'Sensitive sign-ins may rely on weaker authentication factors.',
+    'OKTA-ADM-001': 'Powerful access increases the potential impact of an account compromise and needs clear ownership.',
+    'OKTA-NET-001': 'Sign-in information may be exposed through an insecure trusted destination.',
+    'OKTA-HOOK-001': 'Identity events and attached sensitive information could be exposed in transit.',
+    'OKTA-USR-002': 'Accounts that are no longer needed may still provide access to the organization.',
+  };
+  const impact = finding => impacts[finding.id] || finding.businessRisk;
+  const status = finding => finding.classification === 'confirmed-risk' ? 'Confirmed configuration risk' : finding.classification === 'requires-validation' ? 'Needs validation' : 'Advisory · review context';
+  const actions = report => report.remediationPlan.buckets.flatMap(bucket => bucket.items);
+  function priorities(report) {
+    const severity = {critical:0, high:1, medium:2, low:3, info:4};
+    const classification = {'confirmed-risk':0, 'requires-validation':1, advisory:2};
+    const sorted = [...report.findings].sort((a,b) => (severity[a.severity] ?? 5) - (severity[b.severity] ?? 5) || (classification[a.classification] ?? 3) - (classification[b.classification] ?? 3));
+    const areas = new Set();
+    return sorted.filter(finding => {
+      if (areas.has(finding.category)) return false;
+      areas.add(finding.category); return true;
+    }).slice(0,3);
+  }
+  function metrics(report) {
+    const priority = report.findings.filter(f => ['critical','high'].includes(f.severity));
+    const confirmed = priority.filter(f => f.classification === 'confirmed-risk').length;
+    const gaps = report.coverage.collectors.filter(c => c.status !== 'success').length;
+    return `<article><div><strong>${priority.length}</strong><span>Priority findings</span></div><p>${confirmed} confirmed · ${priority.length - confirmed} to validate or review</p><button class="textlink" data-view="findings">Review business impact</button></article>
+      <article><div><strong>${actions(report).length}</strong><span>Recommended actions</span></div><p>${actions(report).length ? 'Ownership and completion are not recorded.' : 'No actions listed; evidence still needs review.'}</p><button class="textlink" data-view="plan">Review next actions</button></article>
+      <article><div><strong>${gaps}</strong><span>Collection gaps</span></div><p>${gaps ? 'Some controls remain unknown.' : 'No failed or skipped collections reported.'}</p><button class="textlink" data-view="nis2" data-evidence-limits>Review evidence limits</button></article>`;
+  }
+  function decisions(report) {
+    const selected = priorities(report);
+    return `<section class="decision-panel"><div class="panel-head"><div><p class="eyebrow">What needs a decision?</p><h2>${selected.length ? 'Start with these conversations.' : 'Confirm what the evidence can support.'}</h2><p>${selected.length ? 'Highest-severity findings across distinct assessment areas.' : 'No findings in this sample. Collection success and a high score do not establish compliance.'}</p></div><button class="textlink" data-view="findings">All findings (${report.findings.length})</button></div>
+      ${selected.map(f => `<article class="decision-row"><div><span class="decision-class">${esc(f.severity)} · ${esc(status(f))}</span><h3>${esc(title(f))}</h3><p>${esc(impact(f))}</p></div><div class="decision-next"><span>Next decision</span><p>${esc(decision(f))}</p><button class="textlink" data-finding="${esc(f.id)}">Review finding</button></div></article>`).join('') || '<div class="empty-decision"><h3>Request the supporting records</h3><p>Ask the accountable teams for approved policies and validation evidence. These are not supplied in the assessment.</p><button class="textlink" data-view="nis2">Review NIS2 Material</button></div>'}</section>`;
+  }
+  function material(report, evidence) {
+    const successful = report.coverage.collectors.filter(c => c.status === 'success').length;
+    const gaps = report.coverage.collectors.filter(c => c.status !== 'success');
+    const observed = evidence.controls.filter(c => c.status === 'Observed configuration' && report.coverage.collectors.some(r => r.collector === c.collector && r.status === 'success')).length;
+    return `<section class="nis2-focus" aria-labelledby="nis2-heading"><div class="nis2-lead"><span class="eyebrow">NIS2 Material</span><h2 id="nis2-heading">Prepare your<br><span>NIS2 evidence.</span></h2><p>Bring the identity-security findings, action plans and observed controls into one reviewable record.</p><div class="actions"><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button><span class="pill amber">Supporting evidence incomplete</span></div><small>Sample pack · identity-security scope · not a NIS2 compliance verdict</small></div>
+      <div class="evidence-checklist"><h3>What evidence is available?</h3><dl><div><dt>Assessment findings & scope</dt><dd class="available">Available · ${successful}/${report.coverage.collectors.length} collections succeeded</dd></div><div><dt>Observed security settings</dt><dd class="available">${observed} control records · enforcement not verified</dd></div><div><dt>Completed remediation & validation</dt><dd class="missing">Not supplied</dd></div><div><dt>Approved organizational policies</dt><dd class="missing">Not supplied</dd></div></dl></div></section>
+      ${decisions(report)}
+      <section class="review-preparation panel"><div><p class="eyebrow">Before the review</p><h2>Close the gaps in the record.</h2></div><ol><li><strong>Assign accountability.</strong><span>Agree an owner and target date for each accepted action. None are recorded here.</span></li><li><strong>Collect proof of the outcome.</strong><span>Request change records and validation results; recommendations alone do not prove completion.</span></li><li><strong>Add the organizational evidence.</strong><span>Bring approved policies and the wider security records held outside this identity assessment.</span></li></ol></section>
+      <details class="material-scope" id="material-scope"><summary>Assessment boundaries & uncollected areas</summary><p>This view covers identity configuration only. Legal applicability and the wider NIS2 obligations are not assessed. A generated pack may still contain missing or unverified evidence.</p><h3>Collection gaps</h3>${gaps.length ? `<ul>${gaps.map(c => `<li>${esc(c.collector)} · ${esc(c.status)}</li>`).join('')}</ul>` : '<p>No failed or skipped collectors reported. Collection success does not establish exhaustive coverage.</p>'}<h3>Assessment limitations</h3><ul>${report.limitations.map(l => `<li>${esc(l)}</li>`).join('')}</ul><p class="section-note">Configuration collected ${esc(report.provider.collectedAt)} · report generated ${esc(report.generatedAt)}. Independent synthetic fixtures; not before/after remediation evidence.</p></details>`;
+  }
+  function plan(report) {
+    return `<section class="panel business-plan-intro"><p class="eyebrow">Action Plans</p><h2>Agree who will do what next.</h2><p>Use these recommendations to agree priorities, ownership and target dates with your technical contact. Completion and verification are not recorded in this sample. Advisory findings may also need review outside the listed action plan.</p><button class="textlink" data-view="nis2">Include the plan in your NIS2 material</button></section>
+      <div class="business-plan">${report.remediationPlan.buckets.map(bucket => `<section class="panel"><div class="panel-head"><h2>${esc(bucket.name)}</h2><span class="pill">Suggested window: ${esc(bucket.window)}</span></div>${bucket.items.map(action => {
+        const finding = report.findings.find(f => f.id === action.findingId);
+        return `<article class="business-action"><h3>${esc(finding ? title(finding) : action.action)}</h3><p>${esc(finding ? decision(finding) : action.expectedOutcome)}</p><dl class="action-status"><div><dt>Owner</dt><dd>Not assigned in this sample</dd></div><div><dt>Target date</dt><dd>Not recorded</dd></div><div><dt>Completion / validation</dt><dd>Not recorded / not verified</dd></div></dl><details><summary>Recommended change & expected outcome</summary><p>${esc(action.action)}</p><p><strong>Expected outcome:</strong> ${esc(action.expectedOutcome)}</p></details><button class="textlink" data-finding="${esc(action.findingId)}">Review supporting finding</button></article>`;
+      }).join('') || '<p class="empty">No recommendations in this time window.</p>'}</section>`).join('')}</div>`;
+  }
+  window.PulseBusiness = {title, impact, status, metrics, decisions, material, plan, priorities};
+})();
+
+</script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:window.PulseExperience.audience==='business'?'nis2':'overview',query:'',severity:'all'};
+const severityOrder={critical:0,high:1,medium:2,low:3,info:4};
+const business=()=>window.PulseExperience.audience==='business';
+const report=()=>window.PULSE_REPORTS[state.provider][state.scenario];
+const sorted=()=>[...report().findings].sort((a,b)=>(severityOrder[a.severity]??5)-(severityOrder[b.severity]??5));
+const severityPill=s=>`<span class="pill ${['critical','high'].includes(s)?'red':s==='medium'?'amber':'blue'}">${esc(s)}</span>`;
+const row=f=>`<button type="button" class="finding-row" data-finding="${esc(f.id)}"><span><strong>${esc(business()?window.PulseBusiness.title(f):f.title)}</strong><small>${business()?esc(window.PulseBusiness.impact(f)):esc(f.id)+' · '+esc(f.classification.replaceAll('-',' '))}</small></span><span class="finding-meta">${business()?`<span class="pill ${f.classification==='confirmed-risk'?'red':'amber'}">${esc(window.PulseBusiness.status(f))}</span>`:''}${severityPill(f.severity)}<span class="arrow" aria-hidden="true">↗</span></span></button>`;
+function render(){const summary=$('business-summary');if(summary.parentElement!==$('main'))$('assessment-view').before(summary);renderTabs();const r=report(),fs=r.findings,critical=fs.filter(f=>f.severity==='critical').length,high=fs.filter(f=>f.severity==='high').length,validation=fs.filter(f=>f.classification==='requires-validation').length;const success=r.coverage.collectors.filter(c=>c.status==='success').length,total=r.coverage.collectors.length;$('score').textContent=r.score.overall;$('score-ring').style.setProperty('--score',r.score.overall);$('score-title').textContent=r.coverage.partial?'A score with blind spots':critical+high?'Review priority risks':'A stronger starting point';$('score-description').textContent=r.coverage.partial?'Interpret this score alongside uncollected evidence.':critical+high?'Prioritize the findings and validate their context.':'Review remaining signals and assessment boundaries.';$('grade').textContent=`Engine grade ${r.score.grade} · ${state.provider==='auth0'?'Auth0 CIAM':'Okta Workforce'}`;$('finding-total').textContent=`${fs.length} findings`;$('stats').innerHTML=`<div class="stat"><span class="stat-label">Critical</span><strong>${critical}</strong><small>Highest severity</small></div><div class="stat"><span class="stat-label">High</span><strong>${high}</strong><small>Priority review</small></div><div class="stat"><span class="stat-label">To validate</span><strong>${validation}</strong><small>Requires context</small></div>`;$('coverage-summary').textContent=`${success} / ${total} collectors successful`;$('coverage-notice').innerHTML=r.coverage.partial?'<div class="notice"><strong>Partial coverage.</strong> Some evidence could not be collected. Missing evidence is not proof that a control is safe.</div>':'';document.querySelectorAll('[role=tab]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));$('assessment-view').setAttribute('aria-labelledby','tab-'+state.view);if(business()){$('business-summary').innerHTML=window.PulseBusiness.metrics(r);$('sample-context').innerHTML=`Production · synthetic sample<br> Evidence collected ${esc(new Date(r.provider.collectedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}))}`;}renderView();if(business()&&state.view==='nis2')$('assessment-view').querySelector('.nis2-focus').after(summary);}
+function renderView(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='overview'){view.innerHTML=`<div class="overview-grid"><section class="panel"><div class="panel-head"><div><h2>Start with these findings</h2><p>Highest severity first · evidence behind every result</p></div><button class="textlink" data-view="findings">View all ↗</button></div>${sorted().slice(0,4).map(row).join('')||'<p class="empty">No findings in this sample. Review positive signals and collection boundaries before drawing conclusions.</p>'}</section><section class="panel"><div class="panel-head"><div><h2>Where the score comes from</h2><p>Weighted category points, as reported by the engine</p></div></div>${r.categories.map(c=>`<div class="bar-row"><div class="bar-label"><span>${esc(c.name)}</span><b>${c.assessed?`${c.score??0} / ${c.weight}`:'Not assessed'}</b></div><div class="bar-track"><span style="width:${c.assessed?Math.max(0,Math.min(100,(c.score||0)/c.weight*100)):0}%"></span></div></div>`).join('')}<p class="section-note">Provider scoring models differ. Scores are posture indicators, not a certification or a direct provider ranking.</p></section></div><section class="panel" style="margin-top:20px"><div class="panel-head"><h2>Positive signals</h2><span class="pill green">Keep what is working</span></div>${r.positiveSignals.length?r.positiveSignals.slice(0,3).map(s=>`<p style="font-size:14px;margin-top:10px"><strong>${esc(s.title)}</strong> <span class="muted">${esc(s.detail)}</span></p>`).join(''):'<p class="empty">No positive signals are supplied for this sample.</p>'}</section>`;}
+else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${business()?'Findings':'Findings & evidence'}</h2><p>${business()?'Review business impact, then open a finding for the next action.':'Inspect classification, evidence and validation needs.'}</p></div><span class="pill">${r.findings.length} total</span></div><div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">All severities</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select></div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;renderResults();});}
+else if(state.view==='coverage'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>What was actually collected</h2><p>Collector success does not guarantee exhaustive resource coverage.</p></div><span class="pill ${r.coverage.partial?'amber':'green'}">${r.coverage.partial?'Partial coverage':'No reported collector gaps'}</span></div><div class="table-wrap"><table><thead><tr><th>Collector</th><th>Reported state</th><th>Required scopes</th><th>Count</th></tr></thead><tbody>${r.coverage.collectors.map(c=>`<tr><td>${esc(c.collector)}</td><td><span class="pill ${c.status==='success'?'green':'amber'}">${esc(c.status)}</span></td><td><code>${esc((c.requiredScopes||[]).join(', ')||'Not specified')}</code></td><td>${c.count??'—'}</td></tr>`).join('')}</tbody></table></div>${r.coverage.missingScopes.length?`<p class="section-note"><strong>Missing scopes:</strong> ${esc(r.coverage.missingScopes.join(', '))}</p>`:''}<h3 style="margin-top:24px">What this assessment does not establish</h3><ul class="section-note">${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></section>`;}
+else if(state.view==='plan'&&business()){view.innerHTML=window.PulseBusiness.plan(r);}
+else{view.innerHTML=`<div class="notice neutral"><strong>Action Plans · recommended next steps.</strong> Assign an owner, implement the change and collect validation evidence outside this demo. No completion or ownership is recorded in these samples.</div><div class="plan-grid">${r.remediationPlan.buckets.map(b=>`<section class="panel"><div class="panel-head"><div><h2>${esc(b.name)}</h2><p>${esc(b.window)}</p></div></div>${b.items.map(i=>`<div class="plan-item">${i.severity?severityPill(i.severity):''}<p style="margin-top:9px">${esc(i.action)}</p><small>Expected outcome: ${esc(i.expectedOutcome)}</small><dl class="action-status"><div><dt>Owner</dt><dd>Unassigned</dd></div><div><dt>Status</dt><dd>Recommended</dd></div><div><dt>Validation</dt><dd>Not verified</dd></div></dl><button class="textlink" data-finding="${esc(i.findingId)}">${esc(i.findingId)} · Review evidence ↗</button></div>`).join('')||'<p class="empty">No actions in this bucket.</p>'}</section>`).join('')}</div>`;}}
+function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(f.title+' '+f.id+' '+(business()?window.PulseBusiness.title(f)+' '+f.businessRisk:'')).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=matches.map(row).join('')||'<p class="empty" role="status">No findings match this selection.</p>';}
+function finding(id){
+  const f=report().findings.find(x=>x.id===id);if(!f)return;
+  const technical=`${business()?`<h3>Technical finding</h3><p>${esc(f.title)}</p>`:''}<div class="finding-meta"><span class="pill">${esc(f.classification)}</span><span class="pill">${esc(f.confidence)} confidence</span></div><p class="section-note">${esc(f.id)} · score impact ${f.scoreImpact}</p><h3>Observed evidence</h3><div class="evidence">${esc(f.evidence.summary)}</div><h3>How to validate</h3>${f.validationSteps.length?`<ul>${f.validationSteps.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:'<p class="muted">The current report does not supply validation steps for this finding. Engineering review is required.</p>'}${f.falsePositiveNotes.length?`<h3>Context & exceptions</h3><ul>${f.falsePositiveNotes.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:''}<h3>Affected resources</h3><p>${esc(f.affectedResources.map(x=>x.displayName).join(', ')||'Not specified')}</p>`;
+  $('finding-detail').innerHTML=`${severityPill(f.severity)}<h2 id="finding-title">${esc(business()?window.PulseBusiness.title(f):f.title)}</h2><h3>Why it matters</h3><p>${esc(business()?window.PulseBusiness.impact(f):f.businessRisk)}</p><h3>Recommended action</h3><p>${esc(f.recommendation)}</p>${business()?`<p class="section-note">${f.classification==='requires-validation'?'Engineering validation is needed before treating this as a confirmed risk.':'Review the observed configuration and its context with your technical contact.'}</p><details class="technical-evidence"><summary>Technical evidence & validation</summary>${technical}</details>`:technical}`;
+  $('finding-dialog').showModal();
+}
+document.addEventListener('click',e=>{const v=e.target.closest('[data-view]'),f=e.target.closest('[data-finding]');if(v){state.view=business()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}if(f)finding(f.dataset.finding);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-finding').onclick=()=>$('finding-dialog').close();$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+const steps=['Read local assessment settings','Collect provider configuration · GET only','Normalize snapshot & collection status','Run provider-specific deterministic rules','Calculate scores & explain findings','Render local reports'];let scanStep=0,scanTimer=null;function scanDraw(){document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',scanStep);$('scan-progress').style.width=(scanStep/6*100)+'%';$('scan-steps').innerHTML=steps.map((s,i)=>`<li class="${i===scanStep?'active':''}"><span>${s}</span><span>${i<scanStep?'✓':i===scanStep?'…':'—'}</span></li>`).join('');$('scan-status').textContent=scanStep===6?'Walkthrough complete. The workspace shows the selected fixture report.':`Step ${scanStep+1} of 6 · simulated processing`;$('scan-pause').textContent=scanStep===6?'Replay':scanTimer?'Pause':'Continue';}function pauseScan(){clearInterval(scanTimer);scanTimer=null;}function playScan(){scanTimer=setInterval(()=>{scanStep++;if(scanStep>=6)pauseScan();scanDraw();},850);scanDraw();}$('run-demo').onclick=()=>{pauseScan();scanStep=0;$('scan-dialog').showModal();playScan();};$('scan-pause').onclick=()=>{if(scanStep===6)scanStep=0;if(scanTimer)pauseScan();else playScan();scanDraw();};$('scan-close').onclick=()=>$('scan-dialog').close();$('scan-dialog').addEventListener('close',pauseScan);
+function renderTabs(){
+  const views=business()?[['nis2','NIS2 Material'],['findings','Findings'],['plan','Action Plans']]:[['overview','Overview'],['findings','Findings'],['coverage','Coverage'],['plan','Action Plans'],['nis2','NIS2 Material']];
+  if(!views.some(([id])=>id===state.view))state.view=business()?'nis2':'overview';
+  $('assessment-tabs').innerHTML=views.map(([id,label])=>`<button id="tab-${id}" type="button" role="tab" tabindex="${id===state.view?'0':'-1'}" aria-selected="${id===state.view}" aria-controls="assessment-view" data-view="${id}">${label}</button>`).join('');
+  $('review-coverage').dataset.view=business()?'nis2':'coverage';
+  $('review-coverage').textContent=business()?'Scope & evidence':'Review coverage';
+}
+function renderMaterial(){
+  if(business()){$('assessment-view').innerHTML=window.PulseBusiness.material(report(),window.PULSE_CONTROLS[state.provider][state.scenario]);return;}
+  const r=report(),uncollected=r.coverage.collectors.filter(c=>c.status!=='success');
+  $('assessment-view').innerHTML=`<section class="material-hero"><div><span class="eyebrow">NIS2 Material</span><h2>Bring the evidence together.</h2><p>Prepare a clear record of what was checked, what needs attention and what still needs verification.</p><span class="pill light">Sample export · proposed capability</span></div><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button></section><div class="material-grid">${[['01','What was checked',r.coverage.collectors.length+' collectors listed, with their status, scope and collection date.'],['02','Gaps & blind spots',r.findings.length+' findings · '+uncollected.length+' unsuccessful collectors.'],['03','How gaps were addressed','Recommended actions are available. Completed work, owners and validation evidence are not recorded.'],['04','Controls & policies','Observed MFA and protection settings, with unavailable evidence clearly marked.']].map(([n,title,text])=>`<article class="panel"><span class="material-number">${n}</span><h3>${title}</h3><p>${text}</p></article>`).join('')}</div><div class="notice neutral"><strong>For auditor review.</strong> This sample pack supports evidence preparation. It does not certify NIS2 compliance. Organizational policies and bot protection evidence have not been supplied.</div><details class="material-scope"><summary>Review collection gaps and assessment limits</summary><h3>Unsuccessful collectors</h3>${uncollected.length?`<ul>${uncollected.map(c=>`<li>${esc(c.collector)} · ${esc(c.status)}</li>`).join('')}</ul>`:'<p>No collector gaps reported. Collection success does not guarantee exhaustive coverage.</p>'}<h3>Limitations</h3><ul>${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></details>`;
+}
+function generatePack(){
+    currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent);
+    $('pack-preview').innerHTML=window.PulseEvidence.content(currentPack,true);
+    if(currentPackURL)URL.revokeObjectURL(currentPackURL);
+    currentPackURL=URL.createObjectURL(new Blob([window.PulseEvidence.html(currentPack)],{type:'text/html;charset=utf-8'}));
+    $('download-pack').href=currentPackURL;
+    $('download-pack').download=`identity-pulse-${currentPack.report.provider.id}-sample-evidence-pack.html`;
+    $('pack-download-status').textContent='Self-contained HTML · browser mockup';
+    $('pack-dialog').showModal();
+}
+let currentPack=null,currentPackURL=null;
+$('close-pack').onclick=()=>$('pack-dialog').close();
+$('download-pack').onclick=()=>{
+  $('pack-download-status').textContent='Sample HTML download requested. Open the file to review or print.';
+};
+
+$('assessment-tabs').addEventListener('keydown',event=>{
+  const tabs=[...$('assessment-tabs').querySelectorAll('[role=tab]')],index=tabs.indexOf(event.target);
+  if(index<0||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key))return;
+  event.preventDefault();
+  const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1)+tabs.length)%tabs.length;
+  state.view=tabs[next].dataset.view;render();$('tab-'+state.view).focus();
+});
+$('provider').value=state.provider;
+$('scenario').value=state.scenario;
+const requestedView=new URLSearchParams(location.search).get('view');
+if(['overview','findings','coverage','plan','nis2'].includes(requestedView))state.view=requestedView;
+if(business()){
+  $('business-navigation').append($('assessment-tabs'));
+  $('assessment-tabs').setAttribute('aria-label','Business workspace');
+  $('workspace-title').textContent='Risk, actions & evidence';
+  $('workspace-eyebrow').textContent='Business overview';
+  $('workspace-heading').textContent='Know what needs your attention.';
+  $('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence for review.';
+  document.title='Identity Pulse — Business workspace';
+}else document.title='Identity Pulse — Tech SPOC workspace';
+function tabOrientation(){$('assessment-tabs').setAttribute('aria-orientation',business()&&innerWidth>850?'vertical':'horizontal');}
+window.addEventListener('resize',tabOrientation);tabOrientation();
+render();
 
 </script>
 </body></html>
