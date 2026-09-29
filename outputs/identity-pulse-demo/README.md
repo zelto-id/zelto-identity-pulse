@@ -20,9 +20,17 @@ Open http://127.0.0.1:8793. The server binds only to loopback. Stop it with Ctrl
 
 ## What to explore
 
-- **Assessment workspace:** Auth0 or Okta; at-risk, hardened or limited-permission fixtures; score and engine grade; finding detail; search and severity filter; collector coverage; recommended action plan; sample JSON download; simulated assessment replay.
-- **Animated flow:** provider selection; read-only API assessment, offline snapshot input, 403 permission gap, 401 abort and 429 retry; play/pause/replay; manual stage selection. Diagrams reflow on mobile and suppress moving packets for reduced-motion preferences.
-- **Technical architecture:** provider selection and Okta OAuth/SSWS modes; collection, errors and local reporting sequences; inspect requests, responses, authentication, state effects, payloads and implementation references. Play through each sequence or select a message.
+- **Assessment workspace:** Business User View opens by default with Findings, Action Plans and NIS2 Material. Tech SPOC View also includes Overview and Coverage, with evidence, classification, confidence and validation details. Both views use the same selected report. Auth0 or Okta; at-risk, hardened or limited-permission fixtures; score and engine grade; finding detail; search and severity filter; collector coverage; recommended action plan; sample JSON download; simulated assessment replay.
+- **Animated flow:** provider selection; read-only API assessment, offline snapshot input, 403 permission gap, 401 abort and 429 retry; play/pause/replay; manual stage selection; a prominent Step X of Y indicator, explicit Completed/Current/Upcoming labels and contrasted active nodes. Diagrams reflow on mobile and suppress moving packets for reduced-motion preferences.
+- **Technical architecture:** provider selection and Okta OAuth/SSWS modes; collection, errors and local reporting sequences; inspect requests, responses, authentication, state effects, payloads and implementation references. Play through each sequence or select a message. A dismissible four-step guide opens on the first visit and can be reopened with “How to use this page.”
+
+## Sample evidence pack
+
+In **NIS2 Material**, choose **Generate evidence pack**, expand the four preview sections, then **Download sample pack (HTML)**. The self-contained, print-friendly download contains scope and collector coverage; findings and unassessed areas; recommended actions with ownership/completion/evidence/verification gaps; and observed security settings from the matching synthetic snapshot. The preview and export use the same captured report. All sections are expanded in the downloaded document.
+
+This is an implemented browser mockup of a proposed workflow, not an evidence-pack backend or CLI command. No owners, completed changes or validation outcomes are invented. Organizational policy documents and bot protection configuration are not supplied in these fixtures and are marked **Not assessed**. Available MFA, attack-protection, session and authentication-policy settings are observations, not proof of enforcement. The pack supports auditor review; it does not certify NIS2 compliance.
+
+Only the audience preference and architecture-guide dismissal are saved in browser local storage, when available. No assessment data is stored there. Navigation also carries the audience in the page URL. If storage is disabled, navigation still works and the guide may appear again on a later visit.
 
 ## Provenance and scope
 
@@ -43,7 +51,7 @@ Collection status is not a guarantee of exhaustive coverage. Current hardening w
 
 ## Edit and package
 
-- `dist/`: editable HTML, shared styles, scripts and generated synthetic report data.
+- `dist/`: editable HTML, shared styles, audience preferences, sample evidence export, walkthrough scripts, generated synthetic reports and allowlisted control evidence.
 - `offline/`: self-contained pages produced by `support/package.py`.
 - `identity-pulse-demo.zip`: shareable offline pages and guide.
 - `architecture-diagrams.md`: editable Mermaid architecture and sequence diagrams.
@@ -54,10 +62,11 @@ Rebuild the underlying CLI only when regenerating the sample reports:
 ```bash
 npm run build
 python3 outputs/identity-pulse-demo/support/generate-samples.py
+python3 outputs/identity-pulse-demo/support/generate-controls.py
 python3 outputs/identity-pulse-demo/support/package.py
 ```
 
-Run those commands from the repository root. Packaging alone can be run from any directory. Fixture generation uses no provider credentials and reads no repository `.env` file; it invokes snapshot mode from a temporary working directory. Timestamps and scan IDs may change between generations, and time-sensitive rules can change their result.
+Run those commands from the repository root. Packaging alone can be run from any directory. `generate-controls.py` projects only named MFA, attack-protection, session and policy fields from the six fixtures; it does not copy user identities or credentials. Provider, assessment target, collection date and collector status must match before settings are labeled observed. Existing sample reports were retained for this UI update. Fixture generation uses no provider credentials and reads no repository `.env` file; it invokes snapshot mode from a temporary working directory. Timestamps and scan IDs may change between generations, and time-sensitive rules can change their result.
 
 ## Validation
 

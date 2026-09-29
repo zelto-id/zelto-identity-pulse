@@ -6,12 +6,12 @@ Identity Pulse turns identity-provider configuration into a local assessment tha
 
 ## Three-minute walkthrough
 
-1. **Start with the assessment workspace.** Select Auth0 and the at-risk configuration. Show the current engine’s score, the critical/high findings and collector coverage. Explain that this is a synthetic sample, not a customer assessment.
+1. **Start in Business User View.** Select Auth0 and the at-risk configuration. Show the three tabs: Findings, Action Plans and NIS2 Material. Explain that this is a synthetic sample, not a customer assessment.
 2. **Open one finding.** Use “Brute-force protection is disabled.” Follow the evidence through business risk, recommendation and validation steps. The selling point is traceability from configuration to a decision.
 3. **Switch to limited API permissions.** Highlight the partial-coverage notice and skipped collectors. A high score does not settle what was not collected.
-4. **Show the action plan.** Engineers apply provider changes separately. Pulse recommends and reassesses; it does not push configuration changes.
-5. **Play the animated data flow.** Show the provider boundary, local collection, normalized snapshot, deterministic analysis and report outputs. Switch to offline snapshot mode to illustrate the local analysis path.
-6. **Open technical architecture.** Select an application read and toggle between request and response. Show scopes/authentication, pagination and the local collector contract. Use the 403 or 429 scenario for a technical audience.
+4. **Show Action Plans and NIS2 Material.** Owners are unassigned and validation is not verified. Generate the sample evidence pack, expand its four sections and download the HTML. Missing attack-protection settings in the limited-permission sample remain unassessed. The pack supports evidence preparation; it does not certify compliance.
+5. **Switch to Tech SPOC View, then play the animated flow.** The assessment and score stay the same; technical coverage is now a dedicated tab. In the flow, point to Step X of Y, Completed/Current/Upcoming labels and active nodes. Switch to offline snapshot mode to illustrate the local analysis path.
+6. **Open technical architecture.** Use the first-visit guide or reopen it with “How to use this page.” Select an application read and toggle between request and response. Show scopes/authentication, pagination and the local collector contract. Use the 403 or 429 scenario for a technical audience.
 
 ## Messages by audience
 
