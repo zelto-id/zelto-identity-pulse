@@ -107,3 +107,21 @@ Paths are relative to the repository root.
 | Delta comparison | `src/reporting/delta/delta-compare.ts` |
 | Combined summary | `src/reporting/combined/combined-summary.ts` |
 | Current limitations and backlog | `agentic/tasks/ASSESSMENT-2026-09-26.md` |
+
+
+## Additional provider previews
+
+The interactive diagrams now also offer **Microsoft Entra ID**, **Ping Identity** (PingOne customer identity) and **Keycloak**. Their sequences are explicitly proposed designs. They do not reuse Auth0/Okta API contracts or imply an existing connector, analyzer, score, import path or CLI command.
+
+```mermaid
+flowchart LR
+  E[Microsoft Entra ID] -. Proposed connector .-> P[Proposed provider pipeline]
+  I[Ping Identity / PingOne] -. Proposed connector .-> P
+  K[Keycloak] -. Proposed connector .-> P
+  F[Hand-authored fictional examples] --> W[Current interactive mockup]
+  W --> B[Business: findings, actions, NIS2 material]
+  W --> T[Tech: example evidence and coverage]
+  W --> H[Sample HTML evidence pack]
+```
+
+The disconnected proposed pipeline is deliberate: the current mockup reads embedded fictional examples, not those provider APIs. No numerical score or collection timestamp is fabricated. Existing Auth0/Okta implementation diagrams above retain their original scope.

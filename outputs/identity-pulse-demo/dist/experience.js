@@ -7,7 +7,7 @@
   const validAudience = value => ['business', 'tech'].includes(value);
   const audience = validAudience(params.get('audience')) ? params.get('audience') : read('pulse-demo-audience');
   const context = {
-    provider: params.get('provider') === 'okta' ? 'okta' : 'auth0',
+    provider: window.PulseProviders.resolve(params.get('provider')),
     sample: ['risk', 'healthy', 'partial'].includes(params.get('sample')) ? params.get('sample') : 'risk',
   };
   function syncLinks() {
@@ -23,7 +23,7 @@
     });
   }
   function updateContext(provider, sample = context.sample) {
-    context.provider = provider === 'okta' ? 'okta' : 'auth0';
+    context.provider = window.PulseProviders.resolve(provider);
     context.sample = ['risk', 'healthy', 'partial'].includes(sample) ? sample : 'risk';
     syncLinks();
     try {
@@ -35,9 +35,10 @@
   window.PulseExperience = {audience, context, read, write, updateContext};
   if (!validAudience(audience)) {
     document.documentElement.style.visibility = 'hidden';
-    location.replace('index.html');
+    location.replace('index.html?' + new URLSearchParams(context));
     return;
   }
+  document.querySelectorAll('[data-provider-select]').forEach(select => { select.innerHTML = window.PulseProviders.options(); select.value = context.provider; });
   write('pulse-demo-audience', audience);
   document.body.dataset.audience = audience;
   document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = el.dataset.audienceOnly !== audience; });

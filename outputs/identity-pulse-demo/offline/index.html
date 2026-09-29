@@ -52,15 +52,21 @@ body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=busi
 @media(max-width:680px){.business-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.business-summary article{padding:13px 10px}.business-summary article>div{display:block}.business-summary span{font-size:13px;line-height:1.5}.business-summary p{display:none}.business-summary .textlink{font-size:12px;text-align:left;line-height:1.5}.business-summary strong{font-size:27px}body[data-audience=business] .contextbar{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}body[data-audience=business] .contextbar label{font-size:12px}body[data-audience=business] .contextbar select{font-size:13px;padding-right:20px}body[data-audience=business] .context-note{grid-column:1/-1;font-size:12px;max-width:none}body[data-audience=business] .context-note br{display:none}}
 @media(max-width:680px){.entry-main{padding-top:12px}.entry-main h1{font-size:36px;line-height:1.15;letter-spacing:-1px}.entry-main>.eyebrow{margin-bottom:12px}.entry-intro{font-size:15px;margin:14px 0 24px}.entry-card{padding:20px}.entry-card-label{font-size:12px;letter-spacing:.7px}.entry-card h2{font-size:26px;margin:10px 0}.entry-card p{font-size:16px}.entry-card ul{display:none}.entry-cta{margin-top:18px;font-size:14px;padding:12px}.entry-options{gap:16px}.entry-brand{padding-bottom:20px}.entry-footnote{margin-top:20px}}
 
+/* Explain the example before asking the reader to interpret its results. */
+.entry-intro{max-width:810px;line-height:1.65}.entry-footnote{line-height:1.8}
+.contextbar .demo-explainer{flex-basis:100%;font-size:13px;line-height:1.65;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}.demo-explainer strong{color:var(--ink);font-weight:550}
+.contextbar .scenario-description{flex-basis:100%;font-size:13px;line-height:1.65;color:var(--primary);margin-top:-9px;max-width:950px}
+@media(max-width:680px){body[data-audience=business] .contextbar .demo-explainer,body[data-audience=business] .contextbar .scenario-description{grid-column:1/-1}.contextbar .scenario-description{margin-top:0}body[data-audience=business] .contextbar{grid-template-columns:1fr}.entry-main>.eyebrow{font-size:11px;line-height:1.6}}
+
 </style>
 
 </head>
 <body class="entry-page">
   <header class="entry-brand"><div class="brand"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></div><span class="entry-demo">Interactive demo</span></header>
   <main class="entry-main">
-    <p class="eyebrow">One assessment. Two perspectives.</p>
+    <p class="eyebrow">Your identity-security assessment starts here.</p>
     <h1>Choose your<br>workspace.</h1>
-    <p class="entry-intro">Start with the view that matches your role.</p>
+    <p class="entry-intro">Identity Pulse brings identity risks, action plans and NIS2 evidence into one workspace.</p>
     <div class="entry-options">
       <a class="entry-card entry-business" data-enter="business" href="workspace.html?audience=business" aria-labelledby="business-choice" aria-describedby="business-description">
         <span class="entry-card-label">FOR BUSINESS & SECURITY LEADERS</span>
@@ -77,13 +83,37 @@ body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=busi
         <span class="entry-cta">Open technical workspace</span>
       </a>
     </div>
-    <p class="entry-footnote">Synthetic Auth0 & Okta assessments · Local and read-only</p>
+    <p class="entry-footnote">Auth0 · Okta · Microsoft Entra ID · Ping Identity · Keycloak<br>Interactive examples · No live environment connected</p>
   </main>
+<script>
+/* Presentation catalog only. This does not register production CLI connectors. */
+(() => {
+  'use strict';
+  const providers = {
+    auth0: {name:'Auth0', scope:'Customer identity', implemented:true},
+    okta: {name:'Okta', scope:'Workforce identity', implemented:true},
+    entra: {name:'Microsoft Entra ID', scope:'Workforce identity', implemented:false},
+    ping: {name:'Ping Identity', scope:'PingOne example', implemented:false},
+    keycloak: {name:'Keycloak', scope:'Realm & application security', implemented:false},
+  };
+  const scenarios = {
+    risk: {name:'Security gaps found', description:'This fictional assessment contains security gaps. Start with the priority findings, then review the recommended actions.'},
+    healthy: {name:'Stronger controls', description:'This separate fictional assessment has stronger settings and fewer findings. It is not proof of compliance or evidence that the first example was fixed.'},
+    partial: {name:'Incomplete assessment', description:'Some settings could not be read in this fictional assessment. Missing evidence means unknown, even if the visible results look reassuring.'},
+  };
+  const resolve = id => Object.hasOwn(providers, id) ? id : 'auth0';
+  const get = id => providers[resolve(id)];
+  const isPreview = id => !get(id).implemented;
+  const options = () => Object.entries(providers).map(([id,p]) => `<option value="${id}">${p.name}${p.implemented ? '' : ' · Preview'}</option>`).join('');
+  window.PulseProviders = {providers, scenarios, resolve, get, isPreview, options};
+})();
+
+</script>
 <script>
 /* The welcome page always offers both choices, including on a return visit. */
 (() => {
   const params = new URLSearchParams(location.search);
-  const provider = params.get('provider') === 'okta' ? 'okta' : 'auth0';
+  const provider = window.PulseProviders.resolve(params.get('provider'));
   const sample = ['risk', 'healthy', 'partial'].includes(params.get('sample')) ? params.get('sample') : 'risk';
   document.querySelectorAll('[data-enter]').forEach(link => {
     const url = new URL(link.getAttribute('href'), location.href);

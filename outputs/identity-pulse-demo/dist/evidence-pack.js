@@ -28,15 +28,15 @@
     };
   }
   function content(pack, compact = false) {
-    const r = pack.report;
+    const r = pack.report, preview = Boolean(r.demo?.illustrative);
     const unassessed = r.categories.filter(c => !c.assessed).map(c => c.name);
     const markup = `<div class="pack-document">
-      <div class="pack-banner"><strong>SAMPLE EVIDENCE PACK</strong><p>Synthetic assessment · auditor-supporting material · not NIS2 certification or proof of compliance.</p></div>
-      <p class="pack-provenance">Prepared ${esc(pack.generatedAt)}<br>Report generated ${esc(r.generatedAt)}<br>Configuration collected ${esc(r.provider.collectedAt)}<br>Source: ${esc(pack.source)}</p>
+      <div class="pack-banner"><strong>SAMPLE EVIDENCE PACK</strong><p>${preview?'Illustrative provider preview · connector not implemented · no environment assessed.':'Synthetic assessment · auditor-supporting material.'} Not NIS2 certification or proof of compliance.</p></div>
+      <p class="pack-provenance">Prepared ${esc(pack.generatedAt)}<br>${preview?'Hand-authored example · no collection date or engine report':'Report generated '+esc(r.generatedAt)+'<br>Configuration collected '+esc(r.provider.collectedAt)}<br>Source: ${esc(pack.source)}</p>
       <section><h2>01 · What was checked</h2>
-        <dl class="pack-facts"><div><dt>Provider</dt><dd>${esc(r.provider.displayName || r.provider.id)}</dd></div><div><dt>Environment</dt><dd>${esc(r.environment)} · synthetic</dd></div><div><dt>Assessment target</dt><dd>${esc(r.tenant.displayName || r.tenant.primaryIdentifier)}</dd></div><div><dt>Sample</dt><dd>${esc(pack.scenario)}</dd></div><div><dt>Posture score</dt><dd>${esc(r.score.overall)} / 100 · ${esc(r.score.grade)}</dd></div></dl>
-        <p>Scope: configuration represented by the collectors below, evaluated with the current provider-specific rules. This is not an exhaustive assessment of NIS2 obligations.</p>
-        <h3>Assessed categories</h3>${list(r.categories.filter(c => c.assessed).map(c => c.name))}
+        <dl class="pack-facts"><div><dt>Provider</dt><dd>${esc(r.provider.displayName || r.provider.id)}</dd></div><div><dt>Environment</dt><dd>${esc(r.environment)} · synthetic</dd></div><div><dt>Assessment target</dt><dd>${esc(r.tenant.displayName || r.tenant.primaryIdentifier)}</dd></div><div><dt>Sample</dt><dd>${esc(pack.scenario)}</dd></div><div><dt>Posture score</dt><dd>${preview?'Not calculated · illustrative preview':esc(r.score.overall)+' / 100 · '+esc(r.score.grade)}</dd></div></dl>
+        <p>${preview?'Scope: fictional configuration and simulated collection outcomes below. There are no implemented provider rules or collectors for this preview.':'Scope: configuration represented by the collectors below, evaluated with the current provider-specific rules.'} This is not an exhaustive assessment of NIS2 obligations.</p>
+        <h3>${preview?'Illustrated areas':'Assessed categories'}</h3>${list(r.categories.filter(c => c.assessed).map(c => c.name))}
         <div class="table-wrap"><table><thead><tr><th>Collector</th><th>State</th><th>Resources</th><th>Required scopes</th></tr></thead><tbody>${r.coverage.collectors.map(c => `<tr><td>${esc(c.collector)}</td><td>${esc(c.status)}</td><td>${esc(c.count ?? 'Not supplied')}</td><td>${esc((c.requiredScopes || []).join(', ') || 'Not supplied')}</td></tr>`).join('')}</tbody></table></div>
         <p>Collector success does not establish exhaustive coverage. A score is a posture indicator, not a compliance verdict.</p>
       </section>
@@ -47,12 +47,12 @@
         <h3>Missing scopes</h3>${list(r.coverage.missingScopes, 'None reported; this does not establish complete access.')}
         <h3>Assessment limitations</h3>${list(r.limitations)}
         <h3>Assumptions</h3>${list(r.assumptions || [])}
-        ${r.findings.map(f => `<article class="pack-entry"><h3>${esc(f.title)}</h3><p class="pack-label">${esc(f.id)} · ${esc(f.severity)} · ${esc(f.classification)} · ${esc(f.confidence)} confidence</p><p><strong>Observed evidence:</strong> ${esc(f.evidence.summary)}</p><p><strong>Business risk:</strong> ${esc(f.businessRisk)}</p>${f.falsePositiveNotes.length ? `<p><strong>Context and exceptions</strong></p>${list(f.falsePositiveNotes)}` : ''}</article>`).join('') || '<p>No findings in this fixture. This does not prove absence of risk.</p>'}
+        ${r.findings.map(f => `<article class="pack-entry"><h3>${esc(f.title)}</h3><p class="pack-label">${esc(f.id)} · ${esc(f.severity)} · ${esc(f.classification)} · ${esc(f.confidence)} confidence</p><p><strong>${preview?'Illustrative evidence:':'Observed evidence:'}</strong> ${esc(f.evidence.summary)}</p><p><strong>Business risk:</strong> ${esc(f.businessRisk)}</p>${f.falsePositiveNotes.length ? `<p><strong>Context and exceptions</strong></p>${list(f.falsePositiveNotes)}` : ''}</article>`).join('') || '<p>No findings in this fixture. This does not prove absence of risk.</p>'}
       </section>
       <section><h2>03 · How gaps were addressed</h2><p>No completed remediation or validation results are recorded in these samples. The entries below are recommendations awaiting ownership and verification.</p>
         ${pack.actions.map(a => `<article class="pack-entry"><h3>${esc(a.findingId)} · ${esc(a.title)}</h3><p><strong>Recommended action:</strong> ${esc(a.recommendation)}</p><p><strong>Suggested timing:</strong> ${esc(a.window)}</p><dl class="pack-facts"><div><dt>Owner</dt><dd>${esc(a.owner)}</dd></div><div><dt>Status</dt><dd>${esc(a.status)}</dd></div><div><dt>Reported completion</dt><dd>${esc(a.reportedCompletion)}</dd></div><div><dt>Remediation evidence</dt><dd>${esc(a.remediationEvidence)}</dd></div><div><dt>Verification</dt><dd>${esc(a.verification)}</dd></div></dl><p><strong>Suggested validation steps</strong></p>${list(a.validationSteps, 'No rule-specific steps supplied; engineering review is required.')}</article>`).join('') || '<p>No finding-linked recommendations in this fixture. Remediation history is not supplied.</p>'}
       </section>
-      <section><h2>04 · Security controls and policies</h2><p>These are observed settings from the matching synthetic snapshot. A configuration observation is separate from a recommendation, a reported change or a verified outcome. Runtime effectiveness and organizational policy approval have not been verified.</p>
+      <section><h2>04 · Security controls and policies</h2><p>${preview?'These are hand-authored fictional settings for the provider preview; they are not observations from a provider.':'These are observed settings from the matching synthetic snapshot.'} A configuration observation is separate from a recommendation, a reported change or a verified outcome. Runtime effectiveness and organizational policy approval have not been verified.</p>
         ${pack.controls.map(c => `<article class="pack-entry"><h3>${esc(c.name)}</h3><p class="pack-label">${esc(c.status)}</p>${c.settings !== null ? `<pre>${esc(JSON.stringify(c.settings, null, 2))}</pre>` : '<p>No evidence available. Do not infer that this control is enabled or disabled.</p>'}<p>${esc(c.note)}</p><p class="pack-provenance">Source field: ${esc(c.sourcePath)} · collector: ${esc(c.collector)}</p></article>`).join('')}
       </section>
     </div>`;
