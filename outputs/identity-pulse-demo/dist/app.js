@@ -1,69 +1,62 @@
 'use strict';
 const $=id=>document.getElementById(id),esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:window.PulseExperience.audience==='business'?'nis2':'overview',query:'',severity:'all'};
+const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:'nis2',query:'',severity:'all',type:'all',planQuery:'',planStatus:'all',planOwner:'all',planSeverity:'all',planDue:'all',appId:null,clCategory:'all',clStatus:'all',clOwner:'all',clSource:'all'};
+// Action-plan tracking entered in the explore dialog; kept in memory for this page session only.
+const owners=['Jan Czajkowski','Nathanael Chu'],tracking={};
+const trackKey=id=>state.provider+'/'+state.scenario+'/'+id;
+// Pre-filled sample tracking so the Action Plans charts have something to show; dates are relative to today.
+const samplePlan=[['Jan Czajkowski','In Progress',-6,'Change window requested with the platform team.'],['Nathanael Chu','Completed',-12,''],['Jan Czajkowski','Not Started',9,''],['','Not Started',null,''],['Nathanael Chu','In Progress',21,'Waiting on application owner sign-off.'],['Jan Czajkowski','Verified',3,''],['','Not Started',45,''],['Nathanael Chu','Not Started',75,''],['Jan Czajkowski','Closed',-20,'Accepted as a documented exception.'],['','Not Started',120,'']];
+const isoIn=days=>{const d=new Date();d.setDate(d.getDate()+days);return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
+function seedTrack(id){const i=window.PulseBusiness.actions(report()).findIndex(a=>a.findingId===id);if(i<0)return{owner:'',date:'',status:'Not Started',comments:''};const[owner,status,days,comments]=samplePlan[i%samplePlan.length];return{owner,status,date:days===null?'':isoIn(days),comments};}
+const track=id=>tracking[trackKey(id)]??=seedTrack(id);
+// NIS2 evidence checklist state, pre-filled with sample statuses and owners; in memory only.
+const checklistState={};
+const checklistOf=item=>checklistState[trackKey('nis2:'+item.id)]??=window.PulseNIS2.seed(item,window.PulseNIS2.checklist.indexOf(item));
 const severityOrder={critical:0,high:1,medium:2,low:3,info:4};
-const business=()=>window.PulseExperience.audience==='business';
+// Both audiences share one workspace; the Tech SPOC adds the technical layer (tech-view.js, Applications tab, remediation code).
+const tech=()=>window.PulseExperience.audience==='tech';
 const report=()=>window.PULSE_REPORTS[state.provider][state.scenario];
 const sorted=()=>[...report().findings].sort((a,b)=>(severityOrder[a.severity]??5)-(severityOrder[b.severity]??5));
-const severityPill=s=>`<span class="pill ${['critical','high'].includes(s)?'red':s==='medium'?'amber':'blue'}">${esc(s)}</span>`;
-const row=f=>`<button type="button" class="finding-row" data-finding="${esc(f.id)}"><span><strong>${esc(business()?window.PulseBusiness.title(f):f.title)}</strong><small>${business()?esc(window.PulseBusiness.impact(f)):esc(f.id)+' · '+esc(f.classification.replaceAll('-',' '))}</small></span><span class="finding-meta">${business()?`<span class="pill ${f.classification==='confirmed-risk'?'red':'amber'}">${esc(window.PulseBusiness.status(f))}</span>`:''}${severityPill(f.severity)}<span class="arrow" aria-hidden="true">↗</span></span></button>`;
 function render(){
   const summary=$('business-summary');
   if(summary.parentElement!==$('main'))$('assessment-view').before(summary);
   renderTabs();
-  const r=report(),preview=Boolean(r.demo?.illustrative),provider=window.PulseProviders.get(state.provider),fs=r.findings;
-  const critical=fs.filter(f=>f.severity==='critical').length,high=fs.filter(f=>f.severity==='high').length,validation=fs.filter(f=>f.classification==='requires-validation').length;
-  const success=r.coverage.collectors.filter(c=>c.status==='success').length,total=r.coverage.collectors.length;
+  const r=report(),preview=Boolean(r.demo?.illustrative),provider=window.PulseProviders.get(state.provider);
   $('sample-context').textContent=provider.name+' · '+provider.scope+(preview?'':' · Example collected '+new Date(r.provider.collectedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}));
   $('scenario-description').textContent=window.PulseProviders.scenarios[state.scenario].description;
+  $('demo-banner-context').textContent=$('sample-context').textContent;
   $('provider-status').innerHTML=preview?`<div class="notice neutral"><strong>${esc(provider.name)} · Illustrative preview.</strong> Explore fictional findings and NIS2 material. The connector and scoring are not implemented.${state.provider==='ping'?' This example covers PingOne customer identity.':''}</div>`:'';
   $('report-origin').textContent=preview?'Hand-authored UI examples; no collection or analysis was performed. Each scenario is independent and does not prove remediation.':'Auth0 and Okta examples are generated by the CLI from synthetic repository fixtures. Each scenario is independent and does not prove remediation.';
-  $('run-demo').hidden=business()||preview;
   $('export-json').textContent=preview?'Download illustrative example JSON ↓':'Download sample report JSON ↓';
-  $('score-ring').hidden=preview;
-  $('score').textContent=r.score.overall;
-  $('score-ring').style.setProperty('--score',r.score.overall??0);
-  $('score-label').textContent=preview?'Provider preview':'Identity posture score';
-  $('score-title').textContent=preview?'Explore the example findings':r.coverage.partial?'A score with blind spots':critical+high?'Review priority risks':'A stronger starting point';
-  $('score-description').textContent=preview?'No posture score is calculated. These examples show the proposed assessment experience.':r.coverage.partial?'Interpret this score alongside uncollected evidence.':critical+high?'Prioritize the findings and validate their context.':'Review remaining signals and assessment boundaries.';
-  $('grade').textContent=preview?provider.name+' · Illustrative results':`Engine grade ${r.score.grade} · ${provider.name}`;
-  $('finding-total').textContent=`${fs.length} ${preview?'example ':''}findings`;
-  $('stats').innerHTML=`<div class="stat"><span class="stat-label">Critical</span><strong>${critical}</strong><small>Highest severity</small></div><div class="stat"><span class="stat-label">High</span><strong>${high}</strong><small>Priority review</small></div><div class="stat"><span class="stat-label">To validate</span><strong>${validation}</strong><small>Requires context</small></div>`;
-  $('coverage-summary').textContent=preview?`${success} / ${total} areas illustrated`:`${success} / ${total} collectors successful`;
   $('coverage-notice').innerHTML=r.coverage.partial?'<div class="notice"><strong>Incomplete assessment example.</strong> Some evidence could not be collected. Missing evidence is not proof that a control is safe.</div>':'';
   $('assessment-view').setAttribute('aria-labelledby','tab-'+state.view);
-  if(business())summary.innerHTML=window.PulseBusiness.metrics(r);
+  summary.innerHTML=window.PulseBusiness.metrics(r);
   renderView();
-  if(business()&&state.view==='nis2')$('assessment-view').querySelector('.nis2-focus').after(summary);
+  if(state.view==='nis2')$('assessment-view').querySelector('.nis2-focus').after(summary);
 }
-function renderView(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='overview'){view.innerHTML=`<div class="overview-grid"><section class="panel"><div class="panel-head"><div><h2>Start with these findings</h2><p>Highest severity first · evidence behind every result</p></div><button class="textlink" data-view="findings">View all ↗</button></div>${sorted().slice(0,4).map(row).join('')||'<p class="empty">No findings in this sample. Review positive signals and collection boundaries before drawing conclusions.</p>'}</section><section class="panel"><div class="panel-head"><div><h2>${r.demo?.illustrative?'What this preview covers':'Where the score comes from'}</h2><p>${r.demo?.illustrative?'Illustrated areas · no engine rules or scores':'Weighted category points, as reported by the engine'}</p></div></div>${r.categories.map(c=>`<div class="bar-row"><div class="bar-label"><span>${esc(c.name)}</span><b>${c.assessed?(r.demo?.illustrative?'Illustrated':`${c.score??0} / ${c.weight}`):'Not assessed'}</b></div><div class="bar-track" ${r.demo?.illustrative?'hidden':''}><span style="width:${c.assessed&&!r.demo?.illustrative?Math.max(0,Math.min(100,(c.score||0)/c.weight*100)):0}%"></span></div></div>`).join('')}<p class="section-note">Provider scoring models differ. Scores are posture indicators, not a certification or a direct provider ranking.</p></section></div><section class="panel" style="margin-top:20px"><div class="panel-head"><h2>Positive signals</h2><span class="pill green">Keep what is working</span></div>${r.positiveSignals.length?r.positiveSignals.slice(0,3).map(s=>`<p style="font-size:14px;margin-top:10px"><strong>${esc(s.title)}</strong> <span class="muted">${esc(s.detail)}</span></p>`).join(''):'<p class="empty">No positive signals are supplied for this sample.</p>'}</section>`;}
-else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${business()?'Findings':'Findings & evidence'}</h2><p>${business()?'Review business impact, then open a finding for the next action.':'Inspect classification, evidence and validation needs.'}</p></div><span class="pill">${r.findings.length} total</span></div><div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">All severities</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select></div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;renderResults();});}
-else if(state.view==='coverage'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${r.demo?.illustrative?'Example coverage':'What was actually collected'}</h2><p>${r.demo?.illustrative?'Simulated outcomes, not live collection. Required permissions have not been defined.':'Collector success does not guarantee exhaustive resource coverage.'}</p></div><span class="pill ${r.coverage.partial?'amber':'green'}">${r.coverage.partial?'Partial coverage':'No reported collector gaps'}</span></div><div class="table-wrap"><table><thead><tr><th>Collector</th><th>Reported state</th><th>Required scopes</th><th>Count</th></tr></thead><tbody>${r.coverage.collectors.map(c=>`<tr><td>${esc(c.collector)}</td><td><span class="pill ${c.status==='success'?'green':'amber'}">${esc(c.status)}</span></td><td><code>${esc((c.requiredScopes||[]).join(', ')||'Not specified')}</code></td><td>${c.count??'—'}</td></tr>`).join('')}</tbody></table></div>${r.coverage.missingScopes.length?`<p class="section-note"><strong>Missing scopes:</strong> ${esc(r.coverage.missingScopes.join(', '))}</p>`:''}<h3 style="margin-top:24px">What this assessment does not establish</h3><ul class="section-note">${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></section>`;}
-else if(state.view==='plan'&&business()){view.innerHTML=window.PulseBusiness.plan(r);}
-else{view.innerHTML=`<div class="notice neutral"><strong>Action Plans · recommended next steps.</strong> Assign an owner, implement the change and collect validation evidence outside this demo. No completion or ownership is recorded in these samples.</div><div class="plan-grid">${r.remediationPlan.buckets.map(b=>`<section class="panel"><div class="panel-head"><div><h2>${esc(b.name)}</h2><p>${esc(b.window)}</p></div></div>${b.items.map(i=>`<div class="plan-item">${i.severity?severityPill(i.severity):''}<p style="margin-top:9px">${esc(i.action)}</p><small>Expected outcome: ${esc(i.expectedOutcome)}</small><dl class="action-status"><div><dt>Owner</dt><dd>Unassigned</dd></div><div><dt>Status</dt><dd>Recommended</dd></div><div><dt>Validation</dt><dd>Not verified</dd></div></dl><button class="textlink" data-finding="${esc(i.findingId)}">${esc(i.findingId)} · Review evidence ↗</button></div>`).join('')||'<p class="empty">No actions in this bucket.</p>'}</section>`).join('')}</div>`;}}
-function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(f.title+' '+f.id+' '+(business()?window.PulseBusiness.title(f)+' '+f.businessRisk:'')).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=matches.map(row).join('')||'<p class="empty" role="status">No findings match this selection.</p>';}
-function finding(id){
-  const f=report().findings.find(x=>x.id===id);if(!f)return;
-  const technical=`${business()?`<h3>Technical finding</h3><p>${esc(f.title)}</p>`:''}<div class="finding-meta"><span class="pill">${esc(f.classification)}</span><span class="pill">${esc(f.confidence)} confidence</span></div><p class="section-note">${esc(f.id)} · ${report().demo?.illustrative?'illustrative finding · no score calculated':'score impact '+f.scoreImpact}</p><h3>${report().demo?.illustrative?'Illustrative evidence':'Observed evidence'}</h3><div class="evidence">${esc(f.evidence.summary)}</div><h3>How to validate</h3>${f.validationSteps.length?`<ul>${f.validationSteps.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:'<p class="muted">The current report does not supply validation steps for this finding. Engineering review is required.</p>'}${f.falsePositiveNotes.length?`<h3>Context & exceptions</h3><ul>${f.falsePositiveNotes.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:''}<h3>Affected resources</h3><p>${esc(f.affectedResources.map(x=>x.displayName).join(', ')||'Not specified')}</p>`;
-  $('finding-detail').innerHTML=`${severityPill(f.severity)}<h2 id="finding-title">${esc(business()?window.PulseBusiness.title(f):f.title)}</h2>${report().demo?.illustrative?'<p class="notice neutral">Fictional example · connector not implemented · no environment assessed.</p>':''}<h3>Why it matters</h3><p>${esc(business()?window.PulseBusiness.impact(f):f.businessRisk)}</p><h3>Recommended action</h3><p>${esc(f.recommendation)}</p>${business()?`<p class="section-note">${f.classification==='requires-validation'?'Engineering validation is needed before treating this as a confirmed risk.':'Review the observed configuration and its context with your technical contact.'}</p><details class="technical-evidence"><summary>Technical evidence & validation</summary>${technical}</details>`:technical}`;
-  $('finding-dialog').showModal();
-}
-document.addEventListener('click',e=>{const v=e.target.closest('[data-view]'),f=e.target.closest('[data-finding]');if(v){state.view=business()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}if(f)finding(f.dataset.finding);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-finding').onclick=()=>$('finding-dialog').close();$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-const steps=['Read local assessment settings','Collect provider configuration · GET only','Normalize snapshot & collection status','Run provider-specific deterministic rules','Calculate scores & explain findings','Render local reports'];let scanStep=0,scanTimer=null;function scanDraw(){document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',scanStep);$('scan-progress').style.width=(scanStep/6*100)+'%';$('scan-steps').innerHTML=steps.map((s,i)=>`<li class="${i===scanStep?'active':''}"><span>${s}</span><span>${i<scanStep?'✓':i===scanStep?'…':'—'}</span></li>`).join('');$('scan-status').textContent=scanStep===6?'Walkthrough complete. The workspace shows the selected fixture report.':`Step ${scanStep+1} of 6 · simulated processing`;$('scan-pause').textContent=scanStep===6?'Replay':scanTimer?'Pause':'Continue';}function pauseScan(){clearInterval(scanTimer);scanTimer=null;}function playScan(){scanTimer=setInterval(()=>{scanStep++;if(scanStep>=6)pauseScan();scanDraw();},850);scanDraw();}$('run-demo').onclick=()=>{pauseScan();scanStep=0;$('scan-dialog').showModal();playScan();};$('scan-pause').onclick=()=>{if(scanStep===6)scanStep=0;if(scanTimer)pauseScan();else playScan();scanDraw();};$('scan-close').onclick=()=>$('scan-dialog').close();$('scan-dialog').addEventListener('close',pauseScan);
+function renderView(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='apps'){view.innerHTML=window.PulseApps.render(state.provider,state.scenario,r,state.appId,'data-explore');}
+else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Findings</h2><p>Every finding with its severity, type and recommended action plan. Select a finding for the full detail.</p></div><span class="pill">${r.findings.length} Total Findings</span></div>${window.PulseBusiness.findingCharts(r,{severity:state.severity,type:state.type})}<div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select><select id="type-filter" aria-label="Filter by type"><option value="all">Type</option>${[['confirmed-risk','Confirmed configuration risk'],['requires-validation','Needs validation'],['advisory','Advisory · review context']].map(([v,l])=>`<option value="${v}" ${state.type===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;renderView();});$('type-filter').addEventListener('change',e=>{state.type=e.target.value;renderView();});}
+else if(state.view==='coverage'){view.innerHTML=window.PulseTech.coverage(r);}
+else if(state.view==='plan'){const items=window.PulseBusiness.actions(r),progress=['Not Started','In Progress','Verified','Completed','Closed'];view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Action Plans</h2><p>Track the owner, target date and progress of each recommended action. Select a row to update it. Owners, dates, statuses and comments are pre-filled sample data.</p></div><span class="pill">${items.length} Total Actions</span></div>${window.PulseBusiness.planCharts(r,track,owners,{status:state.planStatus,owner:state.planOwner,due:state.planDue})}<div class="filters"><input id="plan-search" type="search" aria-label="Search actions" placeholder="Search finding or action" value="${esc(state.planQuery)}"><select id="plan-severity" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(v=>`<option value="${v}" ${state.planSeverity===v?'selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select><select id="plan-status" aria-label="Filter by status"><option value="all">Status</option>${progress.map(v=>`<option ${state.planStatus===v?'selected':''}>${v}</option>`).join('')}</select><select id="plan-owner" aria-label="Filter by owner"><option value="all">Owner</option><option value="" ${state.planOwner===''?'selected':''}>Unassigned</option>${owners.map(o=>`<option ${state.planOwner===o?'selected':''}>${esc(o)}</option>`).join('')}</select><select id="plan-due" aria-label="Filter by due date"><option value="all">Due date</option>${window.PulseBusiness.dueBuckets.map(([v,l])=>`<option value="${v}" ${state.planDue===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="plan-results"></div></section>`;renderPlanResults();$('plan-search').addEventListener('input',e=>{state.planQuery=e.target.value;renderPlanResults();});$('plan-severity').addEventListener('change',e=>{state.planSeverity=e.target.value;renderPlanResults();});$('plan-status').addEventListener('change',e=>{state.planStatus=e.target.value;renderView();});$('plan-owner').addEventListener('change',e=>{state.planOwner=e.target.value;renderView();});$('plan-due').addEventListener('change',e=>{state.planDue=e.target.value;renderView();});}}
+function renderPlanResults(){const r=report(),q=state.planQuery.toLowerCase(),items=window.PulseBusiness.actions(r).filter(a=>{const t=track(a.findingId),f=r.findings.find(x=>x.id===a.findingId);return(state.planDue==='all'||window.PulseBusiness.dueBucket(t)===state.planDue)&&(state.planSeverity==='all'||f?.severity===state.planSeverity)&&(state.planStatus==='all'||t.status===state.planStatus)&&(state.planOwner==='all'||t.owner===state.planOwner)&&((f?window.PulseBusiness.title(f):'')+' '+a.findingId+' '+a.action+' '+t.comments).toLowerCase().includes(q);});$('plan-results').innerHTML=window.PulseBusiness.plan(r,items,track,tech()?window.PulseTech.stepsText:null);}
+function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(state.type==='all'||f.classification===state.type)&&(f.title+' '+f.id+' '+window.PulseBusiness.title(f)+' '+f.businessRisk).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=tech()?window.PulseTech.findingsTable(report(),matches,track):window.PulseBusiness.dashboard(report(),matches);}
+function exploreFinding(id){const f=report().findings.find(x=>x.id===id);if(!f)return;$('explore-detail').innerHTML=window.PulseBusiness.explore(report(),f,track(id),owners,tech()?{...window.PulseTech.exploreExtra(report(),f,window.PULSE_CONTROLS[state.provider]?.[state.scenario],track(id)),bottom:window.PulseRemediation.panel(state.provider,state.scenario,f,report())}:null);$('explore-dialog').showModal();}
+document.addEventListener('click',e=>{const v=e.target.closest('[data-view]');if(v){state.view=!tech()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}const x=e.target.closest('textarea,input,select')?null:e.target.closest('[data-explore]');if(x)exploreFinding(x.dataset.explore);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-explore').onclick=()=>{$('explore-dialog').close();refreshBehindExplore();};$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 function renderTabs(){
-  const views=business()?[['nis2','NIS2 Material'],['findings','Findings'],['plan','Action Plans']]:[['overview','Overview'],['findings','Findings'],['coverage','Coverage'],['plan','Action Plans'],['nis2','NIS2 Material']];
-  if(!views.some(([id])=>id===state.view))state.view=business()?'nis2':'overview';
+  const views=[['nis2','NIS2 Material'],['findings','Findings'],['plan','Action Plans'],...(tech()?[['coverage','Coverage'],['apps','Applications']]:[])];
+  if(!views.some(([id])=>id===state.view))state.view='nis2';
   $('assessment-tabs').innerHTML=views.map(([id,label])=>`<button id="tab-${id}" type="button" role="tab" tabindex="${id===state.view?'0':'-1'}" aria-selected="${id===state.view}" aria-controls="assessment-view" data-view="${id}">${label}</button>`).join('');
-  $('review-coverage').dataset.view=business()?'nis2':'coverage';
-  $('review-coverage').textContent=business()?'Scope & evidence':'Review coverage';
 }
 function renderMaterial(){
-  if(business()){$('assessment-view').innerHTML=window.PulseBusiness.material(report(),window.PULSE_CONTROLS[state.provider][state.scenario]);return;}
-  const r=report(),uncollected=r.coverage.collectors.filter(c=>c.status!=='success');
-  $('assessment-view').innerHTML=`<section class="material-hero"><div><span class="eyebrow">NIS2 Material</span><h2>Bring the evidence together.</h2><p>Prepare a clear record of what was checked, what needs attention and what still needs verification.</p><span class="pill light">Sample export · proposed capability</span></div><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button></section><div class="material-grid">${[['01','What was checked',r.coverage.collectors.length+' collectors listed, with their status, scope and collection date.'],['02','Gaps & blind spots',r.findings.length+' findings · '+uncollected.length+' unsuccessful collectors.'],['03','How gaps were addressed','Recommended actions are available. Completed work, owners and validation evidence are not recorded.'],['04','Controls & policies',r.demo?.illustrative?'Illustrative settings only; no real configuration has been collected.':'Observed MFA and protection settings, with unavailable evidence clearly marked.']].map(([n,title,text])=>`<article class="panel"><span class="material-number">${n}</span><h3>${title}</h3><p>${text}</p></article>`).join('')}</div><div class="notice neutral"><strong>For auditor review.</strong> This sample pack supports evidence preparation. It does not certify NIS2 compliance. Organizational policies and bot protection evidence have not been supplied.</div><details class="material-scope"><summary>Review collection gaps and assessment limits</summary><h3>Unsuccessful collectors</h3>${uncollected.length?`<ul>${uncollected.map(c=>`<li>${esc(c.collector)} · ${esc(c.status)}</li>`).join('')}</ul>`:'<p>No collector gaps reported. Collection success does not guarantee exhaustive coverage.</p>'}<h3>Limitations</h3><ul>${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></details>`;
+    const r=report(),N=window.PulseNIS2,all=N.checklist.map(item=>({item,state:checklistOf(item)}));
+    const rows=all.filter(({item,state:c})=>(state.clCategory==='all'||item.category===state.clCategory)&&(state.clStatus==='all'||c.status===state.clStatus)&&(state.clOwner==='all'||c.owner===state.clOwner)&&(state.clSource==='all'||item.source===state.clSource));
+    const totals={completed:all.filter(x=>x.state.status==='Completed').length,total:all.length};
+    const filters={category:state.clCategory,status:state.clStatus,owner:state.clOwner,source:state.clSource};
+    $('assessment-view').innerHTML=window.PulseBusiness.material(r,window.PULSE_CONTROLS[state.provider][state.scenario],N.checklistSection(rows,filters,owners,totals)+(tech()?window.PulseTech.traceability(r,track,checklistOf):''),N.obligations(r,checklistOf));
+    [['checklist-category','clCategory'],['checklist-status','clStatus'],['checklist-owner','clOwner'],['checklist-source','clSource']].forEach(([id,key])=>$(id).addEventListener('change',e=>{state[key]=e.target.value;renderMaterialKeep(id);}));
 }
 function generatePack(){
-    currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent);
+    currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent,{trackOf:track,nis2:window.PulseNIS2.packData(report(),track,checklistOf)});
     $('pack-preview').innerHTML=window.PulseEvidence.content(currentPack,true);
     if(currentPackURL)URL.revokeObjectURL(currentPackURL);
     currentPackURL=URL.createObjectURL(new Blob([window.PulseEvidence.html(currentPack)],{type:'text/html;charset=utf-8'}));
@@ -88,16 +81,117 @@ $('assessment-tabs').addEventListener('keydown',event=>{
 $('provider').value=state.provider;
 $('scenario').value=state.scenario;
 const requestedView=new URLSearchParams(location.search).get('view');
-if(['overview','findings','coverage','plan','nis2'].includes(requestedView))state.view=requestedView;
-if(business()){
+if(['findings','coverage','apps','plan','nis2'].includes(requestedView))state.view=requestedView;
+{
   $('business-navigation').append($('assessment-tabs'));
-  $('assessment-tabs').setAttribute('aria-label','Business workspace');
+  $('assessment-tabs').setAttribute('aria-label','Workspace navigation');
   $('workspace-title').textContent='Risk, actions & evidence';
   $('workspace-eyebrow').textContent='Business overview';
   $('workspace-heading').textContent='Know what needs your attention.';
   $('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence for review.';
-  document.title='Identity Pulse — Business workspace';
-}else document.title='Identity Pulse — Tech SPOC workspace';
-function tabOrientation(){$('assessment-tabs').setAttribute('aria-orientation',business()&&innerWidth>850?'vertical':'horizontal');}
+  document.title=tech()?'Identity Pulse — Tech SPOC workspace':'Identity Pulse — Business workspace';
+  if(tech()){$('workspace-eyebrow').textContent='Tech SPOC workspace';$('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence, with the technical detail behind each one.';}
+  const selectors=document.createElement('div');selectors.className='topbar-context';
+  selectors.append(...document.querySelectorAll('.contextbar > label'));
+  document.querySelector('.topbar > p').after(selectors);
+  // A dismissible demo banner replaces the explainer box; dismissal lasts for this browser tab.
+  document.querySelector('.contextbar').hidden=true;
+  let dismissed=false;try{dismissed=sessionStorage.getItem('pulse-demo-banner')==='closed';}catch{}
+  const banner=document.createElement('div');banner.className='notice neutral demo-banner';banner.id='demo-banner';banner.setAttribute('role','note');banner.hidden=dismissed;
+  banner.innerHTML='<p><strong>Fictional assessment · <span id="demo-banner-context"></span>.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</p><button type="button" class="banner-close" aria-label="Dismiss this message">×</button>';
+  $('provider-status').before(banner);
+  banner.querySelector('.banner-close').onclick=()=>{banner.hidden=true;try{sessionStorage.setItem('pulse-demo-banner','closed');}catch{}};
+}
+function tabOrientation(){$('assessment-tabs').setAttribute('aria-orientation',innerWidth>850?'vertical':'horizontal');}
 window.addEventListener('resize',tabOrientation);tabOrientation();
 render();
+
+$('explore-detail').addEventListener('change',e=>{
+  const form=e.target.closest('[data-track]'),field=e.target.dataset.field;if(!form||!field)return;
+  if(field==='owner'&&e.target.value==='__new'){e.target.value=track(form.dataset.track).owner;const add=form.querySelector('.add-owner');add.hidden=false;add.querySelector('input').focus();return;}
+  track(form.dataset.track)[field]=e.target.value;refreshBehindExplore();
+});
+$('explore-detail').addEventListener('input',e=>{const form=e.target.closest('[data-track]');if(form&&e.target.dataset.field==='comments')track(form.dataset.track).comments=e.target.value;});
+function addOwner(form){
+  const input=form.querySelector('[data-new-owner]'),name=input.value.trim();if(!name)return input.focus();
+  if(!owners.includes(name))owners.push(name);
+  track(form.dataset.track).owner=name;
+  const select=form.querySelector('[data-field=owner]'),opt=new Option(name,name);
+  if(![...select.options].some(o=>o.value===name))select.insertBefore(opt,select.querySelector('[value=__new]'));
+  select.value=name;input.value='';form.querySelector('.add-owner').hidden=true;select.focus();
+}
+$('explore-detail').addEventListener('click',e=>{if(e.target.closest('[data-add-owner]'))addOwner(e.target.closest('[data-track]'));});
+$('explore-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addOwner(e.target.closest('[data-track]'));}});
+$('assessment-view').addEventListener('keydown',e=>{const row=e.target.closest('tr[data-explore]');if(row&&e.target===row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();exploreFinding(row.dataset.explore);}});
+// Refresh tables behind the finding pop-up; called on edits and on close, since the dialog close event is not always delivered.
+function refreshBehindExplore(){if(['plan','nis2'].includes(state.view)){const y=scrollY;render();scrollTo(0,y);}}
+$('explore-dialog').addEventListener('close',refreshBehindExplore);
+$('assessment-view').addEventListener('input',e=>{const id=e.target.dataset.rowComment;if(id)track(id).comments=e.target.value;});
+// Chart marks set (or clear, when already active) the matching table filter.
+$('assessment-view').addEventListener('click',e=>{
+  const mark=e.target.closest('[data-chart-filter]');if(!mark)return;
+  const [kind,value]=mark.dataset.chartFilter.split(/:(.*)/s),toggle=(key,v)=>{state[key]=state[key]===v?'all':v;};
+  if(kind==='severity')toggle('severity',value);
+  else if(kind==='matrix'){const [sev,type]=value.split('|'),same=state.severity===sev&&state.type===type;state.severity=same?'all':sev;state.type=same?'all':type;}
+  else if(kind==='status')toggle('planStatus',value);
+  else if(kind==='owner')toggle('planOwner',value);
+  else if(kind==='due')toggle('planDue',value);
+  hideTip();renderView();
+  document.querySelector(`[data-chart-filter="${CSS.escape(mark.dataset.chartFilter)}"]`)?.focus();
+});
+const tip=document.createElement('div');tip.className='chart-tip';tip.setAttribute('role','presentation');tip.hidden=true;document.body.append(tip);
+function hideTip(){tip.hidden=true;}
+function showTip(el){const r=el.getBoundingClientRect();tip.textContent=el.dataset.tip;tip.hidden=false;const w=tip.offsetWidth;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';tip.style.top=(r.top-tip.offsetHeight-8)+'px';}
+$('assessment-view').addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');el?showTip(el):hideTip();});
+$('assessment-view').addEventListener('mouseleave',hideTip);
+$('assessment-view').addEventListener('focusin',e=>{const el=e.target.closest('[data-tip]');el?showTip(el):hideTip();});
+window.addEventListener('scroll',hideTip,{passive:true});
+$('assessment-view').addEventListener('keydown',e=>{const el=e.target.closest('[data-chart-filter][role=button]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();el.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
+// NIS2 Material: re-render while keeping scroll position and focus on the control that changed.
+function renderMaterialKeep(focusId){const y=scrollY;render();scrollTo(0,y);if(focusId)document.getElementById(focusId)?.focus();}
+document.addEventListener('click',e=>{
+  const cat=e.target.closest('[data-checklist-category]');
+  if(cat){state.view='nis2';state.clCategory=cat.dataset.checklistCategory;state.clStatus=state.clOwner=state.clSource='all';render();$('evidence-checklist')?.scrollIntoView({behavior:'smooth',block:'start'});return;}
+});
+// Evidence checklist: requirement pop-up, per-item tracking and evidence-record generation.
+const evidenceItem=id=>window.PulseNIS2.checklist.find(x=>x.id===id);
+function openEvidence(id){const item=evidenceItem(id);$('evidence-dialog').dataset.itemId=id;$('evidence-detail').innerHTML=window.PulseNIS2.evidenceDialog(item,checklistOf(item),owners,report());if(!$('evidence-dialog').open)$('evidence-dialog').showModal();}
+function generateEvidence(id){
+  const item=evidenceItem(id),st=checklistOf(item);
+  const html=window.PulseNIS2.evidenceRecord(item,st,report(),track,$('scenario').selectedOptions[0].textContent);
+  const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),a=document.createElement('a');
+  a.href=url;a.download=`identity-pulse-${state.provider}-evidence-${item.id.toLowerCase()}.html`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  st.generatedAt=new Date().toISOString();
+}
+document.addEventListener('click',e=>{
+  const gen=e.target.closest('[data-generate-evidence]');
+  if(gen){generateEvidence(gen.dataset.generateEvidence);if($('evidence-dialog').open)openEvidence(gen.dataset.generateEvidence);renderMaterialKeep();return;}
+  if(e.target.closest('select,input,textarea,button,a'))return;
+  const row=e.target.closest('tr[data-evidence-item]');if(row)openEvidence(row.dataset.evidenceItem);
+});
+$('assessment-view').addEventListener('keydown',e=>{const row=e.target.closest('tr[data-evidence-item]');if(row&&e.target===row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openEvidence(row.dataset.evidenceItem);}});
+$('evidence-detail').addEventListener('change',e=>{
+  const field=e.target.dataset.evField;if(!field)return;const st=checklistOf(evidenceItem($('evidence-dialog').dataset.itemId));
+  if(field==='owner'&&e.target.value==='__new'){e.target.value=st.owner;const add=$('evidence-detail').querySelector('.add-owner');add.hidden=false;add.querySelector('input').focus();return;}
+  st[field]=e.target.value;renderMaterialKeep();
+});
+$('evidence-detail').addEventListener('input',e=>{if(e.target.dataset.evField==='comments')checklistOf(evidenceItem($('evidence-dialog').dataset.itemId)).comments=e.target.value;});
+$('evidence-detail').addEventListener('focusout',e=>{if(e.target.dataset.evField==='comments')renderMaterialKeep();});
+function addEvidenceOwner(){
+  const box=$('evidence-detail'),input=box.querySelector('[data-new-owner]'),name=input.value.trim();if(!name)return input.focus();
+  if(!owners.includes(name))owners.push(name);checklistOf(evidenceItem($('evidence-dialog').dataset.itemId)).owner=name;openEvidence($('evidence-dialog').dataset.itemId);box.querySelector('[data-ev-field=owner]').focus();
+}
+$('evidence-detail').addEventListener('click',e=>{if(e.target.closest('[data-add-ev-owner]'))addEvidenceOwner();});
+$('evidence-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addEvidenceOwner();}});
+$('close-evidence').onclick=()=>{$('evidence-dialog').close();renderMaterialKeep();};
+$('evidence-dialog').addEventListener('close',()=>renderMaterialKeep());
+// Tech SPOC: tick off a finding's validation steps in the pop-up.
+$('explore-detail').addEventListener('change',e=>{
+  const box=e.target.closest('[data-steps]');if(!box||!e.target.matches('[data-step-index]'))return;
+  const t=track(box.dataset.steps);t.steps=t.steps||[];t.steps[Number(e.target.dataset.stepIndex)]=e.target.checked;
+  const f=report().findings.find(x=>x.id===box.dataset.steps);box.querySelector('h3 .muted').textContent=`${t.steps.filter(Boolean).length}/${f.validationSteps.length} done`;
+  refreshBehindExplore();
+});
+// Applications tab: choose which application's login journey to show.
+$('assessment-view').addEventListener('click',e=>{const a=e.target.closest('[data-app-select]');if(!a||e.target.closest('[data-explore],[data-finding]'))return;state.appId=a.dataset.appSelect;const y=scrollY;renderView();scrollTo(0,y);});
+$('assessment-view').addEventListener('keydown',e=>{const a=e.target.closest('tr[data-app-select]');if(a&&e.target===a&&(e.key==='Enter'||e.key===' ')){e.preventDefault();a.click();}});
