@@ -49,7 +49,157 @@ body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=busi
 .contextbar .scenario-description{flex-basis:100%;font-size:13px;line-height:1.65;color:var(--primary);margin-top:-9px;max-width:950px}
 @media(max-width:680px){body[data-audience=business] .contextbar .demo-explainer,body[data-audience=business] .contextbar .scenario-description{grid-column:1/-1}.contextbar .scenario-description{margin-top:0}body[data-audience=business] .contextbar{grid-template-columns:1fr}.entry-main>.eyebrow{font-size:11px;line-height:1.6}}
 
-</style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></a><div class="workspace">Demo assessment workspace<small>Five providers · example assessments</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business"><p class="navlabel">Business workspace</p></div><div data-audience-only="tech"><p class="navlabel">Technical workspace</p><nav class="sidenav" aria-label="Demo navigation"><a class="active" aria-current="page" href="workspace.html"><span class="num">01</span> Assessment workspace</a><a href="data-flow.html"><span class="num">02</span> Animated data flow</a><a href="technical-flow.html"><span class="num">03</span> Technical architecture</a></nav></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="sidefoot">See the risk.<br>Trace the evidence.<br>Decide what changes.<small>LOCAL-FIRST · READ-ONLY<br>Interactive concept / synthetic data</small></div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p><span class="pill">Product concept · offline demo</span></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Your identity posture, in focus.</h1><p id="workspace-intro">From configuration to evidence and a clear next action.</p></div><button class="button primary" id="run-demo" data-audience-only="tech">▷ Replay assessment</button></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer"><strong>You are exploring a fictional assessment.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business"></section><section class="summary-grid" data-audience-only="tech" aria-label="Assessment summary"><div class="posture"><div class="score-ring" id="score-ring" style="--score:15"><div class="score-value"><strong id="score">15</strong><small>out of 100</small></div></div><div><span class="pill light" id="score-label">Identity posture score</span><h2 id="score-title">Review priority risks</h2><p id="score-description">Evidence-led assessment of the collected configuration.</p><p class="grade" id="grade"></p></div></div><div class="panel"><div class="panel-head"><h2>What needs attention</h2><span class="pill" id="finding-total"></span></div><div class="statrow" id="stats"></div><div class="coverage-strip"><span id="coverage-summary"></span><button class="textlink" id="review-coverage" data-view="coverage">Review coverage ↗</button></div></div></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog" id="finding-dialog" aria-labelledby="finding-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding detail / evidence</span><button class="button" id="close-finding">Close ×</button></div><div class="dialog-content" id="finding-detail"></div></dialog><dialog class="dialog" id="scan-dialog" aria-labelledby="scan-title"><div class="dialog-header"><h2 id="scan-title">Assessment walkthrough</h2><span class="pill">Simulation</span></div><div class="dialog-content"><p class="muted">Replay how a local assessment reaches a report. This demo reads embedded sample data and makes no provider requests.</p><div class="progress-track" role="progressbar" aria-label="Simulated assessment progress" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="scan-progress" style="width:0%"></span></div><ol class="scan-list" id="scan-steps"></ol><p id="scan-status" class="section-note" role="status"></p><div class="scan-actions"><button class="button primary" id="scan-pause">Pause</button><button class="button" id="scan-close">Close walkthrough</button></div></div></dialog><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
+/* Business view: selectors in the top bar, dashboard table and explore dialog. */
+.topbar-context{display:flex;gap:12px;align-items:center;margin-right:auto;margin-left:24px;flex-wrap:wrap}
+.topbar-context label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.topbar-context select{padding:7px 30px 7px 10px;color:var(--ink);border:1px solid var(--line);border-radius:6px;background:var(--canvas);font-size:13px}
+.contextbar.compact{padding:10px 16px;gap:4px 16px;align-items:center;font-size:12px}
+.contextbar.compact .demo-explainer,.contextbar.compact .scenario-description{font-size:12px;margin:0}
+.contextbar.compact .context-note{order:3}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dash-table{font-size:13px;min-width:860px}
+.dash-table th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--raised)}
+.dash-table th:first-child{border-radius:8px 0 0 0}.dash-table th:last-child{border-radius:0 8px 0 0}
+.dash-table td{padding:16px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.dash-table tbody tr{transition:background .15s}.dash-table tbody tr:hover{background:#ffffff08}
+.dash-table td:nth-child(1),.dash-table td:nth-child(3){white-space:nowrap}
+.dash-table td:nth-child(2){width:36%}
+.dash-table td strong{display:block;font-size:14px;font-weight:600;line-height:1.45}
+.dash-table td small{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.55}
+.dash-action p{line-height:1.55}.dash-action b{color:var(--ink);font-weight:600}
+.explore-dialog{width:min(1040px,calc(100% - 32px))}
+.explore-head{display:flex;gap:8px;flex-wrap:wrap}
+.explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.explore-card{background:var(--raised);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.explore-card .eyebrow{color:var(--primary);margin:0 0 8px}
+.explore-card h3:first-of-type{margin-top:12px}
+@media(max-width:850px){.topbar{flex-wrap:wrap}.topbar-context{margin:0;width:100%}.explore-grid{grid-template-columns:1fr}}
+/* Lighter surface shared by the dashboard table and the action-plan tracker. */
+:root{--soft:#2c2c5c;--soft-head:#35356b;--table-bg:#212145;--table-head:#2a2a55}
+.dash-wrap{border:1px solid var(--line);border-radius:10px;background:var(--table-bg)}
+.dash-wrap .dash-table th{background:var(--table-head);border-radius:0}
+.dash-table tbody tr:last-child td{border-bottom:0}
+.dash-row{cursor:pointer}.dash-row:hover{background:#ffffff0a}.dash-row:hover strong{color:var(--primary)}
+.dash-row:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.dash-row .arrow{color:var(--primary);font-size:19px}
+.filters select+select{margin-left:0}
+.plan-form{margin-top:18px;display:grid;gap:14px;padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+.plan-field{display:grid;gap:6px;font-size:12px;color:var(--muted)}
+.plan-field>span{font-weight:600}
+.plan-form select,.plan-form input,.plan-form textarea{width:100%;padding:9px 11px;color:var(--ink);border:1px solid var(--line);border-radius:7px;background:var(--canvas);font:inherit;font-size:13px;color-scheme:dark}
+.plan-form textarea{resize:vertical;min-height:72px;line-height:1.5}
+.plan-form select:focus,.plan-form input:focus,.plan-form textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px #7addc626}
+.plan-form input[type=date]::-webkit-calendar-picker-indicator{filter:invert(78%) sepia(23%) saturate(640%) hue-rotate(110deg);cursor:pointer}
+.add-owner{display:flex;gap:8px;margin-top:-6px}.add-owner input{flex:1}.add-owner .button{padding:8px 14px;font-size:13px}
+.plan-table{min-width:980px;table-layout:fixed}
+.plan-table td{white-space:normal!important;width:auto!important}
+.plan-table th:nth-child(1){width:8%}.plan-table th:nth-child(2){width:18%}.plan-table th:nth-child(3){width:10%}.plan-table th:nth-child(4){width:11%}.plan-table th:nth-child(5){width:9%}.plan-table th:nth-child(6){width:24%}.plan-table th:nth-child(7){width:20%}.plan-table th:nth-child(8){width:40px}
+.plan-table td:nth-child(1),.plan-table td:nth-child(3),.plan-table td:nth-child(5){white-space:nowrap!important}
+.plan-comment textarea{width:100%;min-height:58px;resize:vertical;padding:8px 10px;color:var(--ink);border:1px solid var(--line);border-radius:7px;background:var(--canvas);font:inherit;font-size:12px;line-height:1.5;cursor:text}
+.plan-comment textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px #7addc626}
+/* Equal-width filters on the Findings and Action Plans pages. */
+#severity-filter,#type-filter,#plan-severity,#plan-status,#plan-owner,#plan-due{flex:0 0 230px;width:230px}
+@media(max-width:700px){#severity-filter,#type-filter,#plan-severity,#plan-status,#plan-owner,#plan-due{flex:1 1 100%;width:100%}}
+/* Summary charts on the business Findings and Action Plans pages. */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:4px 0 20px}
+.chart-card{background:var(--table-bg);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.chart-card header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.chart-card h3{font-size:13px;font-weight:600;letter-spacing:.02em}
+.chart-card header p{font-size:12px;color:var(--muted)}.chart-card header strong{color:var(--ink);font-size:15px}
+.stack{display:flex;gap:2px;height:30px}
+.stack-seg{min-width:6px;background:var(--c);border-radius:0;display:flex;align-items:center;justify-content:center;padding:0;transition:opacity .15s}
+.stack-seg:first-child{border-radius:4px 0 0 4px}.stack-seg:last-child{border-radius:0 4px 4px 0}.stack-seg:only-child{border-radius:4px}
+.stack-seg span{font-size:12px;font-weight:700;color:#141429}
+.stack-seg:hover,.stack-seg:focus-visible{filter:brightness(1.12);outline:none;box-shadow:0 0 0 2px var(--ink)}
+.dim{opacity:.32}
+.chart-legend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 14px;margin:12px 0 0;padding:0}
+.chart-legend button{display:flex;align-items:center;gap:7px;background:none;color:var(--muted);font-size:12px;padding:3px 0}
+.chart-legend button:hover:not(:disabled){color:var(--ink)}.chart-legend button:disabled{opacity:.45;cursor:default}
+.chart-legend b{color:var(--ink);font-weight:600}
+.chart-legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.matrix{width:100%;font-size:12px;border-collapse:separate;border-spacing:3px;table-layout:fixed}
+.matrix th{color:var(--muted);font-weight:500;padding:2px 6px;text-align:center}
+.matrix th[scope=row]{text-align:left;width:70px}
+.matrix td{padding:0}
+.matrix .cell{width:100%;height:30px;border-radius:5px;font-size:13px;font-weight:600;color:var(--ink);background:color-mix(in srgb,#7addc6 calc(var(--a)*100%),var(--canvas));border:1px solid transparent;transition:opacity .15s}
+.matrix .cell.strong{color:#141429}
+.matrix .cell:disabled{color:var(--muted);cursor:default;background:var(--canvas)}
+.matrix .cell:hover:not(:disabled),.matrix .cell:focus-visible,.matrix .cell.active{border-color:var(--ink);outline:none}
+.owner-bars{display:grid;gap:6px}
+.owner-bar{display:grid;grid-template-columns:130px 1fr 32px;align-items:center;gap:10px;background:none;padding:3px 0;color:var(--ink);font-size:12px;text-align:left;transition:opacity .15s}
+.owner-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.owner-track{height:14px;background:var(--canvas);border-radius:4px;overflow:hidden}
+.owner-track span{display:block;height:100%;background:var(--c,#7addc6);border-radius:0 4px 4px 0}
+.owner-bar.unassigned .owner-track span{background:#8a8ab0}
+.owner-bar b{text-align:right;font-weight:600}
+.owner-bar:hover .owner-name,.owner-bar:focus-visible .owner-name{color:var(--ink)}.owner-bar:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:4px}
+.chart-tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:#141429;font-size:12px;font-weight:600;padding:5px 9px;border-radius:6px;white-space:nowrap;box-shadow:0 6px 20px #0006}
+@media(max-width:1000px){.chart-row{grid-template-columns:1fr}}
+.chart-row.three{grid-template-columns:repeat(3,1fr)}
+.chart-row.three .owner-bar{grid-template-columns:100px 1fr 28px}
+.donut-wrap{display:flex;align-items:center;gap:24px}
+.donut{width:132px;height:132px;flex:none;overflow:visible}
+.donut-seg{fill:none;stroke-width:16;cursor:pointer;transition:opacity .15s,stroke-width .15s}
+.donut-seg:hover,.donut-seg:focus-visible{stroke-width:19;outline:none}
+.donut-total{fill:var(--ink);font-size:24px;font-weight:700;text-anchor:middle}
+.donut-label{fill:var(--muted);font-size:10px;text-anchor:middle}
+.chart-legend.vertical{flex-direction:column;gap:2px;margin:0;flex:1}
+.chart-legend.vertical button{width:100%}
+.chart-legend.vertical b{margin-left:auto}
+.legend-pct{width:36px;text-align:right;color:var(--muted)}
+@media(max-width:1250px){.chart-row.three{grid-template-columns:1fr 1fr}}
+@media(max-width:1000px){.chart-row.three{grid-template-columns:1fr}}
+#finding-search,#plan-search{flex:1 1 100%}
+.coverage-rest{fill:none;stroke:#727296;stroke-width:16;opacity:.55}
+.coverage-done{fill:none;stroke:#7addc6;stroke-width:16}
+.coverage-detail{flex:1;min-width:0;display:grid;gap:8px;align-content:start}
+.legend-row{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;padding:3px 0}
+.legend-row b{margin-left:auto;color:var(--ink);font-weight:600}
+.coverage-note{font-size:12px;color:var(--muted);line-height:1.5}
+.coverage-gaps{display:flex;flex-wrap:wrap;gap:5px}.coverage-gaps .pill{font-size:11px;padding:3px 8px}
+.coverage-detail .textlink{justify-self:start;padding:2px 0;font-size:12px}
+/* NIS2 Material: obligations list and evidence checklist. */
+.obligations{background:#14142970;padding:20px 22px;border:1px solid #5a4772;border-radius:9px}
+.obligations h3{font-size:17px}
+.obligations-note{font-size:12px;color:var(--muted);margin:4px 0 10px}
+.obligations ol{list-style:none;margin:0;padding:0;counter-reset:ob}
+.obligations li{border-top:1px solid #5a4772;counter-increment:ob}
+.obligations li button{width:100%;display:flex;align-items:center;gap:12px;padding:9px 2px;background:none;color:var(--ink);text-align:left}
+.obligations li button::before{content:counter(ob);flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;color:var(--muted);border:1px solid #5a4772}
+.obligations li button:hover b{color:var(--primary)}
+.ob-text{flex:1;min-width:0}.ob-text b{display:block;font-size:13px;font-weight:600}.ob-text small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.obligations .pill{font-size:11px;padding:3px 8px;flex:none}
+.nis2-section{margin:24px 0}
+.nis2-section .eyebrow{color:var(--primary)}
+.checklist-progress{height:6px;background:var(--canvas);border-radius:3px;overflow:hidden;margin:4px 0 18px}.checklist-progress span{display:block;height:100%;background:var(--primary)}
+.checklist-table{min-width:860px;table-layout:fixed}
+.checklist-table td{white-space:normal!important;width:auto!important;vertical-align:middle}
+.checklist-table th:nth-child(1){width:17%}.checklist-table th:nth-child(2){width:35%}.checklist-table th:nth-child(3){width:13%}.checklist-table th:nth-child(4){width:16%}.checklist-table th:nth-child(5){width:19%}
+.cl-cat{font-size:12px;color:var(--muted)}
+#checklist-category,#checklist-status,#checklist-owner,#checklist-source{flex:0 0 230px;width:230px}
+@media(max-width:700px){#checklist-category,#checklist-status,#checklist-owner,#checklist-source{flex:1 1 100%;width:100%}}
+.checklist-table th:nth-child(1){width:14%!important}.checklist-table th:nth-child(2){width:25%!important}.checklist-table th:nth-child(3){width:12%!important}.checklist-table th:nth-child(4){width:13%!important}.checklist-table th:nth-child(5){width:15%!important}.checklist-table th:nth-child(6){width:17%!important}.checklist-table th:nth-child(7){width:40px!important}
+.checklist-table{min-width:1000px}
+.generate-evidence{font-size:12px;padding:6px 10px;white-space:nowrap;width:158px;justify-content:center;text-align:center}
+.generate-evidence-wide{width:100%;margin-top:14px}
+.req-ref{font-size:11px;font-weight:500;color:var(--muted);margin-left:6px}
+.req-steps{padding-left:20px;margin:6px 0}.req-steps li{font-size:13px;line-height:1.6;margin:3px 0}
+.req-findings{list-style:none;padding:0;margin:6px 0;display:grid;gap:6px}.req-findings li{display:flex;gap:8px;align-items:center;font-size:13px}
+.ob-count{flex:none;font-size:12px;color:var(--muted);text-align:right;padding:4px 9px;border-radius:20px;background:var(--raised);white-space:nowrap}
+.ob-count b{font-size:13px;color:var(--ink)}
+.ev-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ev-links a{display:inline-flex;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--primary);background:#7addc614;border:1px solid #7addc633;border-radius:20px;padding:3px 10px;text-decoration:none;transition:background .15s,border-color .15s}
+.ev-links a:hover,.ev-links a:focus-visible{background:#7addc626;border-color:var(--primary);outline:none}
+.ev-links.stacked{flex-direction:column;align-items:flex-start;margin:6px 0 4px}.ev-links.stacked a{font-size:12px;padding:5px 12px}
+.checklist-table td:nth-child(6){padding-left:6px;padding-right:6px}
+.checklist-table td:nth-child(4),.checklist-table td:nth-child(5){font-size:13px}
+.generate-evidence.done::before{content:"✓ "}
+.demo-banner{display:flex;align-items:center;gap:16px;justify-content:space-between}
+.demo-banner p{margin:0}
+.banner-close{flex:none;width:28px;height:28px;border-radius:6px;background:none;color:var(--info);font-size:20px;line-height:1;display:grid;place-items:center;opacity:.8}
+.banner-close:hover,.banner-close:focus-visible{opacity:1;background:#ffffff14;outline:none}
+
+</style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></a><div class="workspace">Demo assessment workspace<small>Five providers · example assessments</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business"><p class="navlabel">Business workspace</p></div><div data-audience-only="tech"><p class="navlabel">Technical workspace</p><nav class="sidenav" aria-label="Demo navigation"><a class="active" aria-current="page" href="workspace.html"><span class="num">01</span> Assessment workspace</a><a href="data-flow.html"><span class="num">02</span> Animated data flow</a><a href="technical-flow.html"><span class="num">03</span> Technical architecture</a></nav></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="sidefoot">See the risk.<br>Trace the evidence.<br>Decide what changes.<small>LOCAL-FIRST · READ-ONLY<br>Interactive concept / synthetic data</small></div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p><span class="pill">Product concept · offline demo</span></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Your identity posture, in focus.</h1><p id="workspace-intro">From configuration to evidence and a clear next action.</p></div><button class="button primary" id="run-demo" data-audience-only="tech">▷ Replay assessment</button></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer"><strong>You are exploring a fictional assessment.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business"></section><section class="summary-grid" data-audience-only="tech" aria-label="Assessment summary"><div class="posture"><div class="score-ring" id="score-ring" style="--score:15"><div class="score-value"><strong id="score">15</strong><small>out of 100</small></div></div><div><span class="pill light" id="score-label">Identity posture score</span><h2 id="score-title">Review priority risks</h2><p id="score-description">Evidence-led assessment of the collected configuration.</p><p class="grade" id="grade"></p></div></div><div class="panel"><div class="panel-head"><h2>What needs attention</h2><span class="pill" id="finding-total"></span></div><div class="statrow" id="stats"></div><div class="coverage-strip"><span id="coverage-summary"></span><button class="textlink" id="review-coverage" data-view="coverage">Review coverage ↗</button></div></div></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog" id="finding-dialog" aria-labelledby="finding-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding detail / evidence</span><button class="button" id="close-finding">Close ×</button></div><div class="dialog-content" id="finding-detail"></div></dialog><dialog class="dialog" id="scan-dialog" aria-labelledby="scan-title"><div class="dialog-header"><h2 id="scan-title">Assessment walkthrough</h2><span class="pill">Simulation</span></div><div class="dialog-content"><p class="muted">Replay how a local assessment reaches a report. This demo reads embedded sample data and makes no provider requests.</p><div class="progress-track" role="progressbar" aria-label="Simulated assessment progress" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="scan-progress" style="width:0%"></span></div><ol class="scan-list" id="scan-steps"></ol><p id="scan-status" class="section-note" role="status"></p><div class="scan-actions"><button class="button primary" id="scan-pause">Pause</button><button class="button" id="scan-close">Close walkthrough</button></div></div></dialog><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><dialog class="dialog explore-dialog" id="evidence-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Evidence item · NIS2 &amp; KSC requirement</span><button class="button" id="close-evidence">Close ×</button></div><div class="dialog-content" id="evidence-detail"></div></dialog><dialog class="dialog explore-dialog" id="explore-dialog" aria-labelledby="explore-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding &amp; action plan</span><button class="button" id="close-explore">Close ×</button></div><div class="dialog-content" id="explore-detail"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
 /* Presentation catalog only. This does not register production CLI connectors. */
 (() => {
   'use strict';
@@ -4715,7 +4865,7 @@ window.PULSE_CONTROLS = {
   'use strict';
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const list = (values, empty = 'Not supplied.') => values.length ? `<ul>${values.map(v => `<li>${esc(v)}</li>`).join('')}</ul>` : `<p>${esc(empty)}</p>`;
-  function build(report, evidence, scenario) {
+  function build(report, evidence, scenario, extras = {}) {
     const r = JSON.parse(JSON.stringify(report));
     const matchingSource = evidence?.provider === r.provider.id && evidence?.target === r.tenant.primaryIdentifier && evidence?.collectedAt === r.provider.collectedAt;
     const recommendations = r.remediationPlan.buckets.flatMap(bucket => bucket.items.map(item => ({...item, window: bucket.window})));
@@ -4723,21 +4873,29 @@ window.PULSE_CONTROLS = {
       sample: true,
       generatedAt: new Date().toISOString(),
       scenario,
+      nis2: extras.nis2 || null,
       source: matchingSource ? evidence.source : 'No matching control snapshot',
       report: r,
       controls: (evidence?.controls || []).map(control => {
         const covered = r.coverage.collectors.some(c => c.collector === control.collector && c.status === 'success');
         return matchingSource && covered ? {...control} : {...control, status:'Not assessed', settings:null, note:'Matching, successfully collected evidence is not available.'};
       }),
-      actions: r.findings.map(f => ({
+      actions: r.findings.map(f => { const t = extras.trackOf ? extras.trackOf(f.id) : null; return {
         findingId:f.id, title:f.title,
         recommendation:recommendations.find(i => i.findingId === f.id)?.action || f.recommendation,
         window:recommendations.find(i => i.findingId === f.id)?.window || 'Not supplied',
-        owner:'Unassigned', status:'Recommended — no completion recorded',
+        owner:t?.owner || 'Unassigned', status:t ? `${t.status} (sample tracking, not verified)` : 'Recommended — no completion recorded', targetDate:t?.date || 'Not set', comments:t?.comments || '',
         reportedCompletion:'Not supplied', remediationEvidence:'Not supplied', verification:'Not verified',
         validationSteps:f.validationSteps || [],
-      })),
+      }; }),
     };
+  }
+  function nis2Section(rows) {
+    return `<section><h2>01 · NIS2 obligations by category</h2><p>Identity findings, action tracking and evidence items mapped to each NIS2 obligation. The mapping is indicative and assigns each finding to its primary measure. Checklist statuses and owners are sample data; this section supports auditor review and is not a compliance verdict.</p>
+      ${rows.map(m => `<article class="pack-entry"><h3>${esc(m.ref)} · ${esc(m.name)}</h3><p class="pack-label">${esc(m.coverage)} · ${m.findings.length} related finding${m.findings.length === 1 ? '' : 's'}</p>
+        ${m.findings.length ? `<table><thead><tr><th>Finding</th><th>Severity</th><th>Status</th><th>Owner</th><th>Target date</th></tr></thead><tbody>${m.findings.map(f => `<tr><td>${esc(f.id)} · ${esc(f.title)}</td><td>${esc(f.severity)}</td><td>${esc(f.status)}</td><td>${esc(f.owner || 'Unassigned')}</td><td>${esc(f.date || 'Not set')}</td></tr>`).join('')}</tbody></table>` : ''}
+        ${m.evidence.length ? `<p><strong>Evidence items</strong></p><table><thead><tr><th>Item</th><th>Source</th><th>Status</th><th>Owner</th></tr></thead><tbody>${m.evidence.map(e => `<tr><td>${esc(e.label)}</td><td>${esc(e.source)}</td><td>${esc(e.status)}</td><td>${esc(e.owner || 'Unassigned')}</td></tr>`).join('')}</tbody></table>` : ''}</article>`).join('')}
+    </section>`;
   }
   function content(pack, compact = false) {
     const r = pack.report, preview = Boolean(r.demo?.illustrative);
@@ -4745,14 +4903,14 @@ window.PULSE_CONTROLS = {
     const markup = `<div class="pack-document">
       <div class="pack-banner"><strong>SAMPLE EVIDENCE PACK</strong><p>${preview?'Illustrative provider preview · connector not implemented · no environment assessed.':'Synthetic assessment · auditor-supporting material.'} Not NIS2 certification or proof of compliance.</p></div>
       <p class="pack-provenance">Prepared ${esc(pack.generatedAt)}<br>${preview?'Hand-authored example · no collection date or engine report':'Report generated '+esc(r.generatedAt)+'<br>Configuration collected '+esc(r.provider.collectedAt)}<br>Source: ${esc(pack.source)}</p>
-      <section><h2>01 · What was checked</h2>
+      ${pack.nis2 ? nis2Section(pack.nis2) : ''}<section><h2>${pack.nis2 ? '02' : '01'} · What was checked</h2>
         <dl class="pack-facts"><div><dt>Provider</dt><dd>${esc(r.provider.displayName || r.provider.id)}</dd></div><div><dt>Environment</dt><dd>${esc(r.environment)} · synthetic</dd></div><div><dt>Assessment target</dt><dd>${esc(r.tenant.displayName || r.tenant.primaryIdentifier)}</dd></div><div><dt>Sample</dt><dd>${esc(pack.scenario)}</dd></div><div><dt>Posture score</dt><dd>${preview?'Not calculated · illustrative preview':esc(r.score.overall)+' / 100 · '+esc(r.score.grade)}</dd></div></dl>
         <p>${preview?'Scope: fictional configuration and simulated collection outcomes below. There are no implemented provider rules or collectors for this preview.':'Scope: configuration represented by the collectors below, evaluated with the current provider-specific rules.'} This is not an exhaustive assessment of NIS2 obligations.</p>
         <h3>${preview?'Illustrated areas':'Assessed categories'}</h3>${list(r.categories.filter(c => c.assessed).map(c => c.name))}
         <div class="table-wrap"><table><thead><tr><th>Collector</th><th>State</th><th>Resources</th><th>Required scopes</th></tr></thead><tbody>${r.coverage.collectors.map(c => `<tr><td>${esc(c.collector)}</td><td>${esc(c.status)}</td><td>${esc(c.count ?? 'Not supplied')}</td><td>${esc((c.requiredScopes || []).join(', ') || 'Not supplied')}</td></tr>`).join('')}</tbody></table></div>
         <p>Collector success does not establish exhaustive coverage. A score is a posture indicator, not a compliance verdict.</p>
       </section>
-      <section><h2>02 · Gaps and unassessed areas</h2>
+      <section><h2>${pack.nis2 ? '03' : '02'} · Gaps and unassessed areas</h2>
         <p><strong>${r.findings.length} findings · ${r.coverage.partial ? 'partial coverage reported' : 'no collector gaps reported'}</strong></p>
         <h3>Unassessed categories</h3>${list(unassessed, 'No categories marked unassessed by the report. Other limitations still apply.')}
         <h3>Unsuccessful collectors</h3>${list(r.coverage.collectors.filter(c => c.status !== 'success').map(c => `${c.collector}: ${c.status}${c.notes ? ' — ' + c.notes : ''}`), 'None reported.')}
@@ -4761,10 +4919,10 @@ window.PULSE_CONTROLS = {
         <h3>Assumptions</h3>${list(r.assumptions || [])}
         ${r.findings.map(f => `<article class="pack-entry"><h3>${esc(f.title)}</h3><p class="pack-label">${esc(f.id)} · ${esc(f.severity)} · ${esc(f.classification)} · ${esc(f.confidence)} confidence</p><p><strong>${preview?'Illustrative evidence:':'Observed evidence:'}</strong> ${esc(f.evidence.summary)}</p><p><strong>Business risk:</strong> ${esc(f.businessRisk)}</p>${f.falsePositiveNotes.length ? `<p><strong>Context and exceptions</strong></p>${list(f.falsePositiveNotes)}` : ''}</article>`).join('') || '<p>No findings in this fixture. This does not prove absence of risk.</p>'}
       </section>
-      <section><h2>03 · How gaps were addressed</h2><p>No completed remediation or validation results are recorded in these samples. The entries below are recommendations awaiting ownership and verification.</p>
-        ${pack.actions.map(a => `<article class="pack-entry"><h3>${esc(a.findingId)} · ${esc(a.title)}</h3><p><strong>Recommended action:</strong> ${esc(a.recommendation)}</p><p><strong>Suggested timing:</strong> ${esc(a.window)}</p><dl class="pack-facts"><div><dt>Owner</dt><dd>${esc(a.owner)}</dd></div><div><dt>Status</dt><dd>${esc(a.status)}</dd></div><div><dt>Reported completion</dt><dd>${esc(a.reportedCompletion)}</dd></div><div><dt>Remediation evidence</dt><dd>${esc(a.remediationEvidence)}</dd></div><div><dt>Verification</dt><dd>${esc(a.verification)}</dd></div></dl><p><strong>Suggested validation steps</strong></p>${list(a.validationSteps, 'No rule-specific steps supplied; engineering review is required.')}</article>`).join('') || '<p>No finding-linked recommendations in this fixture. Remediation history is not supplied.</p>'}
+      <section><h2>${pack.nis2 ? '04' : '03'} · How gaps were addressed</h2><p>${pack.nis2 ? 'Owners, statuses and dates below are sample tracking entered in the demo workspace. They are not verified completion or validation evidence.' : 'No completed remediation or validation results are recorded in these samples. The entries below are recommendations awaiting ownership and verification.'}</p>
+        ${pack.actions.map(a => `<article class="pack-entry"><h3>${esc(a.findingId)} · ${esc(a.title)}</h3><p><strong>Recommended action:</strong> ${esc(a.recommendation)}</p><p><strong>Suggested timing:</strong> ${esc(a.window)}</p><dl class="pack-facts"><div><dt>Owner</dt><dd>${esc(a.owner)}</dd></div><div><dt>Status</dt><dd>${esc(a.status)}</dd></div>${a.targetDate ? `<div><dt>Target date</dt><dd>${esc(a.targetDate)}</dd></div>` : ''}${a.comments ? `<div><dt>Comments</dt><dd>${esc(a.comments)}</dd></div>` : ''}<div><dt>Reported completion</dt><dd>${esc(a.reportedCompletion)}</dd></div><div><dt>Remediation evidence</dt><dd>${esc(a.remediationEvidence)}</dd></div><div><dt>Verification</dt><dd>${esc(a.verification)}</dd></div></dl><p><strong>Suggested validation steps</strong></p>${list(a.validationSteps, 'No rule-specific steps supplied; engineering review is required.')}</article>`).join('') || '<p>No finding-linked recommendations in this fixture. Remediation history is not supplied.</p>'}
       </section>
-      <section><h2>04 · Security controls and policies</h2><p>${preview?'These are hand-authored fictional settings for the provider preview; they are not observations from a provider.':'These are observed settings from the matching synthetic snapshot.'} A configuration observation is separate from a recommendation, a reported change or a verified outcome. Runtime effectiveness and organizational policy approval have not been verified.</p>
+      <section><h2>${pack.nis2 ? '05' : '04'} · Security controls and policies</h2><p>${preview?'These are hand-authored fictional settings for the provider preview; they are not observations from a provider.':'These are observed settings from the matching synthetic snapshot.'} A configuration observation is separate from a recommendation, a reported change or a verified outcome. Runtime effectiveness and organizational policy approval have not been verified.</p>
         ${pack.controls.map(c => `<article class="pack-entry"><h3>${esc(c.name)}</h3><p class="pack-label">${esc(c.status)}</p>${c.settings !== null ? `<pre>${esc(JSON.stringify(c.settings, null, 2))}</pre>` : '<p>No evidence available. Do not infer that this control is enabled or disabled.</p>'}<p>${esc(c.note)}</p><p class="pack-provenance">Source field: ${esc(c.sourcePath)} · collector: ${esc(c.collector)}</p></article>`).join('')}
       </section>
     </div>`;
@@ -4777,6 +4935,298 @@ window.PULSE_CONTROLS = {
     return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Identity Pulse — sample evidence pack</title><style>${exportStyles}</style></head><body><main><h1>Identity Pulse · NIS2 Material</h1>${content(pack)}</main></body></html>`;
   }
   window.PulseEvidence = {build, content, html};
+})();
+
+</script>
+<script>
+/* NIS2 and Polish KSC obligation model for the business NIS2 Material page: categories, Art. 21
+   measures, finding-to-measure mapping and the auditor evidence checklist. KSC references follow the
+   amended Act on the National Cybersecurity System (Dz.U. 2026 poz. 252, in force 3 April 2026).
+   Supports evidence preparation; it is not legal advice or a compliance verdict. */
+(() => {
+  'use strict';
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  // How much of each Art. 21 measure an identity-configuration assessment can evidence.
+  const levels = {
+    covered: ['Covered by assessment', 'green'],
+    partial: ['Partially covered', 'amber'],
+    external: ['Evidence needed from org', ''],
+  };
+
+  const categories = [
+    {id: 'scope', level: 'external', article: 'NIS2 Art. 2–3, 27', ksc: 'KSC art. 5–7c', name: 'Scope & registration'},
+    {id: 'governance', level: 'external', article: 'NIS2 Art. 20', ksc: 'KSC art. 8c–8e', name: 'Governance & accountability'},
+    {id: 'measures', level: 'partial', article: 'NIS2 Art. 21', ksc: 'KSC art. 8', name: 'Risk-management measures'},
+    {id: 'reporting', level: 'external', article: 'NIS2 Art. 23', ksc: 'KSC art. 11', name: 'Incident reporting'},
+    {id: 'supervision', level: 'partial', article: 'NIS2 Art. 31–37', ksc: 'KSC art. 15, 73', name: 'Supervision & audit'},
+    {id: 'sharing', level: 'external', article: 'NIS2 Art. 29–30', ksc: 'KSC (voluntary)', name: 'Information sharing'},
+    {id: 'standards', level: 'external', article: 'NIS2 Art. 24–25', ksc: 'KSC art. 8', name: 'Certification & standards'},
+    {id: 'documentation', level: 'external', article: 'Cross-cutting', ksc: 'KSC art. 10', name: 'Evidence & documentation'},
+    {id: 'ksc', level: 'external', article: 'Poland only', ksc: 'KSC art. 9, 46, high-risk suppliers', name: 'Poland KSC specifics'},
+  ];
+
+  // Art. 21(2) a–j, plus governance and reporting; used to group findings and evidence in the evidence pack.
+  const measures = [
+    {id: 'a', ref: '21(a)', name: 'Risk analysis & security policies', level: 'external'},
+    {id: 'b', ref: '21(b)', name: 'Incident handling', level: 'partial'},
+    {id: 'c', ref: '21(c)', name: 'Business continuity & recovery', level: 'external'},
+    {id: 'd', ref: '21(d)', name: 'Supply-chain security', level: 'partial'},
+    {id: 'e', ref: '21(e)', name: 'Secure acquisition, development & maintenance', level: 'partial'},
+    {id: 'f', ref: '21(f)', name: 'Effectiveness assessment', level: 'partial'},
+    {id: 'g', ref: '21(g)', name: 'Cyber hygiene & training', level: 'partial'},
+    {id: 'h', ref: '21(h)', name: 'Cryptography & encryption', level: 'partial'},
+    {id: 'i', ref: '21(i)', name: 'Access control & asset management', level: 'covered'},
+    {id: 'j', ref: '21(j)', name: 'MFA & secured communications', level: 'covered'},
+    {id: 'gov', ref: 'Art. 20', name: 'Management approval & training', level: 'external'},
+    {id: 'rep', ref: 'Art. 23', name: 'Incident reporting readiness', level: 'external'},
+  ];
+
+  // Primary Art. 21 measure for each finding rule. Unlisted rules fall back to access control.
+  const findingMeasure = {
+    'AUTH-OBS-001': 'b', 'OKTA-MON-001': 'b',
+    'AUTH-CON-003': 'd',
+    'AUTH-EXT-001': 'e', 'AUTH-EXT-002': 'e', 'AUTH-UX-001': 'e', 'AUTH-TEN-004-A': 'e', 'AUTH-CLI-002': 'e',
+    'AUTH-COV-001': 'f', 'OKTA-COV-001': 'f', 'DEMO-ENTRA-COVERAGE': 'f', 'DEMO-PING-COVERAGE': 'f', 'DEMO-KEYCLOAK-COVERAGE': 'f',
+    'AUTH-SEC-004': 'g', 'AUTH-SEC-005': 'g', 'AUTH-SEC-006': 'g', 'AUTH-CON-001': 'g', 'AUTH-CON-002': 'g', 'DEMO-KEYCLOAK-1': 'g', 'AUTH-UX-003': 'g',
+    'AUTH-API-001': 'h', 'OKTA-HOOK-001': 'h', 'OKTA-NET-001': 'h',
+    'AUTH-SEC-001': 'j', 'OKTA-POL-001': 'j', 'OKTA-POL-002': 'j', 'DEMO-ENTRA-1': 'j', 'DEMO-ENTRA-2': 'j', 'DEMO-KEYCLOAK-2': 'j', 'DEMO-PING-1': 'j', 'DEMO-PING-2': 'j',
+  };
+  const measureFor = finding => findingMeasure[finding.id] || 'i';
+
+  // What an auditor would expect to see, with the NIS2 and KSC requirement behind each item.
+  // source "assessment" = evidenced by this Identity Pulse report; "external" = supplied by the organization.
+  const C = (id, category, label, source, measure, nis2, ksc, steps) => ({id, category, label, source, measure, nis2, ksc, steps});
+  const checklist = [
+    C('S1', 'scope', 'In-scope determination and essential / important classification', 'external', null,
+      'Determine whether the organization falls within a sector in Annex I or II and meets the size threshold, and whether it is an essential or important entity.',
+      'Classify the organization as a key (kluczowy) or important (ważny) entity using the KSC criteria for sector, size and the services provided in Poland.',
+      ['List the services and legal entities in the group that operate in NIS2 sectors.', 'Apply the size and sector criteria and record the classification with its reasoning.', 'Have legal or compliance approve the determination and set a date to review it.']),
+    C('S2', 'scope', 'Registration with the authority, kept up to date', 'external', null,
+      'Provide entity details, contact information, IP ranges and the Member States where services are provided to the competent authority, and notify changes.',
+      'Self-register in the register of key and important entities (wykaz) by 3 October 2026, unless entered ex officio, and keep the entry current.',
+      ['Collect the registration data: legal details, services, IP ranges and contacts.', 'Submit the registration application and keep the confirmation.', 'Assign an owner to update the entry whenever details change.']),
+    C('G1', 'governance', 'Management approval of the risk-management measures', 'external', 'gov',
+      'The management body must approve the cybersecurity risk-management measures and oversee their implementation (Art. 20(1)).',
+      'The head of the entity (kierownik podmiotu) is responsible for meeting the cybersecurity obligations and cannot delegate that responsibility.',
+      ['Present the risk-management measures and this assessment to the management body.', 'Record the formal approval in minutes or a signed resolution.', 'Schedule recurring oversight reviews and keep the records.']),
+    C('G2', 'governance', 'Management oversight records (board minutes, status reporting)', 'external', 'gov',
+      'Management bodies oversee implementation and can be held liable for infringements (Art. 20(1)).',
+      'Management carries defined oversight tasks, and directors of private entities face personal fines for breaches.',
+      ['Define a regular cybersecurity status report to management.', 'Include finding and action-plan progress from this workspace.', 'Keep minutes that show decisions and follow-up.']),
+    C('G3', 'governance', 'Management cybersecurity training records', 'external', 'gov',
+      'Members of management bodies must follow cybersecurity training; similar training is encouraged for employees (Art. 20(2)).',
+      'Management must complete documented cybersecurity training each year.',
+      ['Select a training programme suitable for management.', 'Record attendance and completion dates for each member.', 'Plan the next annual session.']),
+    C('Ma', 'measures', '21(a) Risk assessment and approved information-security policy', 'external', 'a',
+      'Policies on risk analysis and information-system security (Art. 21(2)(a)).',
+      'Run systematic risk assessment and maintain security policies as part of the information security management system (ISMS) required by KSC art. 8, in place by 3 April 2027.',
+      ['Perform and document a risk assessment covering the in-scope services.', 'Draft or update the information-security policy and have it approved.', 'Link identity risks from this assessment to the risk register.']),
+    C('Mb1', 'measures', '21(b) Incident response plan and playbooks', 'external', 'b',
+      'Incident handling: prevention, detection, response and recovery (Art. 21(2)(b)).',
+      'Have incident-handling procedures as part of the ISMS and the ability to report through the S46 system.',
+      ['Write or update the incident response plan with roles and escalation.', 'Add playbooks for identity incidents such as account takeover.', 'Run a tabletop exercise and record lessons learned.']),
+    C('Mb2', 'measures', '21(b) Identity security logs retained and monitored', 'assessment', 'b',
+      'Detection and handling of incidents relies on security logging (Art. 21(2)(b)).',
+      'Continuous monitoring of information systems is one of the ISMS areas in KSC art. 8.',
+      ['Confirm identity-provider logs stream to an external, retained destination.', 'Define retention periods and who monitors alerts.', 'Attach the log-stream configuration as evidence.']),
+    C('Mc', 'measures', '21(c) Backup and disaster-recovery plan, with test results', 'external', 'c',
+      'Business continuity, backup management, disaster recovery and crisis management (Art. 21(2)(c)).',
+      'Maintain business continuity and recovery plans within the ISMS.',
+      ['Document backup scope, frequency and restore objectives.', 'Include identity-provider recovery and break-glass access.', 'Test a restore and keep the results.']),
+    C('Md1', 'measures', '21(d) Supplier security requirements and assessments', 'external', 'd',
+      'Supply-chain security, including security aspects of relationships with direct suppliers (Art. 21(2)(d)).',
+      'Manage ICT supply-chain risk; the KSC also allows suppliers to be designated high-risk with mandatory phase-out.',
+      ['List critical ICT suppliers, including the identity provider.', 'Add security requirements to contracts and assess suppliers.', 'Track supplier risks and review them each year.']),
+    C('Md2', 'measures', '21(d) Inventory of identity integrations and extensions', 'assessment', 'd',
+      'Supply-chain security covers third-party components that connect to core systems (Art. 21(2)(d)).',
+      'Supply-chain risk management within the ISMS (KSC art. 8).',
+      ['Export the list of integrations, hooks and custom scripts from this assessment.', 'Confirm an owner and purpose for each integration.', 'Remove or secure integrations without a clear owner.']),
+    C('Me1', 'measures', '21(e) Secure development, vulnerability handling and patching process', 'external', 'e',
+      'Security in acquisition, development and maintenance, including vulnerability handling and disclosure (Art. 21(2)(e)).',
+      'Vulnerability management and secure maintenance within the ISMS.',
+      ['Document the secure-development and change process.', 'Define patching timelines by severity.', 'Publish a vulnerability-disclosure contact.']),
+    C('Me2', 'measures', '21(e) Identity platform maintenance (runtimes, deprecated features)', 'assessment', 'e',
+      'Maintenance of network and information systems (Art. 21(2)(e)).',
+      'Keep systems maintained and updated within the ISMS.',
+      ['Review deprecated features and outdated runtimes found in this assessment.', 'Plan migrations before vendor end-of-life dates.', 'Record completed upgrades as evidence.']),
+    C('Mf1', 'measures', '21(f) Control-effectiveness testing and audit results', 'external', 'f',
+      'Policies and procedures to assess the effectiveness of risk-management measures (Art. 21(2)(f)).',
+      'Assess the effectiveness of security measures; key entities also need a periodic security audit.',
+      ['Define metrics and tests for key controls.', 'Run internal audits or penetration tests.', 'Track and close the findings.']),
+    C('Mf2', 'measures', '21(f) Identity configuration assessment (this report)', 'assessment', 'f',
+      'Assessing the effectiveness of measures includes technical configuration reviews (Art. 21(2)(f)).',
+      'Supports the ISMS effectiveness assessment and audit preparation.',
+      ['Keep this assessment report with its collection date.', 'Repeat the assessment after remediation to show improvement.', 'Record any collection gaps as open items.']),
+    C('Mg1', 'measures', '21(g) Security awareness training records', 'external', 'g',
+      'Basic cyber hygiene practices and cybersecurity training (Art. 21(2)(g)).',
+      'Cyber hygiene and training are ISMS areas under KSC art. 8.',
+      ['Run awareness training for all staff.', 'Record completion rates.', 'Add phishing and password-hygiene topics.']),
+    C('Mg2', 'measures', '21(g) Password and attack-protection settings', 'assessment', 'g',
+      'Basic cyber hygiene includes strong authentication hygiene and protection against password attacks (Art. 21(2)(g)).',
+      'Cyber hygiene measures within the ISMS.',
+      ['Review brute-force, breached-password and throttling settings in this assessment.', 'Enable the missing protections through the Action Plans.', 'Export the updated settings as evidence.']),
+    C('Mh1', 'measures', '21(h) Encryption and key-management policy', 'external', 'h',
+      'Policies and procedures on cryptography and, where appropriate, encryption (Art. 21(2)(h)).',
+      'Use cryptography in line with the ISMS policies.',
+      ['Write an encryption and key-management policy.', 'Define approved algorithms and key rotation.', 'Assign ownership of keys and certificates.']),
+    C('Mh2', 'measures', '21(h) Token signing and encrypted transport in identity flows', 'assessment', 'h',
+      'Cryptography applied to authentication tokens and data in transit (Art. 21(2)(h)).',
+      'Cryptography within the ISMS.',
+      ['Review token-signing algorithms and insecure HTTP endpoints in this assessment.', 'Move to asymmetric signing and HTTPS-only endpoints.', 'Record the changes as evidence.']),
+    C('Mi1', 'measures', '21(i) Joiner / mover / leaver process and access reviews', 'external', 'i',
+      'Human-resources security, access-control policies and asset management (Art. 21(2)(i)).',
+      'Access control and asset management policies within the ISMS.',
+      ['Document the joiner, mover and leaver process.', 'Run periodic access reviews for critical systems.', 'Keep the review sign-offs.']),
+    C('Mi2', 'measures', '21(i) Privileged access, roles and dormant accounts', 'assessment', 'i',
+      'Access-control policies, including privileged access (Art. 21(2)(i)).',
+      'Access control within the ISMS.',
+      ['Review admin roles and dormant accounts in this assessment.', 'Remove unneeded privileges and inactive accounts.', 'Export the updated role assignments.']),
+    C('Mi3', 'measures', '21(i) Application and identity asset inventory', 'assessment', 'i',
+      'Asset management (Art. 21(2)(i)).',
+      'Asset management within the ISMS.',
+      ['Export the application and client inventory from this assessment.', 'Assign an owner to each application.', 'Reconcile it with the wider asset register.']),
+    C('Mj1', 'measures', '21(j) MFA enforcement for users and administrators', 'assessment', 'j',
+      'Use of multi-factor or continuous authentication solutions (Art. 21(2)(j)).',
+      'Multi-factor authentication within the ISMS.',
+      ['Review the MFA findings in this assessment.', 'Enforce MFA for administrators and sensitive actions.', 'Export the MFA policy as evidence.']),
+    C('Mj2', 'measures', '21(j) Secured voice, video, text and emergency communications', 'external', 'j',
+      'Secured voice, video and text communications and secured emergency communication systems (Art. 21(2)(j)).',
+      'Secure communications within the ISMS.',
+      ['Identify the tools used for crisis communication.', 'Confirm they are encrypted and available during an outage.', 'Document the emergency contact procedure.']),
+    C('R1', 'reporting', 'Incident reporting procedure (24 h / 72 h / 1 month)', 'external', 'rep',
+      'Early warning within 24 hours, incident notification within 72 hours and a final report within one month (Art. 23).',
+      'Report incidents to the competent CSIRT (NASK, GOV or MON) through the S46 system: early warning in 24 hours, notification in 72 hours, final report within one month.',
+      ['Write the reporting procedure with timelines and decision criteria.', 'Name who decides whether an incident is significant.', 'Prepare report templates and test the S46 submission.']),
+    C('R2', 'reporting', 'Authority and CSIRT contact register', 'external', 'rep',
+      'Know the competent authority and CSIRT for notifications (Art. 23).',
+      'Identify the competent CSIRT (NASK, GOV or MON) and the sector authority.',
+      ['Record the CSIRT and authority contacts.', 'Store the register where the incident team can reach it.', 'Review it every six months.']),
+    C('V1', 'supervision', 'Audit-ready evidence pack', 'assessment', null,
+      'Essential entities face proactive supervision and important entities reactive supervision, including audits and information requests (Art. 31–37).',
+      'Key entities need a periodic security audit, with the first due by 3 April 2028; fines apply from that date.',
+      ['Generate the evidence pack from this workspace.', 'Add the organizational evidence from this checklist.', 'Keep versions for each audit period.']),
+    C('I1', 'sharing', 'Threat-intelligence sharing arrangements (voluntary)', 'external', null,
+      'Voluntary cybersecurity information-sharing arrangements and voluntary notifications (Art. 29–30).',
+      'Voluntary notifications and information sharing with the CSIRTs are possible; no additional mandatory duty identified.',
+      ['Decide whether to join a sector sharing group.', 'Define what can be shared and who approves it.', 'Record any agreements.']),
+    C('C1', 'standards', 'Mapping to ISO 27001 or certified products where required', 'external', null,
+      'Use certified ICT products, services and processes where required, and apply European or international standards (Art. 24–25).',
+      'ISMS requirements can be evidenced through alignment with recognised standards such as PN-EN ISO/IEC 27001.',
+      ['Map the ISMS controls to ISO/IEC 27001.', 'Check whether any national certification requirement applies.', 'Keep certificates or the gap analysis.']),
+    C('D1', 'documentation', 'Cybersecurity documentation and record retention', 'external', null,
+      'Keep the records that demonstrate the measures in Art. 21 for supervisory review.',
+      'Maintain cybersecurity documentation for the information systems used to provide the service.',
+      ['Define the documentation set and where it is stored.', 'Set retention periods and version control.', 'Assign document owners.']),
+    C('K1', 'ksc', 'At least two designated contact persons', 'external', null,
+      'Provide contact details to the competent authority (Art. 3 and 27).',
+      'Designate at least two contact persons for communication with the authorities.',
+      ['Name two contact persons with backups.', 'Register them with the authority.', 'Update the details when people change roles.']),
+    C('K2', 'ksc', 'S46 system onboarding', 'external', 'rep',
+      'Notifications must reach the competent CSIRT without undue delay (Art. 23).',
+      'Use the S46 system for reporting and for communication with the authorities; it has been available to the newly covered entities since 12 June 2026.',
+      ['Create S46 accounts for the reporting team.', 'Test access and the reporting workflow.', 'Document who can submit reports.']),
+    C('K3', 'ksc', 'High-risk supplier review', 'external', 'd',
+      'Coordinated EU risk assessments of critical supply chains (Art. 22).',
+      'The KSC allows ICT suppliers to be designated high-risk, which requires phasing out their products within set deadlines.',
+      ['Check suppliers against any high-risk designation.', 'Assess the impact on identity and network components.', 'Plan replacement where a designation applies.']),
+  ];
+  // Official sites where the organization registers or reports (Poland). Shown as labelled links.
+  const L = (label, url) => ({label, url});
+  const links = {
+    S1: [L('Self-registration guide (gov.pl)', 'https://www.gov.pl/web/system-s46/wpis-do-wykazu-ksc')],
+    S2: [L('Register in Wykaz KSC', 'https://wykaz-ksc.gov.pl'), L('Registration guide (gov.pl)', 'https://www.gov.pl/web/system-s46/wpis-do-wykazu-ksc')],
+    K1: [L('Update contacts in Wykaz KSC', 'https://wykaz-ksc.gov.pl')],
+    K2: [L('System S46 (gov.pl)', 'https://www.gov.pl/web/system-s46'), L('What changed in S46', 'https://www.gov.pl/web/system-s46/zmiany-w-systemie-s46-po-nowelizacji')],
+    R1: [L('Report via System S46', 'https://www.gov.pl/web/system-s46'), L('CERT Polska incident form', 'https://incydent.cert.pl')],
+    R2: [L('CERT Polska contacts', 'https://cert.pl/kontakt/')],
+  };
+  checklist.forEach(item => { item.links = links[item.id] || []; });
+  const linkList = (item, cls = 'ev-links') => item.links.length ? `<span class="${cls}">${item.links.map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(l.url)}">${esc(l.label)}<span aria-hidden="true"> ↗</span><span class="sr-only"> (opens in a new tab)</span></a>`).join('')}</span>` : '';
+  const evidenceStatuses = ['Not Started', 'In Progress', 'Completed'];
+
+  // Pre-filled sample state; dates are relative to today so the demo stays realistic.
+  const isoIn = days => { const d = new Date(); d.setDate(d.getDate() + days); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+  const sampleExternal = [['In Progress', 'Jan Czajkowski', 30], ['Completed', 'Nathanael Chu', null], ['Not Started', '', 60], ['In Progress', 'Nathanael Chu', 14], ['Completed', 'Jan Czajkowski', null], ['Not Started', '', null]];
+  function seed(item, index) {
+    const base = {date: '', comments: '', generatedAt: ''};
+    if (item.id === 'I1') return {...base, status: 'Not Started', owner: '', comments: 'Voluntary; decide whether to join a sharing group this year.'};
+    if (item.source === 'assessment') return {...base, status: 'Completed', owner: index % 2 ? 'Nathanael Chu' : 'Jan Czajkowski'};
+    const [status, owner, days] = sampleExternal[index % sampleExternal.length];
+    return {...base, status, owner, date: days === null ? '' : isoIn(days)};
+  }
+
+  const sevRank = {critical: 0, high: 1, medium: 2, low: 3, info: 4};
+  const sevClass = s => ['critical', 'high'].includes(s) ? 'red' : s === 'medium' ? 'amber' : 'blue';
+  const relatedFindings = (report, measure) => report.findings.filter(f => measureFor(f) === measure).sort((a, b) => (sevRank[a.severity] ?? 5) - (sevRank[b.severity] ?? 5));
+  const categoryName = id => categories.find(c => c.id === id)?.name || id;
+  const progressOf = (items, stateOf) => ({done: items.filter(i => stateOf(i).status === 'Completed').length, total: items.length});
+
+  function obligations(report, stateOf) {
+    return `<div class="obligations"><h3>NIS2 obligations by category</h3><p class="obligations-note">Evidence items completed in each category, including Poland's KSC Act.</p><ol>${categories.map(c => {
+      const p = progressOf(checklist.filter(i => i.category === c.id), stateOf);
+      return `<li><button type="button" data-checklist-category="${c.id}"><span class="ob-text"><b>${esc(c.name)}</b><small>${esc(c.article)} · ${esc(c.ksc)}</small></span><span class="ob-count" aria-label="${p.done} of ${p.total} evidence items completed"><b>${p.done}/${p.total}</b> evidence completed</span></button></li>`;
+    }).join('')}</ol></div>`;
+  }
+
+  // Same status colors as the Action Plans table.
+  const statusClass = v => v === 'In Progress' ? 'amber' : v === 'Completed' ? 'green' : '';
+  // Organizational items produce a template to fill in; assessment items produce an evidence record.
+  const generateLabel = item => item.source === 'external' ? 'Generate template' : 'Generate evidence';
+
+  function checklistSection(rows, filters, owners, totals) {
+    const done = totals.completed, all = totals.total;
+    return `<section class="panel nis2-section" id="evidence-checklist" aria-labelledby="checklist-heading"><div class="panel-head"><div><p class="eyebrow">Evidence checklist</p><h2 id="checklist-heading">What will an auditor ask for?</h2><p>Select an item for the NIS2 and KSC requirement and the recommended steps. Generate evidence creates a record from this assessment; Generate template creates a document to complete for the auditor. Statuses, owners and dates are pre-filled sample data.</p></div><span class="pill">${done} of ${all} completed</span></div>
+      <div class="checklist-progress" aria-hidden="true"><span style="width:${all ? done / all * 100 : 0}%"></span></div>
+      <div class="filters"><select id="checklist-category" aria-label="Filter by category"><option value="all">Category</option>${categories.map(c => `<option value="${c.id}" ${filters.category === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select><select id="checklist-status" aria-label="Filter by status"><option value="all">Status</option>${evidenceStatuses.map(s => `<option ${filters.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select><select id="checklist-owner" aria-label="Filter by owner"><option value="all">Owner</option><option value="" ${filters.owner === '' ? 'selected' : ''}>Unassigned</option>${owners.map(o => `<option ${filters.owner === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select><select id="checklist-source" aria-label="Filter by source"><option value="all">Source</option><option value="assessment" ${filters.source === 'assessment' ? 'selected' : ''}>Identity Pulse</option><option value="external" ${filters.source === 'external' ? 'selected' : ''}>Your organization</option></select></div>
+      ${rows.length ? `<div class="table-wrap dash-wrap"><table class="dash-table checklist-table"><thead><tr><th scope="col">Category</th><th scope="col">Evidence item</th><th scope="col">Source</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Evidence</th><th scope="col"><span class="sr-only">Open</span></th></tr></thead><tbody>${rows.map(({item, state}) => `<tr class="dash-row" data-evidence-item="${item.id}" tabindex="0" aria-label="Open requirement: ${esc(item.label)}"><td><span class="cl-cat">${esc(categoryName(item.category))}</span></td><td><strong>${esc(item.label)}</strong>${linkList(item)}</td><td><span class="pill ${item.source === 'assessment' ? 'light' : ''}">${item.source === 'assessment' ? 'Identity Pulse' : 'Your organization'}</span></td><td><span class="pill ${statusClass(state.status)}">${esc(state.status)}</span></td><td>${state.owner ? esc(state.owner) : '<span class="muted">Unassigned</span>'}</td><td><button type="button" class="button primary generate-evidence ${state.generatedAt ? 'done' : ''}" data-generate-evidence="${item.id}" aria-label="${generateLabel(item)} for ${esc(item.label)}${state.generatedAt ? ' (generated)' : ''}" ${state.generatedAt ? `title="Generated ${esc(new Date(state.generatedAt).toLocaleString('en-GB'))}"` : ''}>${generateLabel(item)}</button></td><td><span class="arrow" aria-hidden="true">↗</span></td></tr>`).join('')}</tbody></table></div>` : '<p class="empty" role="status">No checklist items match this selection.</p>'}</section>`;
+  }
+
+  // Requirement pop-up for one checklist item, with editable tracking fields.
+  function evidenceDialog(item, state, owners, report) {
+    const cat = categories.find(c => c.id === item.category), related = item.measure ? relatedFindings(report, item.measure) : [];
+    const opt = (v, sel) => `<option value="${esc(v)}" ${v === sel ? 'selected' : ''}>${esc(v)}</option>`;
+    return `<div class="explore-head"><span class="pill ${item.source === 'assessment' ? 'light' : ''}">${item.source === 'assessment' ? 'Identity Pulse' : 'Your organization'}</span><span class="pill">${esc(cat.name)}</span></div><h2 id="evidence-title">${esc(item.label)}</h2>
+      <div class="explore-grid"><section class="explore-card"><p class="eyebrow">Requirement</p><h3>NIS2 requirement <span class="req-ref">${esc(cat.article)}</span></h3><p>${esc(item.nis2)}</p><h3>KSC requirement (Poland) <span class="req-ref">${esc(cat.ksc)}</span></h3><p>${esc(item.ksc)}</p>${item.links.length ? `<h3>Where to register or report</h3>${linkList(item, 'ev-links stacked')}` : ''}<h3>Recommended action steps</h3><ol class="req-steps">${item.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>${related.length ? `<h3>Related findings in this assessment</h3><ul class="req-findings">${related.slice(0, 5).map(f => `<li><span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span>${esc(window.PulseBusiness.title(f))}</li>`).join('')}</ul>${related.length > 5 ? `<p class="muted">+ ${related.length - 5} more</p>` : ''}` : ''}</section>
+      <section class="explore-card"><p class="eyebrow">Tracking</p><div class="plan-form" data-evidence-form="${item.id}"><label class="plan-field"><span>Owner</span><select data-ev-field="owner"><option value="" ${state.owner ? '' : 'selected'}>Unassigned</option>${owners.map(o => opt(o, state.owner)).join('')}<option value="__new">+ Add new name…</option></select></label><div class="add-owner" hidden><input type="text" data-new-owner placeholder="Full name" aria-label="New owner name"><button type="button" class="button primary" data-add-ev-owner>Add</button></div>
+        <label class="plan-field"><span>Status</span><select data-ev-field="status">${evidenceStatuses.map(s => opt(s, state.status)).join('')}</select></label>
+        <label class="plan-field"><span>Target date</span><input type="date" data-ev-field="date" value="${esc(state.date)}"></label>
+        <label class="plan-field"><span>Additional comments</span><textarea data-ev-field="comments" rows="3" placeholder="Add context, decisions or links to evidence">${esc(state.comments)}</textarea></label></div>
+        <button type="button" class="button primary generate-evidence-wide" data-generate-evidence="${item.id}">${generateLabel(item)}</button>${state.generatedAt ? `<p class="section-note">Last generated ${esc(new Date(state.generatedAt).toLocaleString('en-GB'))}.</p>` : ''}</section></div>
+      <p class="section-note">Article references are indicative. Confirm against NIS2 (Directive (EU) 2022/2555) and the consolidated KSC Act (Dz.U. 2026 poz. 252). This is not legal advice.</p>`;
+  }
+
+  // Self-contained evidence record for one checklist item (sample, browser-generated).
+  function evidenceRecord(item, state, report, trackOf, scenario) {
+    const cat = categories.find(c => c.id === item.category), related = item.measure ? relatedFindings(report, item.measure) : [];
+    const preview = Boolean(report.demo?.illustrative), coll = report.coverage.collectors;
+    const body = `<div class="banner"><strong>${item.source === 'external' ? 'EVIDENCE TEMPLATE' : 'SAMPLE EVIDENCE RECORD'}</strong><p>${preview ? 'Illustrative provider preview · no environment assessed.' : 'Synthetic assessment data.'} Supports auditor review; not proof of compliance.</p></div>
+      <h1>${esc(item.label)}</h1><p class="meta">${esc(cat.name)} · ${esc(cat.article)} · ${esc(cat.ksc)}<br>Provider: ${esc(report.provider.displayName || report.provider.id)} · Scenario: ${esc(scenario)}<br>Generated ${esc(new Date().toISOString())}</p>
+      <h2>Requirement</h2><h3>NIS2</h3><p>${esc(item.nis2)}</p><h3>KSC (Poland)</h3><p>${esc(item.ksc)}</p>
+      <h2>Tracking</h2><table><tr><th>Status</th><td>${esc(state.status)}</td></tr><tr><th>Owner</th><td>${esc(state.owner || 'Unassigned')}</td></tr><tr><th>Target date</th><td>${esc(state.date || 'Not set')}</td></tr><tr><th>Comments</th><td>${esc(state.comments || '—')}</td></tr></table>
+      ${item.links.length ? `<h2>Where to register or report</h2><ul>${item.links.map(l => `<li><a href="${esc(l.url)}">${esc(l.label)}</a></li>`).join('')}</ul>` : ''}<h2>Recommended action steps</h2><ol>${item.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>
+      ${item.source === 'assessment' ? `<h2>Evidence from the identity assessment</h2><p>${coll.filter(c => c.status === 'success').length} of ${coll.length} collection areas ${preview ? 'illustrated' : 'collected successfully'}${preview ? '' : ` · configuration collected ${esc(report.provider.collectedAt)}`}.</p>
+        ${related.length ? `<table><thead><tr><th>Finding</th><th>Severity</th><th>Evidence</th><th>Action status</th><th>Owner</th></tr></thead><tbody>${related.map(f => { const t = trackOf(f.id); return `<tr><td>${esc(f.id)} · ${esc(f.title)}</td><td>${esc(f.severity)}</td><td>${esc(f.evidence.summary)}</td><td>${esc(t.status)}</td><td>${esc(t.owner || 'Unassigned')}</td></tr>`; }).join('')}</tbody></table>` : '<p>No findings mapped to this item in this assessment. This does not prove the requirement is met.</p>'}`
+      : `<h2>Evidence to attach</h2><p>This item is evidenced by organizational records outside the identity assessment. Attach them below.</p><table><thead><tr><th>Document</th><th>Reference / location</th><th>Approved by</th><th>Date</th></tr></thead><tbody>${item.steps.map(s => `<tr><td>${esc(s)}</td><td></td><td></td><td></td></tr>`).join('')}</tbody></table>`}
+      <p class="foot">Article references are indicative; confirm against Directive (EU) 2022/2555 and Dz.U. 2026 poz. 252. Tracking values are sample data entered in the demo workspace.</p>`;
+    const css = 'body{font:15px/1.6 system-ui,sans-serif;color:#141429;max-width:900px;margin:auto;padding:36px 24px}h1{font-size:26px;margin:18px 0 4px}h2{font-size:19px;margin-top:28px;padding-top:14px;border-top:2px solid #83219b}h3{font-size:15px;margin:14px 0 4px}.banner{padding:16px 18px;background:#141429;color:#fff;border-left:6px solid #7addc6}.banner p{margin:4px 0 0}.meta,.foot{font-size:13px;color:#4a4a65}table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}th,td{border:1px solid #c9c9d8;padding:8px;text-align:left;vertical-align:top}th{background:#f0f0f6;width:22%}td:empty{height:28px}@media print{body{padding:0}}';
+    return `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${item.source === 'external' ? 'Evidence template' : 'Evidence record'} — ${esc(item.label)}</title><style>${css}</style></head><body>${body}</body></html>`;
+  }
+
+  // Structured NIS2 / KSC view for the evidence pack.
+  function packData(report, trackOf, checklistOf) {
+    const evidenceRow = item => ({label: item.label, source: item.source === 'assessment' ? 'Identity Pulse' : 'Organization', ...checklistOf(item)});
+    return measures.map(m => ({
+      ref: m.ref, name: m.name, coverage: levels[m.level][0],
+      findings: relatedFindings(report, m.id).map(f => ({id: f.id, title: f.title, severity: f.severity, ...trackOf(f.id)})),
+      evidence: checklist.filter(item => (m.id === 'gov' && item.category === 'governance') || (m.id === 'rep' && item.category === 'reporting') || item.label.startsWith(m.ref + ' ')).map(evidenceRow),
+    })).concat(categories.filter(c => ['scope', 'supervision', 'sharing', 'standards', 'documentation', 'ksc'].includes(c.id)).map(c => ({
+      ref: `${c.article} · ${c.ksc}`, name: c.name, coverage: 'Organizational evidence', findings: [],
+      evidence: checklist.filter(item => item.category === c.id).map(evidenceRow),
+    })));
+  }
+
+  window.PulseNIS2 = {categories, measures, checklist, evidenceStatuses, seed, measureFor, obligations, checklistSection, evidenceDialog, evidenceRecord, packData};
 })();
 
 </script>
@@ -4839,10 +5289,9 @@ window.PULSE_CONTROLS = {
     }).slice(0,3);
   }
   function metrics(report) {
-    const priority = report.findings.filter(f => ['critical','high'].includes(f.severity));
-    const confirmed = priority.filter(f => f.classification === 'confirmed-risk').length;
+    const all = report.findings, confirmed = all.filter(f => f.classification === 'confirmed-risk').length;
     const gaps = report.coverage.collectors.filter(c => c.status !== 'success').length;
-    return `<article><div><strong>${priority.length}</strong><span>Priority findings</span></div><p>${confirmed} confirmed · ${priority.length - confirmed} to validate or review</p><button class="textlink" data-view="findings">Review business impact</button></article>
+    return `<article><div><strong>${all.length}</strong><span>Total findings</span></div><p>${confirmed} confirmed · ${all.length - confirmed} to validate or review</p><button class="textlink" data-view="findings">Review business impact</button></article>
       <article><div><strong>${actions(report).length}</strong><span>Recommended actions</span></div><p>${actions(report).length ? 'Ownership and completion are not recorded.' : 'No actions listed; evidence still needs review.'}</p><button class="textlink" data-view="plan">Review next actions</button></article>
       <article><div><strong>${gaps}</strong><span>${report.demo?.illustrative?'Example coverage gaps':'Collection gaps'}</span></div><p>${gaps ? 'Some controls remain unknown.' : report.demo?.illustrative?'No gaps represented in this example.':'No failed or skipped collections reported.'}</p><button class="textlink" data-view="nis2" data-evidence-limits>Review evidence limits</button></article>`;
   }
@@ -4851,32 +5300,141 @@ window.PULSE_CONTROLS = {
     return `<section class="decision-panel"><div class="panel-head"><div><p class="eyebrow">What needs a decision?</p><h2>${selected.length ? 'Start with these conversations.' : 'Confirm what the evidence can support.'}</h2><p>${selected.length ? 'Highest-severity findings across distinct assessment areas.' : 'No findings in this sample. Collection success and a high score do not establish compliance.'}</p></div><button class="textlink" data-view="findings">All findings (${report.findings.length})</button></div>
       ${selected.map(f => `<article class="decision-row"><div><span class="decision-class">${esc(f.severity)} · ${esc(status(f))}</span><h3>${esc(title(f))}</h3><p>${esc(impact(f))}</p></div><div class="decision-next"><span>Next decision</span><p>${esc(decision(f))}</p><button class="textlink" data-finding="${esc(f.id)}">Review finding</button></div></article>`).join('') || '<div class="empty-decision"><h3>Request the supporting records</h3><p>Ask the accountable teams for approved policies and validation evidence. These are not supplied in the assessment.</p><button class="textlink" data-view="nis2">Review NIS2 Material</button></div>'}</section>`;
   }
-  function material(report, evidence) {
-    const successful = report.coverage.collectors.filter(c => c.status === 'success').length;
+  function material(report, evidence, sections = '', obligations = '') {
     const gaps = report.coverage.collectors.filter(c => c.status !== 'success');
     const preview = Boolean(report.demo?.illustrative);
-    const observed = evidence.controls.filter(c => ['Observed configuration','Illustrative setting'].includes(c.status) && report.coverage.collectors.some(r => r.collector === c.collector && r.status === 'success')).length;
     return `<section class="nis2-focus" aria-labelledby="nis2-heading"><div class="nis2-lead"><span class="eyebrow">NIS2 Material</span><h2 id="nis2-heading">Prepare your<br><span>NIS2 evidence.</span></h2><p>${preview?'Explore how example findings, action plans and illustrative controls would appear in an evidence pack.':'Bring the identity-security findings, action plans and observed controls into one reviewable record.'}</p><div class="actions"><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button><span class="pill amber">Supporting evidence incomplete</span></div><small>Sample pack · identity-security scope · not a NIS2 compliance verdict</small></div>
-      <div class="evidence-checklist"><h3>What evidence is available?</h3><dl><div><dt>Assessment findings & scope</dt><dd class="available">${preview?'Illustrative only':'Available'} · ${successful}/${report.coverage.collectors.length} ${preview?'areas shown':'collections succeeded'}</dd></div><div><dt>${preview?'Illustrative security settings':'Observed security settings'}</dt><dd class="available">${observed} control ${observed===1?'record':'records'} · enforcement not verified</dd></div><div><dt>Completed remediation & validation</dt><dd class="missing">Not supplied</dd></div><div><dt>Approved organizational policies</dt><dd class="missing">Not supplied</dd></div></dl></div></section>
+      ${obligations}</section>
+      ${sections}
       ${decisions(report)}
-      <section class="review-preparation panel"><div><p class="eyebrow">Before the review</p><h2>Close the gaps in the record.</h2></div><ol><li><strong>Assign accountability.</strong><span>Agree an owner and target date for each accepted action. None are recorded here.</span></li><li><strong>Collect proof of the outcome.</strong><span>Request change records and validation results; recommendations alone do not prove completion.</span></li><li><strong>Add the organizational evidence.</strong><span>Bring approved policies and the wider security records held outside this identity assessment.</span></li></ol></section>
       <details class="material-scope" id="material-scope"><summary>Assessment boundaries & uncollected areas</summary><p>This view covers identity configuration only. Legal applicability and the wider NIS2 obligations are not assessed. A generated pack may still contain missing or unverified evidence.</p><h3>Collection gaps</h3>${gaps.length ? `<ul>${gaps.map(c => `<li>${esc(c.collector)} · ${esc(c.status)}</li>`).join('')}</ul>` : '<p>No failed or skipped collectors reported. Collection success does not establish exhaustive coverage.</p>'}<h3>Assessment limitations</h3><ul>${report.limitations.map(l => `<li>${esc(l)}</li>`).join('')}</ul><p class="section-note">${preview?'Hand-authored preview. No configuration was collected and no report was generated by the engine.':'Configuration collected '+esc(report.provider.collectedAt)+' · report generated '+esc(report.generatedAt)+'.'} Independent synthetic fixtures; not before/after remediation evidence.</p></details>`;
   }
-  function plan(report) {
-    return `<section class="panel business-plan-intro"><p class="eyebrow">Action Plans</p><h2>Agree who will do what next.</h2><p>Use these recommendations to agree priorities, ownership and target dates with your technical contact. Completion and verification are not recorded in this sample. Advisory findings may also need review outside the listed action plan.</p><button class="textlink" data-view="nis2">Include the plan in your NIS2 material</button></section>
-      <div class="business-plan">${report.remediationPlan.buckets.map(bucket => `<section class="panel"><div class="panel-head"><h2>${esc(bucket.name)}</h2><span class="pill">Suggested window: ${esc(bucket.window)}</span></div>${bucket.items.map(action => {
-        const finding = report.findings.find(f => f.id === action.findingId);
-        return `<article class="business-action"><h3>${esc(finding ? title(finding) : action.action)}</h3><p>${esc(finding ? decision(finding) : action.expectedOutcome)}</p><dl class="action-status"><div><dt>Owner</dt><dd>Not assigned in this sample</dd></div><div><dt>Target date</dt><dd>Not recorded</dd></div><div><dt>Completion / validation</dt><dd>Not recorded / not verified</dd></div></dl><details><summary>Recommended change & expected outcome</summary><p>${esc(action.action)}</p><p><strong>Expected outcome:</strong> ${esc(action.expectedOutcome)}</p></details><button class="textlink" data-finding="${esc(action.findingId)}">Review supporting finding</button></article>`;
-      }).join('') || '<p class="empty">No recommendations in this time window.</p>'}</section>`).join('')}</div>`;
+  const progressClass = v => v === 'In Progress' ? 'amber' : ['Verified', 'Completed'].includes(v) ? 'green' : v === 'Closed' ? 'blue' : '';
+  const dateText = v => v ? new Date(v + 'T00:00:00Z').toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'}) : '';
+  function plan(report, items, trackOf) {
+    if (!items.length) return '<p class="empty" role="status">No actions match this selection.</p>';
+    return `<div class="table-wrap dash-wrap"><table class="dash-table plan-table"><thead><tr><th scope="col">Severity</th><th scope="col">Finding</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Target date</th><th scope="col">Recommended corrective action</th><th scope="col">Additional comments</th><th scope="col"><span class="sr-only">Explore</span></th></tr></thead><tbody>${items.map(a => {
+      const f = report.findings.find(x => x.id === a.findingId), t = trackOf(a.findingId);
+      return `<tr class="dash-row" data-explore="${esc(a.findingId)}" tabindex="0" aria-label="Update action plan: ${esc(f ? title(f) : a.action)}"><td>${f ? `<span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span>` : ''}</td><td><strong>${esc(f ? title(f) : a.findingId)}</strong></td><td><span class="pill ${progressClass(t.status)}">${esc(t.status)}</span></td><td>${t.owner ? esc(t.owner) : '<span class="muted">Unassigned</span>'}</td><td>${t.date ? esc(dateText(t.date)) : '<span class="muted">Not set</span>'}</td><td class="dash-action"><p>${esc(a.action)}</p><small><b>Expected outcome:</b> ${esc(a.expectedOutcome)}</small></td><td class="plan-comment"><textarea data-row-comment="${esc(a.findingId)}" rows="2" placeholder="Add a comment" aria-label="Additional comments for ${esc(f ? title(f) : a.action)}">${esc(t.comments)}</textarea></td><td><span class="arrow" aria-hidden="true">↗</span></td></tr>`;
+    }).join('')}</tbody></table></div>`;
   }
-  window.PulseBusiness = {title, impact, status, metrics, decisions, material, plan, priorities};
+  const actionFor = (report, finding) => actions(report).find(a => a.findingId === finding.id);
+  const sevClass = s => ['critical','high'].includes(s) ? 'red' : s === 'medium' ? 'amber' : 'blue';
+  const typeClass = f => f.classification === 'confirmed-risk' ? 'red' : 'amber';
+  function dashboard(report, findings) {
+    if (!findings.length) return '<p class="empty" role="status">No findings match this selection.</p>';
+    return `<div class="table-wrap dash-wrap"><table class="dash-table"><thead><tr><th scope="col">Severity</th><th scope="col">Finding</th><th scope="col">Type</th><th scope="col">Action Plan</th><th scope="col"><span class="sr-only">Explore</span></th></tr></thead><tbody>${findings.map(f => {
+      const a = actionFor(report, f);
+      return `<tr class="dash-row" data-explore="${esc(f.id)}" tabindex="0" aria-label="Explore ${esc(title(f))}"><td><span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span></td><td><strong>${esc(title(f))}</strong><small>${esc(impact(f))}</small></td><td><span class="pill ${typeClass(f)}">${esc(status(f))}</span></td><td class="dash-action"><p>${esc(a ? a.action : decision(f))}</p>${a ? `<small><b>Expected outcome:</b> ${esc(a.expectedOutcome)}</small>` : ''}</td><td><span class="arrow" aria-hidden="true">↗</span></td></tr>`;
+    }).join('')}</tbody></table></div>`;
+  }
+  const progress = ['Not Started', 'In Progress', 'Verified', 'Completed', 'Closed'];
+  const opt = (value, selected) => `<option value="${esc(value)}" ${value === selected ? 'selected' : ''}>${esc(value)}</option>`;
+  function tracker(f, track, owners) {
+    return `<div class="plan-form" data-track="${esc(f.id)}"><label class="plan-field"><span>Owner</span><select data-field="owner"><option value="" ${track.owner ? '' : 'selected'}>Unassigned</option>${owners.map(o => opt(o, track.owner)).join('')}<option value="__new">+ Add new name…</option></select></label><div class="add-owner" hidden><input type="text" data-new-owner placeholder="Full name" aria-label="New owner name"><button type="button" class="button primary" data-add-owner>Add</button></div>
+      <label class="plan-field"><span>Target date</span><input type="date" data-field="date" value="${esc(track.date)}"></label>
+      <label class="plan-field"><span>Completion / validation</span><select data-field="status">${progress.map(v => opt(v, track.status)).join('')}</select></label>
+      <label class="plan-field"><span>Additional comments</span><textarea data-field="comments" rows="3" placeholder="Add context, decisions or links to evidence">${esc(track.comments)}</textarea></label></div>`;
+  }
+  function explore(report, f, track, owners) {
+    const a = actionFor(report, f), bucket = report.remediationPlan.buckets.find(b => b.items.includes(a));
+    return `<div class="explore-head"><span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span><span class="pill ${typeClass(f)}">${esc(status(f))}</span></div><h2 id="explore-title">${esc(title(f))}</h2>
+      <div class="explore-grid"><section class="explore-card"><p class="eyebrow">Finding</p><h3>Why it matters</h3><p>${esc(impact(f))}</p><h3>Technical finding</h3><p>${esc(f.title)}</p><h3>${report.demo?.illustrative ? 'Illustrative evidence' : 'Observed evidence'}</h3><div class="evidence">${esc(f.evidence.summary)}</div><h3>Affected resources</h3><p>${esc(f.affectedResources.map(x => x.displayName).join(', ') || 'Not specified')}</p>${f.validationSteps.length ? `<details class="technical-evidence"><summary>How to validate</summary><ul>${f.validationSteps.map(v => `<li>${esc(v)}</li>`).join('')}</ul></details>` : ''}</section>
+      <section class="explore-card"><p class="eyebrow">Action Plan</p>${bucket ? `<span class="pill">${esc(bucket.name)} · ${esc(bucket.window)}</span>` : ''}<h3>Recommended change</h3><p>${esc(a ? a.action : f.recommendation)}</p>${a ? `<h3>Expected outcome</h3><p>${esc(a.expectedOutcome)}</p>` : ''}<h3>Next decision</h3><p>${esc(decision(f))}</p>${tracker(f, track, owners)}</section></div>
+      <p class="section-note">${f.classification === 'requires-validation' ? 'Engineering validation is needed before treating this as a confirmed risk.' : 'Review the observed configuration and its context with your technical contact.'}${report.demo?.illustrative ? ' Fictional example · connector not implemented.' : ''}</p>`;
+  }
+
+  /* Summary charts above the Findings and Action Plans tables. Each mark is a button that sets the matching filter. */
+  const sevOrder = ['critical', 'high', 'medium', 'low', 'info'];
+  const sevColor = {critical: '#ffa3ae', high: '#f27b8e', medium: '#d95e75', low: '#b84a63', info: '#963f5c'};
+  const typeCols = [['confirmed-risk', 'Confirmed risk'], ['requires-validation', 'Needs validation'], ['advisory', 'Advisory']];
+  const statusColor = {'Not Started': '#8a8ab0', 'In Progress': '#f2ce86', Verified: '#3fa58e', Completed: '#7addc6', Closed: '#b7a6f0'};
+  const cap = v => v[0].toUpperCase() + v.slice(1);
+  const pct = (n, total) => total ? Math.round(n / total * 100) : 0;
+  function stacked(parts, total, label) {
+    const shown = parts.filter(p => p.count);
+    return `<div class="stack" role="group" aria-label="${esc(label)}">${shown.map(p => `<button type="button" class="stack-seg ${p.dim ? 'dim' : ''}" style="flex:${p.count};--c:${p.color}" data-chart-filter="${esc(p.filter)}" data-tip="${esc(p.label)} · ${p.count} (${pct(p.count, total)}%)" aria-label="${esc(p.label)}: ${p.count}. Filter the table">${p.count / total >= .08 ? `<span>${p.count}</span>` : ''}</button>`).join('')}</div>
+      <ul class="chart-legend">${parts.map(p => `<li><button type="button" class="${p.dim ? 'dim' : ''}" data-chart-filter="${esc(p.filter)}" ${p.count ? '' : 'disabled'}><i style="--c:${p.color}"></i>${esc(p.label)} <b>${p.count}</b></button></li>`).join('')}</ul>`;
+  }
+  function findingCharts(report, filters) {
+    const fs = report.findings, total = fs.length;
+    const parts = sevOrder.map(v => ({label: cap(v), count: fs.filter(f => f.severity === v).length, color: sevColor[v], filter: 'severity:' + v, dim: filters.severity !== 'all' && filters.severity !== v}));
+    const rows = sevOrder.filter(v => fs.some(f => f.severity === v));
+    const max = Math.max(1, ...rows.flatMap(v => typeCols.map(([t]) => fs.filter(f => f.severity === v && f.classification === t).length)));
+    const matrix = `<table class="matrix"><caption class="sr-only">Findings by severity and type</caption><thead><tr><th scope="col"><span class="sr-only">Severity</span></th>${typeCols.map(([, l]) => `<th scope="col">${l}</th>`).join('')}</tr></thead><tbody>${rows.map(v => `<tr><th scope="row">${cap(v)}</th>${typeCols.map(([t, l]) => {
+      const n = fs.filter(f => f.severity === v && f.classification === t).length, a = n ? .16 + .64 * n / max : 0;
+      const active = filters.severity === v && filters.type === t, dim = (filters.severity !== 'all' || filters.type !== 'all') && !active;
+      return `<td><button type="button" class="cell ${a > .5 ? 'strong' : ''} ${active ? 'active' : ''} ${dim ? 'dim' : ''}" style="--a:${a.toFixed(2)}" data-chart-filter="matrix:${v}|${t}" data-tip="${cap(v)} · ${l} · ${n}" aria-label="${cap(v)}, ${l}: ${n}. Filter the table" ${n ? '' : 'disabled'}>${n || '–'}</button></td>`;
+    }).join('')}</tr>`).join('')}</tbody></table>`;
+    const critical = fs.filter(f => f.severity === 'critical').length;
+    return `<div class="chart-row three"><article class="chart-card"><header><h3>Findings by severity</h3><p><strong>${critical}</strong> of ${total} are critical</p></header>${donut(parts, total)}</article>
+      <article class="chart-card"><header><h3>Severity × type</h3><p>Confirmed risks versus findings that still need validation</p></header>${matrix}</article>
+      ${coverageChart(report)}</div>`;
+  }
+  function coverageChart(report) {
+    const all = report.coverage.collectors, ok = all.filter(c => c.status === 'success'), gaps = all.filter(c => c.status !== 'success');
+    const preview = Boolean(report.demo?.illustrative), share = all.length ? ok.length / all.length : 0;
+    const r = 46, c = 2 * Math.PI * r, len = share * c, name = v => String(v).replaceAll('_', ' ');
+    return `<article class="chart-card"><header><h3>Assessment coverage</h3><p><strong>${pct(ok.length, all.length)}%</strong> of ${preview ? 'areas illustrated' : 'areas checked'}</p></header>
+      <div class="donut-wrap"><svg class="donut" viewBox="0 0 120 120" role="img" aria-label="${ok.length} of ${all.length} areas checked"><circle cx="60" cy="60" r="${r}" class="coverage-rest"></circle>${ok.length ? `<circle cx="60" cy="60" r="${r}" class="coverage-done" stroke-dasharray="${len.toFixed(2)} ${(c - len).toFixed(2)}" transform="rotate(-90 60 60)" data-tip="Checked · ${ok.length} of ${all.length}"></circle>` : ''}<text x="60" y="58" class="donut-total">${ok.length}/${all.length}</text><text x="60" y="75" class="donut-label">${preview ? 'illustrated' : 'checked'}</text></svg>
+      <div class="coverage-detail"><ul class="chart-legend vertical"><li><span class="legend-row"><i style="--c:#7addc6"></i>Checked <b>${ok.length}</b></span></li><li><span class="legend-row"><i style="--c:#727296"></i>Not checked <b>${gaps.length}</b></span></li></ul>
+      ${gaps.length ? `<p class="coverage-note">Unknown, not safe:</p><div class="coverage-gaps">${gaps.map(g => `<span class="pill amber" data-tip="${esc(name(g.collector))} · ${esc(g.status)}">${esc(name(g.collector))}</span>`).join('')}</div>` : '<p class="coverage-note">No collection gaps reported. This does not prove every resource was covered.</p>'}
+      <button type="button" class="textlink" data-view="nis2" data-evidence-limits>Review evidence limits</button></div></div></article>`;
+  }
+  function donut(parts, total) {
+    const r = 46, c = 2 * Math.PI * r, gap = parts.filter(p => p.count).length > 1 ? 2.5 : 0;
+    let offset = 0;
+    const arcs = parts.filter(p => p.count).map(p => {
+      const len = p.count / total * c, arc = `<circle class="donut-seg ${p.dim ? 'dim' : ''}" cx="60" cy="60" r="${r}" stroke="${p.color}" stroke-dasharray="${Math.max(0, len - gap).toFixed(2)} ${(c - Math.max(0, len - gap)).toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}" data-chart-filter="${esc(p.filter)}" data-tip="${esc(p.label)} · ${p.count} (${pct(p.count, total)}%)" tabindex="0" role="button" aria-label="${esc(p.label)}: ${p.count}. Filter the table"></circle>`;
+      offset += len; return arc;
+    }).join('');
+    return `<div class="donut-wrap"><svg class="donut" viewBox="0 0 120 120" aria-label="Findings by severity"><g transform="rotate(-90 60 60)">${arcs}</g><text x="60" y="58" class="donut-total">${total}</text><text x="60" y="75" class="donut-label">findings</text></svg>
+      <ul class="chart-legend vertical">${parts.map(p => `<li><button type="button" class="${p.dim ? 'dim' : ''}" data-chart-filter="${esc(p.filter)}" ${p.count ? '' : 'disabled'}><i style="--c:${p.color}"></i>${esc(p.label)} <b>${p.count}</b><span class="legend-pct">${pct(p.count, total)}%</span></button></li>`).join('')}</ul></div>`;
+  }
+  const dueBuckets = [['overdue', 'Overdue', '#ff8e9c'], ['soon', 'Next 30 days', '#f2ce86'], ['quarter', '31–90 days', '#4fbfa6'], ['later', 'Later', '#b7a6f0'], ['none', 'No date', '#727296']];
+  function dueBucket(t) {
+    if (['Completed', 'Closed'].includes(t.status)) return 'done';
+    if (!t.date) return 'none';
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const days = Math.round((new Date(t.date + 'T00:00:00') - today) / 864e5);
+    return days < 0 ? 'overdue' : days <= 30 ? 'soon' : days <= 90 ? 'quarter' : 'later';
+  }
+  function planCharts(report, trackOf, owners, filters) {
+    const items = actions(report), total = items.length, tracks = items.map(a => trackOf(a.findingId));
+    const parts = Object.keys(statusColor).map(v => ({label: v, count: tracks.filter(t => t.status === v).length, color: statusColor[v], filter: 'status:' + v, dim: filters.status !== 'all' && filters.status !== v}));
+    const done = tracks.filter(t => ['Completed', 'Closed'].includes(t.status)).length;
+    const unassigned = tracks.filter(t => !t.owner).length;
+    const rows = [...owners.map(o => [o, tracks.filter(t => t.owner === o).length, o]), ['Unassigned', unassigned, '']];
+    const max = Math.max(1, ...rows.map(r => r[1]));
+    return `<div class="chart-row three"><article class="chart-card"><header><h3>Progress by status</h3><p><strong>${done}</strong> of ${total} completed or closed</p></header>${stacked(parts, total, 'Actions by status')}</article>
+      <article class="chart-card"><header><h3>Ownership</h3><p><strong>${unassigned}</strong> of ${total} actions have no owner</p></header><div class="owner-bars">${rows.map(([label, n, value]) => {
+        const dim = filters.owner !== 'all' && filters.owner !== value;
+        return `<button type="button" class="owner-bar ${value ? '' : 'unassigned'} ${dim ? 'dim' : ''}" data-chart-filter="owner:${esc(value)}" data-tip="${esc(label)} · ${n} action${n === 1 ? '' : 's'}" aria-label="${esc(label)}: ${n} actions. Filter the table"><span class="owner-name">${esc(label)}</span><span class="owner-track"><span style="width:${n ? Math.max(2, n / max * 100) : 0}%"></span></span><b>${n}</b></button>`;
+      }).join('')}</div></article>
+      <article class="chart-card"><header><h3>Due-date timeline</h3><p><strong>${tracks.filter(t => dueBucket(t) === 'overdue').length}</strong> overdue · open actions only</p></header><div class="owner-bars">${(() => {
+        const counts = dueBuckets.map(([key]) => tracks.filter(t => dueBucket(t) === key).length), top = Math.max(1, ...counts);
+        return dueBuckets.map(([key, label, color], i) => `<button type="button" class="owner-bar ${filters.due !== 'all' && filters.due !== key ? 'dim' : ''}" style="--c:${color}" data-chart-filter="due:${key}" data-tip="${label} · ${counts[i]} action${counts[i] === 1 ? '' : 's'}" aria-label="${label}: ${counts[i]} actions. Filter the table"><span class="owner-name">${label}</span><span class="owner-track"><span style="width:${counts[i] ? Math.max(2, counts[i] / top * 100) : 0}%"></span></span><b>${counts[i]}</b></button>`).join('');
+      })()}</div></article></div>`;
+  }
+  window.PulseBusiness = {title, impact, status, metrics, decisions, material, plan, priorities, dashboard, explore, actions, findingCharts, planCharts, dueBucket, dueBuckets};
 })();
 
 </script>
 <script>
 'use strict';
 const $=id=>document.getElementById(id),esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:window.PulseExperience.audience==='business'?'nis2':'overview',query:'',severity:'all'};
+const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:window.PulseExperience.audience==='business'?'nis2':'overview',query:'',severity:'all',type:'all',planQuery:'',planStatus:'all',planOwner:'all',planSeverity:'all',planDue:'all',clCategory:'all',clStatus:'all',clOwner:'all',clSource:'all'};
+// Action-plan tracking entered in the explore dialog; kept in memory for this page session only.
+const owners=['Jan Czajkowski','Nathanael Chu'],tracking={};
+const trackKey=id=>state.provider+'/'+state.scenario+'/'+id;
+// Pre-filled sample tracking so the Action Plans charts have something to show; dates are relative to today.
+const samplePlan=[['Jan Czajkowski','In Progress',-6,'Change window requested with the platform team.'],['Nathanael Chu','Completed',-12,''],['Jan Czajkowski','Not Started',9,''],['','Not Started',null,''],['Nathanael Chu','In Progress',21,'Waiting on application owner sign-off.'],['Jan Czajkowski','Verified',3,''],['','Not Started',45,''],['Nathanael Chu','Not Started',75,''],['Jan Czajkowski','Closed',-20,'Accepted as a documented exception.'],['','Not Started',120,'']];
+const isoIn=days=>{const d=new Date();d.setDate(d.getDate()+days);return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
+function seedTrack(id){const i=window.PulseBusiness.actions(report()).findIndex(a=>a.findingId===id);if(i<0)return{owner:'',date:'',status:'Not Started',comments:''};const[owner,status,days,comments]=samplePlan[i%samplePlan.length];return{owner,status,date:days===null?'':isoIn(days),comments};}
+const track=id=>tracking[trackKey(id)]??=seedTrack(id);
+// NIS2 evidence checklist state, pre-filled with sample statuses and owners; in memory only.
+const checklistState={};
+const checklistOf=item=>checklistState[trackKey('nis2:'+item.id)]??=window.PulseNIS2.seed(item,window.PulseNIS2.checklist.indexOf(item));
 const severityOrder={critical:0,high:1,medium:2,low:3,info:4};
 const business=()=>window.PulseExperience.audience==='business';
 const report=()=>window.PULSE_REPORTS[state.provider][state.scenario];
@@ -4892,6 +5450,7 @@ function render(){
   const success=r.coverage.collectors.filter(c=>c.status==='success').length,total=r.coverage.collectors.length;
   $('sample-context').textContent=provider.name+' · '+provider.scope+(preview?'':' · Example collected '+new Date(r.provider.collectedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}));
   $('scenario-description').textContent=window.PulseProviders.scenarios[state.scenario].description;
+  if(business())$('demo-banner-context').textContent=$('sample-context').textContent;
   $('provider-status').innerHTML=preview?`<div class="notice neutral"><strong>${esc(provider.name)} · Illustrative preview.</strong> Explore fictional findings and NIS2 material. The connector and scoring are not implemented.${state.provider==='ping'?' This example covers PingOne customer identity.':''}</div>`:'';
   $('report-origin').textContent=preview?'Hand-authored UI examples; no collection or analysis was performed. Each scenario is independent and does not prove remediation.':'Auth0 and Okta examples are generated by the CLI from synthetic repository fixtures. Each scenario is independent and does not prove remediation.';
   $('run-demo').hidden=business()||preview;
@@ -4913,18 +5472,20 @@ function render(){
   if(business()&&state.view==='nis2')$('assessment-view').querySelector('.nis2-focus').after(summary);
 }
 function renderView(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='overview'){view.innerHTML=`<div class="overview-grid"><section class="panel"><div class="panel-head"><div><h2>Start with these findings</h2><p>Highest severity first · evidence behind every result</p></div><button class="textlink" data-view="findings">View all ↗</button></div>${sorted().slice(0,4).map(row).join('')||'<p class="empty">No findings in this sample. Review positive signals and collection boundaries before drawing conclusions.</p>'}</section><section class="panel"><div class="panel-head"><div><h2>${r.demo?.illustrative?'What this preview covers':'Where the score comes from'}</h2><p>${r.demo?.illustrative?'Illustrated areas · no engine rules or scores':'Weighted category points, as reported by the engine'}</p></div></div>${r.categories.map(c=>`<div class="bar-row"><div class="bar-label"><span>${esc(c.name)}</span><b>${c.assessed?(r.demo?.illustrative?'Illustrated':`${c.score??0} / ${c.weight}`):'Not assessed'}</b></div><div class="bar-track" ${r.demo?.illustrative?'hidden':''}><span style="width:${c.assessed&&!r.demo?.illustrative?Math.max(0,Math.min(100,(c.score||0)/c.weight*100)):0}%"></span></div></div>`).join('')}<p class="section-note">Provider scoring models differ. Scores are posture indicators, not a certification or a direct provider ranking.</p></section></div><section class="panel" style="margin-top:20px"><div class="panel-head"><h2>Positive signals</h2><span class="pill green">Keep what is working</span></div>${r.positiveSignals.length?r.positiveSignals.slice(0,3).map(s=>`<p style="font-size:14px;margin-top:10px"><strong>${esc(s.title)}</strong> <span class="muted">${esc(s.detail)}</span></p>`).join(''):'<p class="empty">No positive signals are supplied for this sample.</p>'}</section>`;}
-else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${business()?'Findings':'Findings & evidence'}</h2><p>${business()?'Review business impact, then open a finding for the next action.':'Inspect classification, evidence and validation needs.'}</p></div><span class="pill">${r.findings.length} total</span></div><div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">All severities</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select></div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;renderResults();});}
+else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${business()?'Findings':'Findings & evidence'}</h2><p>${business()?'Every finding with its severity, type and recommended action plan. Select a finding for the full detail.':'Inspect classification, evidence and validation needs.'}</p></div><span class="pill">${r.findings.length} ${business()?'Total Findings':'total'}</span></div>${business()?window.PulseBusiness.findingCharts(r,{severity:state.severity,type:state.type}):''}<div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">${business()?'Severity':'All severities'}</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select>${business()?`<select id="type-filter" aria-label="Filter by type"><option value="all">Type</option>${[['confirmed-risk','Confirmed configuration risk'],['requires-validation','Needs validation'],['advisory','Advisory · review context']].map(([v,l])=>`<option value="${v}" ${state.type===v?'selected':''}>${l}</option>`).join('')}</select>`:''}</div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;business()?renderView():renderResults();});$('type-filter')?.addEventListener('change',e=>{state.type=e.target.value;renderView();});}
 else if(state.view==='coverage'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${r.demo?.illustrative?'Example coverage':'What was actually collected'}</h2><p>${r.demo?.illustrative?'Simulated outcomes, not live collection. Required permissions have not been defined.':'Collector success does not guarantee exhaustive resource coverage.'}</p></div><span class="pill ${r.coverage.partial?'amber':'green'}">${r.coverage.partial?'Partial coverage':'No reported collector gaps'}</span></div><div class="table-wrap"><table><thead><tr><th>Collector</th><th>Reported state</th><th>Required scopes</th><th>Count</th></tr></thead><tbody>${r.coverage.collectors.map(c=>`<tr><td>${esc(c.collector)}</td><td><span class="pill ${c.status==='success'?'green':'amber'}">${esc(c.status)}</span></td><td><code>${esc((c.requiredScopes||[]).join(', ')||'Not specified')}</code></td><td>${c.count??'—'}</td></tr>`).join('')}</tbody></table></div>${r.coverage.missingScopes.length?`<p class="section-note"><strong>Missing scopes:</strong> ${esc(r.coverage.missingScopes.join(', '))}</p>`:''}<h3 style="margin-top:24px">What this assessment does not establish</h3><ul class="section-note">${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></section>`;}
-else if(state.view==='plan'&&business()){view.innerHTML=window.PulseBusiness.plan(r);}
+else if(state.view==='plan'&&business()){const items=window.PulseBusiness.actions(r),progress=['Not Started','In Progress','Verified','Completed','Closed'];view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Action Plans</h2><p>Track the owner, target date and progress of each recommended action. Select a row to update it. Owners, dates, statuses and comments are pre-filled sample data.</p></div><span class="pill">${items.length} Total Actions</span></div>${window.PulseBusiness.planCharts(r,track,owners,{status:state.planStatus,owner:state.planOwner,due:state.planDue})}<div class="filters"><input id="plan-search" type="search" aria-label="Search actions" placeholder="Search finding or action" value="${esc(state.planQuery)}"><select id="plan-severity" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(v=>`<option value="${v}" ${state.planSeverity===v?'selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select><select id="plan-status" aria-label="Filter by status"><option value="all">Status</option>${progress.map(v=>`<option ${state.planStatus===v?'selected':''}>${v}</option>`).join('')}</select><select id="plan-owner" aria-label="Filter by owner"><option value="all">Owner</option><option value="" ${state.planOwner===''?'selected':''}>Unassigned</option>${owners.map(o=>`<option ${state.planOwner===o?'selected':''}>${esc(o)}</option>`).join('')}</select><select id="plan-due" aria-label="Filter by due date"><option value="all">Due date</option>${window.PulseBusiness.dueBuckets.map(([v,l])=>`<option value="${v}" ${state.planDue===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="plan-results"></div></section>`;renderPlanResults();$('plan-search').addEventListener('input',e=>{state.planQuery=e.target.value;renderPlanResults();});$('plan-severity').addEventListener('change',e=>{state.planSeverity=e.target.value;renderPlanResults();});$('plan-status').addEventListener('change',e=>{state.planStatus=e.target.value;renderView();});$('plan-owner').addEventListener('change',e=>{state.planOwner=e.target.value;renderView();});$('plan-due').addEventListener('change',e=>{state.planDue=e.target.value;renderView();});}
 else{view.innerHTML=`<div class="notice neutral"><strong>Action Plans · recommended next steps.</strong> Assign an owner, implement the change and collect validation evidence outside this demo. No completion or ownership is recorded in these samples.</div><div class="plan-grid">${r.remediationPlan.buckets.map(b=>`<section class="panel"><div class="panel-head"><div><h2>${esc(b.name)}</h2><p>${esc(b.window)}</p></div></div>${b.items.map(i=>`<div class="plan-item">${i.severity?severityPill(i.severity):''}<p style="margin-top:9px">${esc(i.action)}</p><small>Expected outcome: ${esc(i.expectedOutcome)}</small><dl class="action-status"><div><dt>Owner</dt><dd>Unassigned</dd></div><div><dt>Status</dt><dd>Recommended</dd></div><div><dt>Validation</dt><dd>Not verified</dd></div></dl><button class="textlink" data-finding="${esc(i.findingId)}">${esc(i.findingId)} · Review evidence ↗</button></div>`).join('')||'<p class="empty">No actions in this bucket.</p>'}</section>`).join('')}</div>`;}}
-function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(f.title+' '+f.id+' '+(business()?window.PulseBusiness.title(f)+' '+f.businessRisk:'')).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=matches.map(row).join('')||'<p class="empty" role="status">No findings match this selection.</p>';}
+function renderPlanResults(){const r=report(),q=state.planQuery.toLowerCase(),items=window.PulseBusiness.actions(r).filter(a=>{const t=track(a.findingId),f=r.findings.find(x=>x.id===a.findingId);return(state.planDue==='all'||window.PulseBusiness.dueBucket(t)===state.planDue)&&(state.planSeverity==='all'||f?.severity===state.planSeverity)&&(state.planStatus==='all'||t.status===state.planStatus)&&(state.planOwner==='all'||t.owner===state.planOwner)&&((f?window.PulseBusiness.title(f):'')+' '+a.findingId+' '+a.action+' '+t.comments).toLowerCase().includes(q);});$('plan-results').innerHTML=window.PulseBusiness.plan(r,items,track);}
+function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(!business()||state.type==='all'||f.classification===state.type)&&(f.title+' '+f.id+' '+(business()?window.PulseBusiness.title(f)+' '+f.businessRisk:'')).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=business()?window.PulseBusiness.dashboard(report(),matches):matches.map(row).join('')||'<p class="empty" role="status">No findings match this selection.</p>';}
+function exploreFinding(id){const f=report().findings.find(x=>x.id===id);if(!f)return;$('explore-detail').innerHTML=window.PulseBusiness.explore(report(),f,track(id),owners);$('explore-dialog').showModal();}
 function finding(id){
   const f=report().findings.find(x=>x.id===id);if(!f)return;
   const technical=`${business()?`<h3>Technical finding</h3><p>${esc(f.title)}</p>`:''}<div class="finding-meta"><span class="pill">${esc(f.classification)}</span><span class="pill">${esc(f.confidence)} confidence</span></div><p class="section-note">${esc(f.id)} · ${report().demo?.illustrative?'illustrative finding · no score calculated':'score impact '+f.scoreImpact}</p><h3>${report().demo?.illustrative?'Illustrative evidence':'Observed evidence'}</h3><div class="evidence">${esc(f.evidence.summary)}</div><h3>How to validate</h3>${f.validationSteps.length?`<ul>${f.validationSteps.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:'<p class="muted">The current report does not supply validation steps for this finding. Engineering review is required.</p>'}${f.falsePositiveNotes.length?`<h3>Context & exceptions</h3><ul>${f.falsePositiveNotes.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:''}<h3>Affected resources</h3><p>${esc(f.affectedResources.map(x=>x.displayName).join(', ')||'Not specified')}</p>`;
   $('finding-detail').innerHTML=`${severityPill(f.severity)}<h2 id="finding-title">${esc(business()?window.PulseBusiness.title(f):f.title)}</h2>${report().demo?.illustrative?'<p class="notice neutral">Fictional example · connector not implemented · no environment assessed.</p>':''}<h3>Why it matters</h3><p>${esc(business()?window.PulseBusiness.impact(f):f.businessRisk)}</p><h3>Recommended action</h3><p>${esc(f.recommendation)}</p>${business()?`<p class="section-note">${f.classification==='requires-validation'?'Engineering validation is needed before treating this as a confirmed risk.':'Review the observed configuration and its context with your technical contact.'}</p><details class="technical-evidence"><summary>Technical evidence & validation</summary>${technical}</details>`:technical}`;
   $('finding-dialog').showModal();
 }
-document.addEventListener('click',e=>{const v=e.target.closest('[data-view]'),f=e.target.closest('[data-finding]');if(v){state.view=business()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}if(f)finding(f.dataset.finding);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-finding').onclick=()=>$('finding-dialog').close();$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+document.addEventListener('click',e=>{const v=e.target.closest('[data-view]'),f=e.target.closest('[data-finding]');if(v){state.view=business()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}const x=e.target.closest('textarea,input,select')?null:e.target.closest('[data-explore]');if(x)exploreFinding(x.dataset.explore);else if(f)finding(f.dataset.finding);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-finding').onclick=()=>$('finding-dialog').close();$('close-explore').onclick=()=>{$('explore-dialog').close();refreshBehindExplore();};$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 const steps=['Read local assessment settings','Collect provider configuration · GET only','Normalize snapshot & collection status','Run provider-specific deterministic rules','Calculate scores & explain findings','Render local reports'];let scanStep=0,scanTimer=null;function scanDraw(){document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',scanStep);$('scan-progress').style.width=(scanStep/6*100)+'%';$('scan-steps').innerHTML=steps.map((s,i)=>`<li class="${i===scanStep?'active':''}"><span>${s}</span><span>${i<scanStep?'✓':i===scanStep?'…':'—'}</span></li>`).join('');$('scan-status').textContent=scanStep===6?'Walkthrough complete. The workspace shows the selected fixture report.':`Step ${scanStep+1} of 6 · simulated processing`;$('scan-pause').textContent=scanStep===6?'Replay':scanTimer?'Pause':'Continue';}function pauseScan(){clearInterval(scanTimer);scanTimer=null;}function playScan(){scanTimer=setInterval(()=>{scanStep++;if(scanStep>=6)pauseScan();scanDraw();},850);scanDraw();}$('run-demo').onclick=()=>{pauseScan();scanStep=0;$('scan-dialog').showModal();playScan();};$('scan-pause').onclick=()=>{if(scanStep===6)scanStep=0;if(scanTimer)pauseScan();else playScan();scanDraw();};$('scan-close').onclick=()=>$('scan-dialog').close();$('scan-dialog').addEventListener('close',pauseScan);
 function renderTabs(){
   const views=business()?[['nis2','NIS2 Material'],['findings','Findings'],['plan','Action Plans']]:[['overview','Overview'],['findings','Findings'],['coverage','Coverage'],['plan','Action Plans'],['nis2','NIS2 Material']];
@@ -4934,12 +5495,20 @@ function renderTabs(){
   $('review-coverage').textContent=business()?'Scope & evidence':'Review coverage';
 }
 function renderMaterial(){
-  if(business()){$('assessment-view').innerHTML=window.PulseBusiness.material(report(),window.PULSE_CONTROLS[state.provider][state.scenario]);return;}
+  if(business()){
+    const r=report(),N=window.PulseNIS2,all=N.checklist.map(item=>({item,state:checklistOf(item)}));
+    const rows=all.filter(({item,state:c})=>(state.clCategory==='all'||item.category===state.clCategory)&&(state.clStatus==='all'||c.status===state.clStatus)&&(state.clOwner==='all'||c.owner===state.clOwner)&&(state.clSource==='all'||item.source===state.clSource));
+    const totals={completed:all.filter(x=>x.state.status==='Completed').length,total:all.length};
+    const filters={category:state.clCategory,status:state.clStatus,owner:state.clOwner,source:state.clSource};
+    $('assessment-view').innerHTML=window.PulseBusiness.material(r,window.PULSE_CONTROLS[state.provider][state.scenario],N.checklistSection(rows,filters,owners,totals),N.obligations(r,checklistOf));
+    [['checklist-category','clCategory'],['checklist-status','clStatus'],['checklist-owner','clOwner'],['checklist-source','clSource']].forEach(([id,key])=>$(id).addEventListener('change',e=>{state[key]=e.target.value;renderMaterialKeep(id);}));
+    return;
+  }
   const r=report(),uncollected=r.coverage.collectors.filter(c=>c.status!=='success');
   $('assessment-view').innerHTML=`<section class="material-hero"><div><span class="eyebrow">NIS2 Material</span><h2>Bring the evidence together.</h2><p>Prepare a clear record of what was checked, what needs attention and what still needs verification.</p><span class="pill light">Sample export · proposed capability</span></div><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button></section><div class="material-grid">${[['01','What was checked',r.coverage.collectors.length+' collectors listed, with their status, scope and collection date.'],['02','Gaps & blind spots',r.findings.length+' findings · '+uncollected.length+' unsuccessful collectors.'],['03','How gaps were addressed','Recommended actions are available. Completed work, owners and validation evidence are not recorded.'],['04','Controls & policies',r.demo?.illustrative?'Illustrative settings only; no real configuration has been collected.':'Observed MFA and protection settings, with unavailable evidence clearly marked.']].map(([n,title,text])=>`<article class="panel"><span class="material-number">${n}</span><h3>${title}</h3><p>${text}</p></article>`).join('')}</div><div class="notice neutral"><strong>For auditor review.</strong> This sample pack supports evidence preparation. It does not certify NIS2 compliance. Organizational policies and bot protection evidence have not been supplied.</div><details class="material-scope"><summary>Review collection gaps and assessment limits</summary><h3>Unsuccessful collectors</h3>${uncollected.length?`<ul>${uncollected.map(c=>`<li>${esc(c.collector)} · ${esc(c.status)}</li>`).join('')}</ul>`:'<p>No collector gaps reported. Collection success does not guarantee exhaustive coverage.</p>'}<h3>Limitations</h3><ul>${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></details>`;
 }
 function generatePack(){
-    currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent);
+    currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent,{trackOf:track,nis2:business()?window.PulseNIS2.packData(report(),track,checklistOf):null});
     $('pack-preview').innerHTML=window.PulseEvidence.content(currentPack,true);
     if(currentPackURL)URL.revokeObjectURL(currentPackURL);
     currentPackURL=URL.createObjectURL(new Blob([window.PulseEvidence.html(currentPack)],{type:'text/html;charset=utf-8'}));
@@ -4973,10 +5542,100 @@ if(business()){
   $('workspace-heading').textContent='Know what needs your attention.';
   $('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence for review.';
   document.title='Identity Pulse — Business workspace';
+  const selectors=document.createElement('div');selectors.className='topbar-context';
+  selectors.append(...document.querySelectorAll('.contextbar > label'));
+  document.querySelector('.topbar > p').after(selectors);
+  // A dismissible demo banner replaces the explainer box; dismissal lasts for this browser tab.
+  document.querySelector('.contextbar').hidden=true;
+  let dismissed=false;try{dismissed=sessionStorage.getItem('pulse-demo-banner')==='closed';}catch{}
+  const banner=document.createElement('div');banner.className='notice neutral demo-banner';banner.id='demo-banner';banner.setAttribute('role','note');banner.hidden=dismissed;
+  banner.innerHTML='<p><strong>Fictional assessment · <span id="demo-banner-context"></span>.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</p><button type="button" class="banner-close" aria-label="Dismiss this message">×</button>';
+  $('provider-status').before(banner);
+  banner.querySelector('.banner-close').onclick=()=>{banner.hidden=true;try{sessionStorage.setItem('pulse-demo-banner','closed');}catch{}};
 }else document.title='Identity Pulse — Tech SPOC workspace';
 function tabOrientation(){$('assessment-tabs').setAttribute('aria-orientation',business()&&innerWidth>850?'vertical':'horizontal');}
 window.addEventListener('resize',tabOrientation);tabOrientation();
 render();
+
+$('explore-detail').addEventListener('change',e=>{
+  const form=e.target.closest('[data-track]'),field=e.target.dataset.field;if(!form||!field)return;
+  if(field==='owner'&&e.target.value==='__new'){e.target.value=track(form.dataset.track).owner;const add=form.querySelector('.add-owner');add.hidden=false;add.querySelector('input').focus();return;}
+  track(form.dataset.track)[field]=e.target.value;refreshBehindExplore();
+});
+$('explore-detail').addEventListener('input',e=>{const form=e.target.closest('[data-track]');if(form&&e.target.dataset.field==='comments')track(form.dataset.track).comments=e.target.value;});
+function addOwner(form){
+  const input=form.querySelector('[data-new-owner]'),name=input.value.trim();if(!name)return input.focus();
+  if(!owners.includes(name))owners.push(name);
+  track(form.dataset.track).owner=name;
+  const select=form.querySelector('[data-field=owner]'),opt=new Option(name,name);
+  if(![...select.options].some(o=>o.value===name))select.insertBefore(opt,select.querySelector('[value=__new]'));
+  select.value=name;input.value='';form.querySelector('.add-owner').hidden=true;select.focus();
+}
+$('explore-detail').addEventListener('click',e=>{if(e.target.closest('[data-add-owner]'))addOwner(e.target.closest('[data-track]'));});
+$('explore-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addOwner(e.target.closest('[data-track]'));}});
+$('assessment-view').addEventListener('keydown',e=>{const row=e.target.closest('tr[data-explore]');if(row&&e.target===row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();exploreFinding(row.dataset.explore);}});
+// Refresh tables behind the finding pop-up; called on edits and on close, since the dialog close event is not always delivered.
+function refreshBehindExplore(){if(business()&&['plan','nis2'].includes(state.view)){const y=scrollY;render();scrollTo(0,y);}}
+$('explore-dialog').addEventListener('close',refreshBehindExplore);
+$('assessment-view').addEventListener('input',e=>{const id=e.target.dataset.rowComment;if(id)track(id).comments=e.target.value;});
+// Chart marks set (or clear, when already active) the matching table filter.
+$('assessment-view').addEventListener('click',e=>{
+  const mark=e.target.closest('[data-chart-filter]');if(!mark)return;
+  const [kind,value]=mark.dataset.chartFilter.split(/:(.*)/s),toggle=(key,v)=>{state[key]=state[key]===v?'all':v;};
+  if(kind==='severity')toggle('severity',value);
+  else if(kind==='matrix'){const [sev,type]=value.split('|'),same=state.severity===sev&&state.type===type;state.severity=same?'all':sev;state.type=same?'all':type;}
+  else if(kind==='status')toggle('planStatus',value);
+  else if(kind==='owner')toggle('planOwner',value);
+  else if(kind==='due')toggle('planDue',value);
+  hideTip();renderView();
+  document.querySelector(`[data-chart-filter="${CSS.escape(mark.dataset.chartFilter)}"]`)?.focus();
+});
+const tip=document.createElement('div');tip.className='chart-tip';tip.setAttribute('role','presentation');tip.hidden=true;document.body.append(tip);
+function hideTip(){tip.hidden=true;}
+function showTip(el){const r=el.getBoundingClientRect();tip.textContent=el.dataset.tip;tip.hidden=false;const w=tip.offsetWidth;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';tip.style.top=(r.top-tip.offsetHeight-8)+'px';}
+$('assessment-view').addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');el?showTip(el):hideTip();});
+$('assessment-view').addEventListener('mouseleave',hideTip);
+$('assessment-view').addEventListener('focusin',e=>{const el=e.target.closest('[data-tip]');el?showTip(el):hideTip();});
+window.addEventListener('scroll',hideTip,{passive:true});
+$('assessment-view').addEventListener('keydown',e=>{const el=e.target.closest('[data-chart-filter][role=button]');if(el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();el.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
+// NIS2 Material: re-render while keeping scroll position and focus on the control that changed.
+function renderMaterialKeep(focusId){const y=scrollY;render();scrollTo(0,y);if(focusId)document.getElementById(focusId)?.focus();}
+document.addEventListener('click',e=>{
+  const cat=e.target.closest('[data-checklist-category]');
+  if(cat){state.view='nis2';state.clCategory=cat.dataset.checklistCategory;state.clStatus=state.clOwner=state.clSource='all';render();$('evidence-checklist')?.scrollIntoView({behavior:'smooth',block:'start'});return;}
+});
+// Evidence checklist: requirement pop-up, per-item tracking and evidence-record generation.
+const evidenceItem=id=>window.PulseNIS2.checklist.find(x=>x.id===id);
+function openEvidence(id){const item=evidenceItem(id);$('evidence-dialog').dataset.itemId=id;$('evidence-detail').innerHTML=window.PulseNIS2.evidenceDialog(item,checklistOf(item),owners,report());if(!$('evidence-dialog').open)$('evidence-dialog').showModal();}
+function generateEvidence(id){
+  const item=evidenceItem(id),st=checklistOf(item);
+  const html=window.PulseNIS2.evidenceRecord(item,st,report(),track,$('scenario').selectedOptions[0].textContent);
+  const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'})),a=document.createElement('a');
+  a.href=url;a.download=`identity-pulse-${state.provider}-evidence-${item.id.toLowerCase()}.html`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  st.generatedAt=new Date().toISOString();
+}
+document.addEventListener('click',e=>{
+  const gen=e.target.closest('[data-generate-evidence]');
+  if(gen){generateEvidence(gen.dataset.generateEvidence);if($('evidence-dialog').open)openEvidence(gen.dataset.generateEvidence);renderMaterialKeep();return;}
+  if(e.target.closest('select,input,textarea,button,a'))return;
+  const row=e.target.closest('tr[data-evidence-item]');if(row)openEvidence(row.dataset.evidenceItem);
+});
+$('assessment-view').addEventListener('keydown',e=>{const row=e.target.closest('tr[data-evidence-item]');if(row&&e.target===row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openEvidence(row.dataset.evidenceItem);}});
+$('evidence-detail').addEventListener('change',e=>{
+  const field=e.target.dataset.evField;if(!field)return;const st=checklistOf(evidenceItem($('evidence-dialog').dataset.itemId));
+  if(field==='owner'&&e.target.value==='__new'){e.target.value=st.owner;const add=$('evidence-detail').querySelector('.add-owner');add.hidden=false;add.querySelector('input').focus();return;}
+  st[field]=e.target.value;renderMaterialKeep();
+});
+$('evidence-detail').addEventListener('input',e=>{if(e.target.dataset.evField==='comments')checklistOf(evidenceItem($('evidence-dialog').dataset.itemId)).comments=e.target.value;});
+$('evidence-detail').addEventListener('focusout',e=>{if(e.target.dataset.evField==='comments')renderMaterialKeep();});
+function addEvidenceOwner(){
+  const box=$('evidence-detail'),input=box.querySelector('[data-new-owner]'),name=input.value.trim();if(!name)return input.focus();
+  if(!owners.includes(name))owners.push(name);checklistOf(evidenceItem($('evidence-dialog').dataset.itemId)).owner=name;openEvidence($('evidence-dialog').dataset.itemId);box.querySelector('[data-ev-field=owner]').focus();
+}
+$('evidence-detail').addEventListener('click',e=>{if(e.target.closest('[data-add-ev-owner]'))addEvidenceOwner();});
+$('evidence-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addEvidenceOwner();}});
+$('close-evidence').onclick=()=>{$('evidence-dialog').close();renderMaterialKeep();};
+$('evidence-dialog').addEventListener('close',()=>renderMaterialKeep());
 
 </script>
 </body></html>
