@@ -10,7 +10,7 @@
 .posture{box-shadow:inset 0 0 0 1px var(--secondary)}.score-value strong{color:var(--accent)}.pill.light{color:var(--primary)}.sidenav a.active .num{color:var(--accent)}.brand-mark{box-shadow:0 0 22px #7addc618}.button.primary:hover,.button.dark:hover{filter:brightness(1.06)}::selection{background:#83219b80;color:var(--ink)}
 
 /* Audience-focused workspace and evidence preparation. */
-body[data-audience=business] .finding-row strong{font-size:16px}body[data-audience=business] .finding-row small{font-size:14px;line-height:1.65;max-width:850px}
+body:is([data-audience=business],[data-audience=tech]) .finding-row strong{font-size:16px}body:is([data-audience=business],[data-audience=tech]) .finding-row small{font-size:14px;line-height:1.65;max-width:850px}
 .technical-evidence,.material-scope{border:1px solid var(--line);padding:18px;border-radius:8px;margin-top:22px;line-height:1.7;font-size:14px}
 summary{cursor:pointer;font-weight:600;color:var(--primary);padding:4px 0}summary:focus-visible{outline:3px solid var(--primary);outline-offset:4px}.material-scope h3{margin-top:20px}
 .action-status{display:grid;gap:7px;margin:16px 0;padding:12px;background:var(--raised);border-radius:6px;font-size:13px}.action-status div{display:flex;justify-content:space-between;gap:12px}.action-status dt{color:var(--muted)}.action-status dd{margin:0}
@@ -31,7 +31,7 @@ summary{cursor:pointer;font-weight:600;color:var(--primary);padding:4px 0}summar
 .workspace-context{display:flex;gap:18px;align-items:center;flex-shrink:0}.change-view{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:4px}.change-view:hover{color:var(--primary)}
 .business-navigation .tabs{display:grid;gap:7px;border:0;margin:0}.business-navigation .tabs button{padding:14px 12px;border:1px solid transparent;border-radius:7px;text-align:left;font-size:15px;min-height:48px;color:var(--ink)}.business-navigation .tabs button[aria-selected=true]{background:var(--selected);border-color:#754889;color:var(--ink)}.business-navigation #tab-nis2{color:var(--primary);font-weight:650;border-left:3px solid var(--primary)}.business-navigation #tab-nis2[aria-selected=true]{background:var(--success-bg);border-color:#427c72;border-left-color:var(--primary)}
 .business-explore{border-top:1px solid var(--line);padding-top:18px;font-size:13px;line-height:1.7}.business-explore summary{font-size:13px;color:var(--muted);font-weight:400}.business-explore a{display:block;padding:9px 0;color:var(--muted)}.business-explore a:hover{color:var(--primary)}
-body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=business] .heading h1{font-size:30px}body[data-audience=business] .contextbar{padding:14px 18px;margin-bottom:18px}body[data-audience=business] .context-note{max-width:240px}
+body:is([data-audience=business],[data-audience=tech]) .heading{margin-bottom:20px}body:is([data-audience=business],[data-audience=tech]) .heading h1{font-size:30px}body:is([data-audience=business],[data-audience=tech]) .contextbar{padding:14px 18px;margin-bottom:18px}body:is([data-audience=business],[data-audience=tech]) .context-note{max-width:240px}
 .business-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:22px}.business-summary article{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:16px 18px}.business-summary article>div{display:flex;align-items:baseline;gap:10px}.business-summary strong{font-size:30px;line-height:1.2;font-weight:550;color:var(--ink)}.business-summary span{font-size:14px}.business-summary p{font-size:12px;color:var(--muted);margin-top:9px}.business-summary .textlink{font-size:13px;margin-top:3px}
 .nis2-focus{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;padding:30px;background:linear-gradient(120deg,var(--surface),#26223f);border:1px solid #785088;border-left:4px solid var(--primary);border-radius:12px;margin-bottom:26px}.nis2-lead .eyebrow{display:block;color:var(--primary)}.nis2-lead h2{font-size:34px;line-height:1.18;letter-spacing:-.9px;margin:14px 0 18px;font-weight:550}.nis2-lead h2 span{color:var(--accent)}.nis2-lead>p{font-size:16px;color:var(--ink);max-width:560px;margin-bottom:24px}.nis2-lead .actions{align-items:center;gap:13px}.nis2-lead>small{display:block;color:var(--muted);font-size:12px;line-height:1.6;margin-top:18px}.evidence-checklist{background:#14142970;padding:22px;border:1px solid #5a4772;border-radius:9px}.evidence-checklist h3{font-size:17px;margin-bottom:16px}.evidence-checklist dl{margin:0}.evidence-checklist dl>div{padding:12px 0;border-top:1px solid #5a4772}.evidence-checklist dt{font-size:14px;line-height:1.5}.evidence-checklist dd{margin:5px 0 0;font-size:13px;line-height:1.5}.available{color:var(--primary)}.missing{color:var(--amber)}
 .decision-panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px;margin:24px 0}.decision-panel .panel-head{align-items:flex-start}.decision-panel .eyebrow{color:var(--primary)}.decision-panel .panel-head p:not(.eyebrow){font-size:14px}.decision-row{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;border-top:1px solid var(--line);padding:22px 0}.decision-row:last-child{padding-bottom:0}.decision-class{display:block;color:var(--amber);font-size:12px;margin-bottom:8px;line-height:1.6}.decision-row h3{font-size:17px;line-height:1.5;margin-bottom:8px}.decision-row p{color:var(--muted);font-size:14px}.decision-next{border-left:2px solid var(--secondary);padding-left:20px}.decision-next>span{display:block;color:var(--primary);font-size:13px;margin-bottom:8px}.decision-next p{color:var(--ink)}.empty-decision{border-top:1px solid var(--line);padding-top:20px}.empty-decision p{font-size:14px;color:var(--muted);margin-top:8px}
@@ -39,15 +39,15 @@ body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=busi
 .business-plan-intro{margin-bottom:20px}.business-plan-intro>p:not(.eyebrow){color:var(--muted);font-size:16px;margin:12px 0}.business-plan{display:grid;gap:20px}.business-plan .panel-head{flex-wrap:wrap}.business-action{border-top:1px solid var(--line);padding:22px 0}.business-action:last-child{padding-bottom:0}.business-action h3{font-size:17px;line-height:1.5}.business-action>p{font-size:15px;color:var(--muted);margin-top:10px}.business-action .action-status{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;padding:16px}.business-action .action-status div{display:block}.business-action dd{margin-top:6px;line-height:1.6}.business-action details{font-size:14px;line-height:1.7}.business-action details p{margin:12px 0}
 @media(max-width:1150px){.nis2-focus{gap:22px;padding:24px;grid-template-columns:1fr 1fr}.nis2-lead h2{font-size:30px}.business-summary article{padding:15px}.business-summary article>div{display:block}.business-summary span{display:block;margin-top:5px}.workspace-context{gap:12px}.diagram-page .topbar{flex-wrap:wrap}}
 @media(max-width:850px){.entry-main{padding:36px 28px}.entry-brand{padding:26px 28px}.entry-main h1{font-size:48px}.entry-options{gap:18px}.entry-card{padding:24px}.business-navigation .tabs{display:flex;gap:7px;flex-wrap:wrap}.business-navigation .tabs button{padding:12px 16px;text-align:center}.business-explore{border:0;padding:0}.business-explore[open]{padding-top:10px}.business-explore a{display:inline-block;padding:8px 18px 0 0}.business-navigation #tab-nis2{border-left:1px solid var(--primary)}.review-preparation{grid-template-columns:1fr}.business-summary article>div{display:flex}.business-summary span{display:block}.nis2-focus{grid-template-columns:1fr 1fr}}
-@media(max-width:680px){.entry-options{grid-template-columns:1fr}.entry-main{padding:22px 22px 32px}.entry-main h1{font-size:43px}.entry-intro{font-size:16px;margin-bottom:26px}.entry-card{padding:25px}.entry-brand{padding:24px 22px}.entry-demo{display:none}.entry-card h2{font-size:29px}.entry-card ul{margin:20px 0 24px}.nis2-focus{grid-template-columns:1fr;gap:24px}.business-summary{grid-template-columns:1fr;gap:10px}.business-summary article{padding:14px 16px}.business-summary article>div{display:flex;gap:12px}.business-summary p{margin-top:7px}.decision-row{grid-template-columns:1fr;gap:16px}.decision-panel{padding:20px}.decision-panel .panel-head{flex-wrap:wrap}.business-action .action-status{grid-template-columns:1fr;gap:12px}.business-action .action-status div{display:flex}.business-action dd{margin-top:0;text-align:right}.business-action dt{max-width:45%}.workspace-context{flex-wrap:wrap;gap:10px}.topbar{flex-wrap:wrap}.business-navigation .tabs{gap:6px}.business-navigation .tabs button{padding:10px;font-size:14px;flex:1}body[data-audience=business] .heading h1{font-size:27px}.evidence-checklist{padding:18px}.nis2-focus .pill{white-space:normal}.nis2-focus{padding:22px}.review-preparation{gap:20px}.entry-footnote{font-size:12px}}
-@media(max-width:680px){.business-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.business-summary article{padding:13px 10px}.business-summary article>div{display:block}.business-summary span{font-size:13px;line-height:1.5}.business-summary p{display:none}.business-summary .textlink{font-size:12px;text-align:left;line-height:1.5}.business-summary strong{font-size:27px}body[data-audience=business] .contextbar{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}body[data-audience=business] .contextbar label{font-size:12px}body[data-audience=business] .contextbar select{font-size:13px;padding-right:20px}body[data-audience=business] .context-note{grid-column:1/-1;font-size:12px;max-width:none}body[data-audience=business] .context-note br{display:none}}
+@media(max-width:680px){.entry-options{grid-template-columns:1fr}.entry-main{padding:22px 22px 32px}.entry-main h1{font-size:43px}.entry-intro{font-size:16px;margin-bottom:26px}.entry-card{padding:25px}.entry-brand{padding:24px 22px}.entry-demo{display:none}.entry-card h2{font-size:29px}.entry-card ul{margin:20px 0 24px}.nis2-focus{grid-template-columns:1fr;gap:24px}.business-summary{grid-template-columns:1fr;gap:10px}.business-summary article{padding:14px 16px}.business-summary article>div{display:flex;gap:12px}.business-summary p{margin-top:7px}.decision-row{grid-template-columns:1fr;gap:16px}.decision-panel{padding:20px}.decision-panel .panel-head{flex-wrap:wrap}.business-action .action-status{grid-template-columns:1fr;gap:12px}.business-action .action-status div{display:flex}.business-action dd{margin-top:0;text-align:right}.business-action dt{max-width:45%}.workspace-context{flex-wrap:wrap;gap:10px}.topbar{flex-wrap:wrap}.business-navigation .tabs{gap:6px}.business-navigation .tabs button{padding:10px;font-size:14px;flex:1}body:is([data-audience=business],[data-audience=tech]) .heading h1{font-size:27px}.evidence-checklist{padding:18px}.nis2-focus .pill{white-space:normal}.nis2-focus{padding:22px}.review-preparation{gap:20px}.entry-footnote{font-size:12px}}
+@media(max-width:680px){.business-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.business-summary article{padding:13px 10px}.business-summary article>div{display:block}.business-summary span{font-size:13px;line-height:1.5}.business-summary p{display:none}.business-summary .textlink{font-size:12px;text-align:left;line-height:1.5}.business-summary strong{font-size:27px}body:is([data-audience=business],[data-audience=tech]) .contextbar{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}body:is([data-audience=business],[data-audience=tech]) .contextbar label{font-size:12px}body:is([data-audience=business],[data-audience=tech]) .contextbar select{font-size:13px;padding-right:20px}body:is([data-audience=business],[data-audience=tech]) .context-note{grid-column:1/-1;font-size:12px;max-width:none}body:is([data-audience=business],[data-audience=tech]) .context-note br{display:none}}
 @media(max-width:680px){.entry-main{padding-top:12px}.entry-main h1{font-size:36px;line-height:1.15;letter-spacing:-1px}.entry-main>.eyebrow{margin-bottom:12px}.entry-intro{font-size:15px;margin:14px 0 24px}.entry-card{padding:20px}.entry-card-label{font-size:12px;letter-spacing:.7px}.entry-card h2{font-size:26px;margin:10px 0}.entry-card p{font-size:16px}.entry-card ul{display:none}.entry-cta{margin-top:18px;font-size:14px;padding:12px}.entry-options{gap:16px}.entry-brand{padding-bottom:20px}.entry-footnote{margin-top:20px}}
 
 /* Explain the example before asking the reader to interpret its results. */
 .entry-intro{max-width:810px;line-height:1.65}.entry-footnote{line-height:1.8}
 .contextbar .demo-explainer{flex-basis:100%;font-size:13px;line-height:1.65;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}.demo-explainer strong{color:var(--ink);font-weight:550}
 .contextbar .scenario-description{flex-basis:100%;font-size:13px;line-height:1.65;color:var(--primary);margin-top:-9px;max-width:950px}
-@media(max-width:680px){body[data-audience=business] .contextbar .demo-explainer,body[data-audience=business] .contextbar .scenario-description{grid-column:1/-1}.contextbar .scenario-description{margin-top:0}body[data-audience=business] .contextbar{grid-template-columns:1fr}.entry-main>.eyebrow{font-size:11px;line-height:1.6}}
+@media(max-width:680px){body:is([data-audience=business],[data-audience=tech]) .contextbar .demo-explainer,body:is([data-audience=business],[data-audience=tech]) .contextbar .scenario-description{grid-column:1/-1}.contextbar .scenario-description{margin-top:0}body:is([data-audience=business],[data-audience=tech]) .contextbar{grid-template-columns:1fr}.entry-main>.eyebrow{font-size:11px;line-height:1.6}}
 
 /* Business view: selectors in the top bar, dashboard table and explore dialog. */
 .topbar-context{display:flex;gap:12px;align-items:center;margin-right:auto;margin-left:24px;flex-wrap:wrap}
@@ -198,8 +198,89 @@ body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=busi
 .demo-banner p{margin:0}
 .banner-close{flex:none;width:28px;height:28px;border-radius:6px;background:none;color:var(--info);font-size:20px;line-height:1;display:grid;place-items:center;opacity:.8}
 .banner-close:hover,.banner-close:focus-visible{opacity:1;background:#ffffff14;outline:none}
+/* Tech SPOC: technical columns, pop-up detail, coverage and traceability. */
+.tech-deepdive{margin-top:18px}.tech-deepdive .sidenav a{font-size:14px}
+.tech-table{min-width:1000px;table-layout:fixed}
+.tech-table td{white-space:normal!important;width:auto!important}
+.tech-table th:nth-child(1){width:9%}.tech-table th:nth-child(2){width:33%}.tech-table th:nth-child(3){width:15%}.tech-table th:nth-child(4){width:9%}.tech-table th:nth-child(5){width:15%}.tech-table th:nth-child(6){width:15%}.tech-table th:nth-child(7){width:40px}
+.tech-table td small,.coverage-table td small,.trace-table td small{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.rule-line code,.trace-table code{font-size:11px;color:var(--accent);background:#e1f29714;padding:1px 5px;border-radius:4px;margin-right:4px}
+code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6px;border-radius:4px}
+.conf{font-size:12px;font-weight:600}.conf-high{color:var(--success)}.conf-medium{color:var(--amber)}.conf-low{color:var(--muted)}
+.tech-detail{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.tech-detail .eyebrow{color:var(--accent)!important}
+.tech-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin:10px 0}
+.tech-facts dt{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.tech-facts dd{margin:2px 0 0;font-size:13px;overflow-wrap:anywhere}
+.tech-facts code{font-size:12px;color:var(--primary)}
+.settings-json{background:var(--canvas);border:1px solid var(--line);border-radius:7px;padding:10px 12px;font-size:12px;line-height:1.5;overflow:auto;max-height:180px;color:var(--ink)}
+.deep-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.deep-link{display:inline-flex;gap:4px;font-size:12px;font-weight:600;color:var(--primary);background:#7addc614;border:1px solid #7addc633;border-radius:20px;padding:5px 12px;text-decoration:none}
+.deep-link:hover,.deep-link:focus-visible{background:#7addc626;border-color:var(--primary);outline:none}
+.notice .deep-link{margin-left:8px}
+.validation-steps{margin-top:16px;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+.validation-steps h3{margin:0 0 8px!important;font-size:13px;display:flex;justify-content:space-between}
+.step-check{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;padding:5px 0;cursor:pointer}
+.step-check input{margin-top:3px;accent-color:var(--primary);width:15px;height:15px;flex:none}
+.coverage-table{min-width:900px}
+.linked-findings{display:grid;gap:4px;justify-items:start}
+.linked{display:flex;align-items:center;gap:7px;background:none;color:var(--ink);font-size:12px;padding:2px 0;text-align:left}
+.linked:hover{color:var(--primary)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--info)}.dot.red{background:var(--red)}.dot.amber{background:var(--amber)}
+.trace-table{min-width:960px;table-layout:fixed}
+.trace-table td{white-space:normal!important;width:auto!important}
+.trace-table th:nth-child(1){width:14%}.trace-table th:nth-child(2){width:30%}.trace-table th:nth-child(3){width:20%}.trace-table th:nth-child(4){width:22%}.trace-table th:nth-child(5){width:14%}
+.trace-ref{font-weight:700;color:var(--ink)}
+.status-note{display:block;margin-top:6px;font-size:11px;color:var(--muted)}
+.tech-table .pill{white-space:normal;text-align:center;line-height:1.35}
+.tech-table code.src,.coverage-table code.src{display:inline-block;max-width:100%;overflow-wrap:anywhere;word-break:break-all}
+.settings-label{margin:14px 0 -4px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+/* Remediation as code (finding pop-ups). */
+.remediation{margin-top:20px;padding:18px 20px;border:1px solid var(--line);border-radius:10px;background:var(--raised)}
+.rem-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.rem-head .eyebrow{color:var(--primary);margin:0}.rem-head h3{margin:4px 0 0!important;font-size:15px}
+.rem-diff{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin:14px 0}
+.rem-diff>div{min-width:0}.rem-diff span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.rem-diff pre{margin:0;height:calc(100% - 20px);background:var(--canvas);border:1px solid var(--line);border-radius:7px;padding:10px;font-size:12px;line-height:1.5;overflow:auto;max-height:200px}
+.rem-diff>div:first-child pre{border-color:#6e4a52}.rem-diff>div:last-child pre{border-color:#427c72}
+.rem-arrow{align-self:center;color:var(--primary);font-size:18px}
+.rem-tabs{display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--line);margin-top:6px}
+.rem-tabs [role=tab]{background:none;color:var(--muted);font-size:12px;font-weight:600;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.rem-tabs [role=tab][aria-selected=true]{color:var(--ink);border-bottom-color:var(--primary)}
+.rem-copy{margin-left:auto;background:none;color:var(--primary);font-size:12px;font-weight:600;padding:6px 8px}
+.rem-code{margin:10px 0 0;background:#0d0d1c;border:1px solid var(--line);border-radius:7px;padding:12px 14px;font-size:12px;line-height:1.55;overflow:auto;max-height:320px;color:#e6e6f2;white-space:pre}
+.rem-note{margin-top:10px;font-size:13px;line-height:1.6;padding:10px 12px;border-left:3px solid var(--amber);background:var(--amber-bg);color:var(--amber);border-radius:0 6px 6px 0}
+@media(max-width:700px){.rem-diff{grid-template-columns:1fr}.rem-arrow{transform:rotate(90deg);justify-self:center}}
+/* Applications tab: token lifetime matrix and login journey. */
+.apps-sub{font-size:14px;margin:22px 0 10px}
+.apps-table{min-width:980px}
+.apps-table td small{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.5}
+.apps-table code{font-size:11px;color:var(--muted)}
+.token-matrix tr.selected{background:#7addc60f;box-shadow:inset 3px 0 0 var(--primary)}
+.grant-list{display:flex;flex-wrap:wrap;gap:4px}
+.lvl{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;margin:0 4px 4px 0;white-space:nowrap;background:var(--raised);color:var(--muted)}
+.lvl-ok{background:var(--success-bg);color:var(--success)}.lvl-warn{background:var(--amber-bg);color:var(--amber)}.lvl-risk{background:var(--red-bg);color:var(--red)}.lvl-neutral{background:var(--raised);color:var(--ink)}.lvl-unknown{background:var(--raised);color:var(--muted)}
+.nowrap{white-space:nowrap}
+.journey-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px}
+.journey-head .apps-sub{margin:0}
+.app-pills{display:flex;gap:6px;flex-wrap:wrap}
+.app-pill{font-size:12px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:none;color:var(--muted)}
+.app-pill[aria-pressed=true]{border-color:var(--primary);color:var(--ink);background:#7addc614}
+.journey{list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;counter-reset:none}
+.journey-step{position:relative;padding:14px;border:1px solid var(--line);border-top:3px solid var(--line);border-radius:10px;background:var(--table-bg);display:flex;flex-direction:column;gap:6px}
+.journey-step:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:22px;color:var(--muted);font-size:13px;z-index:1}
+.lvl-border-ok{border-top-color:var(--success)}.lvl-border-warn{border-top-color:var(--amber)}.lvl-border-risk{border-top-color:var(--red)}.lvl-border-unknown{border-top-color:var(--muted)}
+.js-top{display:flex;justify-content:space-between;align-items:center}
+.js-num{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:var(--raised);color:var(--muted)}
+.js-top .lvl{margin:0}
+.journey-step h4{font-size:13px;margin:2px 0 0}
+.journey-step p{font-size:12px;line-height:1.55;color:var(--muted)}
+.js-hint{font-style:italic;font-size:11px!important}
+.js-findings{display:grid;gap:4px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line)}
+.js-finding{display:flex;gap:7px;align-items:flex-start;text-align:left;background:none;color:var(--ink);font-size:12px;line-height:1.4;padding:2px 0}
+.js-finding .dot{margin-top:4px}
+.js-finding:hover{color:var(--primary)}
 
-</style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></a><div class="workspace">Demo assessment workspace<small>Five providers · example assessments</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business"><p class="navlabel">Business workspace</p></div><div data-audience-only="tech"><p class="navlabel">Technical workspace</p><nav class="sidenav" aria-label="Demo navigation"><a class="active" aria-current="page" href="workspace.html"><span class="num">01</span> Assessment workspace</a><a href="data-flow.html"><span class="num">02</span> Animated data flow</a><a href="technical-flow.html"><span class="num">03</span> Technical architecture</a></nav></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="sidefoot">See the risk.<br>Trace the evidence.<br>Decide what changes.<small>LOCAL-FIRST · READ-ONLY<br>Interactive concept / synthetic data</small></div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p><span class="pill">Product concept · offline demo</span></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Your identity posture, in focus.</h1><p id="workspace-intro">From configuration to evidence and a clear next action.</p></div><button class="button primary" id="run-demo" data-audience-only="tech">▷ Replay assessment</button></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer"><strong>You are exploring a fictional assessment.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business"></section><section class="summary-grid" data-audience-only="tech" aria-label="Assessment summary"><div class="posture"><div class="score-ring" id="score-ring" style="--score:15"><div class="score-value"><strong id="score">15</strong><small>out of 100</small></div></div><div><span class="pill light" id="score-label">Identity posture score</span><h2 id="score-title">Review priority risks</h2><p id="score-description">Evidence-led assessment of the collected configuration.</p><p class="grade" id="grade"></p></div></div><div class="panel"><div class="panel-head"><h2>What needs attention</h2><span class="pill" id="finding-total"></span></div><div class="statrow" id="stats"></div><div class="coverage-strip"><span id="coverage-summary"></span><button class="textlink" id="review-coverage" data-view="coverage">Review coverage ↗</button></div></div></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog" id="finding-dialog" aria-labelledby="finding-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding detail / evidence</span><button class="button" id="close-finding">Close ×</button></div><div class="dialog-content" id="finding-detail"></div></dialog><dialog class="dialog" id="scan-dialog" aria-labelledby="scan-title"><div class="dialog-header"><h2 id="scan-title">Assessment walkthrough</h2><span class="pill">Simulation</span></div><div class="dialog-content"><p class="muted">Replay how a local assessment reaches a report. This demo reads embedded sample data and makes no provider requests.</p><div class="progress-track" role="progressbar" aria-label="Simulated assessment progress" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="scan-progress" style="width:0%"></span></div><ol class="scan-list" id="scan-steps"></ol><p id="scan-status" class="section-note" role="status"></p><div class="scan-actions"><button class="button primary" id="scan-pause">Pause</button><button class="button" id="scan-close">Close walkthrough</button></div></div></dialog><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><dialog class="dialog explore-dialog" id="evidence-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Evidence item · NIS2 &amp; KSC requirement</span><button class="button" id="close-evidence">Close ×</button></div><div class="dialog-content" id="evidence-detail"></div></dialog><dialog class="dialog explore-dialog" id="explore-dialog" aria-labelledby="explore-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding &amp; action plan</span><button class="button" id="close-explore">Close ×</button></div><div class="dialog-content" id="explore-detail"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
+</style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></a><div class="workspace">Demo assessment workspace<small>Five providers · example assessments</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business tech"><p class="navlabel">Business workspace</p></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="tech-deepdive" data-audience-only="tech"><p class="navlabel">Technical deep dive</p><nav class="sidenav" aria-label="Technical deep dive"><a href="data-flow.html"><span class="num">↗</span> Animated data flow</a><a href="technical-flow.html"><span class="num">↗</span> Technical architecture</a></nav></div><div class="sidefoot">See the risk.<br>Trace the evidence.<br>Decide what changes.<small>LOCAL-FIRST · READ-ONLY<br>Interactive concept / synthetic data</small></div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p><span class="pill">Product concept · offline demo</span></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Your identity posture, in focus.</h1><p id="workspace-intro">From configuration to evidence and a clear next action.</p></div></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer"><strong>You are exploring a fictional assessment.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business tech"></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><dialog class="dialog explore-dialog" id="evidence-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Evidence item · NIS2 &amp; KSC requirement</span><button class="button" id="close-evidence">Close ×</button></div><div class="dialog-content" id="evidence-detail"></div></dialog><dialog class="dialog explore-dialog" id="explore-dialog" aria-labelledby="explore-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding &amp; action plan</span><button class="button" id="close-explore">Close ×</button></div><div class="dialog-content" id="explore-detail"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
 /* Presentation catalog only. This does not register production CLI connectors. */
 (() => {
   'use strict';
@@ -267,7 +348,8 @@ body[data-audience=business] .heading{margin-bottom:20px}body[data-audience=busi
   document.querySelectorAll('[data-provider-select]').forEach(select => { select.innerHTML = window.PulseProviders.options(); select.value = context.provider; });
   write('pulse-demo-audience', audience);
   document.body.dataset.audience = audience;
-  document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = el.dataset.audienceOnly !== audience; });
+  // data-audience-only may list several audiences, separated by spaces.
+  document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = !el.dataset.audienceOnly.split(' ').includes(audience); });
   const bar = document.createElement('div');
   bar.className = 'workspace-context';
   bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Tech SPOC workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
@@ -5298,7 +5380,7 @@ window.PULSE_CONTROLS = {
   function decisions(report) {
     const selected = priorities(report);
     return `<section class="decision-panel"><div class="panel-head"><div><p class="eyebrow">What needs a decision?</p><h2>${selected.length ? 'Start with these conversations.' : 'Confirm what the evidence can support.'}</h2><p>${selected.length ? 'Highest-severity findings across distinct assessment areas.' : 'No findings in this sample. Collection success and a high score do not establish compliance.'}</p></div><button class="textlink" data-view="findings">All findings (${report.findings.length})</button></div>
-      ${selected.map(f => `<article class="decision-row"><div><span class="decision-class">${esc(f.severity)} · ${esc(status(f))}</span><h3>${esc(title(f))}</h3><p>${esc(impact(f))}</p></div><div class="decision-next"><span>Next decision</span><p>${esc(decision(f))}</p><button class="textlink" data-finding="${esc(f.id)}">Review finding</button></div></article>`).join('') || '<div class="empty-decision"><h3>Request the supporting records</h3><p>Ask the accountable teams for approved policies and validation evidence. These are not supplied in the assessment.</p><button class="textlink" data-view="nis2">Review NIS2 Material</button></div>'}</section>`;
+      ${selected.map(f => `<article class="decision-row"><div><span class="decision-class">${esc(f.severity)} · ${esc(status(f))}</span><h3>${esc(title(f))}</h3><p>${esc(impact(f))}</p></div><div class="decision-next"><span>Next decision</span><p>${esc(decision(f))}</p><button type="button" class="textlink" data-explore="${esc(f.id)}">Review finding ↗</button></div></article>`).join('') || '<div class="empty-decision"><h3>Request the supporting records</h3><p>Ask the accountable teams for approved policies and validation evidence. These are not supplied in the assessment.</p><button class="textlink" data-view="nis2">Review NIS2 Material</button></div>'}</section>`;
   }
   function material(report, evidence, sections = '', obligations = '') {
     const gaps = report.coverage.collectors.filter(c => c.status !== 'success');
@@ -5311,11 +5393,12 @@ window.PULSE_CONTROLS = {
   }
   const progressClass = v => v === 'In Progress' ? 'amber' : ['Verified', 'Completed'].includes(v) ? 'green' : v === 'Closed' ? 'blue' : '';
   const dateText = v => v ? new Date(v + 'T00:00:00Z').toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'}) : '';
-  function plan(report, items, trackOf) {
+  // statusNote: optional (finding, tracking) => text shown under the status (Tech SPOC).
+  function plan(report, items, trackOf, statusNote = null) {
     if (!items.length) return '<p class="empty" role="status">No actions match this selection.</p>';
     return `<div class="table-wrap dash-wrap"><table class="dash-table plan-table"><thead><tr><th scope="col">Severity</th><th scope="col">Finding</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Target date</th><th scope="col">Recommended corrective action</th><th scope="col">Additional comments</th><th scope="col"><span class="sr-only">Explore</span></th></tr></thead><tbody>${items.map(a => {
       const f = report.findings.find(x => x.id === a.findingId), t = trackOf(a.findingId);
-      return `<tr class="dash-row" data-explore="${esc(a.findingId)}" tabindex="0" aria-label="Update action plan: ${esc(f ? title(f) : a.action)}"><td>${f ? `<span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span>` : ''}</td><td><strong>${esc(f ? title(f) : a.findingId)}</strong></td><td><span class="pill ${progressClass(t.status)}">${esc(t.status)}</span></td><td>${t.owner ? esc(t.owner) : '<span class="muted">Unassigned</span>'}</td><td>${t.date ? esc(dateText(t.date)) : '<span class="muted">Not set</span>'}</td><td class="dash-action"><p>${esc(a.action)}</p><small><b>Expected outcome:</b> ${esc(a.expectedOutcome)}</small></td><td class="plan-comment"><textarea data-row-comment="${esc(a.findingId)}" rows="2" placeholder="Add a comment" aria-label="Additional comments for ${esc(f ? title(f) : a.action)}">${esc(t.comments)}</textarea></td><td><span class="arrow" aria-hidden="true">↗</span></td></tr>`;
+      return `<tr class="dash-row" data-explore="${esc(a.findingId)}" tabindex="0" aria-label="Update action plan: ${esc(f ? title(f) : a.action)}"><td>${f ? `<span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span>` : ''}</td><td><strong>${esc(f ? title(f) : a.findingId)}</strong></td><td><span class="pill ${progressClass(t.status)}">${esc(t.status)}</span>${statusNote && f && statusNote(f, t) ? `<small class="status-note">${esc(statusNote(f, t))}</small>` : ''}</td><td>${t.owner ? esc(t.owner) : '<span class="muted">Unassigned</span>'}</td><td>${t.date ? esc(dateText(t.date)) : '<span class="muted">Not set</span>'}</td><td class="dash-action"><p>${esc(a.action)}</p><small><b>Expected outcome:</b> ${esc(a.expectedOutcome)}</small></td><td class="plan-comment"><textarea data-row-comment="${esc(a.findingId)}" rows="2" placeholder="Add a comment" aria-label="Additional comments for ${esc(f ? title(f) : a.action)}">${esc(t.comments)}</textarea></td><td><span class="arrow" aria-hidden="true">↗</span></td></tr>`;
     }).join('')}</tbody></table></div>`;
   }
   const actionFor = (report, finding) => actions(report).find(a => a.findingId === finding.id);
@@ -5336,11 +5419,12 @@ window.PULSE_CONTROLS = {
       <label class="plan-field"><span>Completion / validation</span><select data-field="status">${progress.map(v => opt(v, track.status)).join('')}</select></label>
       <label class="plan-field"><span>Additional comments</span><textarea data-field="comments" rows="3" placeholder="Add context, decisions or links to evidence">${esc(track.comments)}</textarea></label></div>`;
   }
-  function explore(report, f, track, owners) {
+  // extra: optional {left, right, bottom} HTML from the Tech SPOC layer.
+  function explore(report, f, track, owners, extra = null) {
     const a = actionFor(report, f), bucket = report.remediationPlan.buckets.find(b => b.items.includes(a));
     return `<div class="explore-head"><span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span><span class="pill ${typeClass(f)}">${esc(status(f))}</span></div><h2 id="explore-title">${esc(title(f))}</h2>
-      <div class="explore-grid"><section class="explore-card"><p class="eyebrow">Finding</p><h3>Why it matters</h3><p>${esc(impact(f))}</p><h3>Technical finding</h3><p>${esc(f.title)}</p><h3>${report.demo?.illustrative ? 'Illustrative evidence' : 'Observed evidence'}</h3><div class="evidence">${esc(f.evidence.summary)}</div><h3>Affected resources</h3><p>${esc(f.affectedResources.map(x => x.displayName).join(', ') || 'Not specified')}</p>${f.validationSteps.length ? `<details class="technical-evidence"><summary>How to validate</summary><ul>${f.validationSteps.map(v => `<li>${esc(v)}</li>`).join('')}</ul></details>` : ''}</section>
-      <section class="explore-card"><p class="eyebrow">Action Plan</p>${bucket ? `<span class="pill">${esc(bucket.name)} · ${esc(bucket.window)}</span>` : ''}<h3>Recommended change</h3><p>${esc(a ? a.action : f.recommendation)}</p>${a ? `<h3>Expected outcome</h3><p>${esc(a.expectedOutcome)}</p>` : ''}<h3>Next decision</h3><p>${esc(decision(f))}</p>${tracker(f, track, owners)}</section></div>
+      <div class="explore-grid"><section class="explore-card"><p class="eyebrow">Finding</p><h3>Why it matters</h3><p>${esc(impact(f))}</p><h3>Technical finding</h3><p>${esc(f.title)}</p><h3>${report.demo?.illustrative ? 'Illustrative evidence' : 'Observed evidence'}</h3><div class="evidence">${esc(f.evidence.summary)}</div><h3>Affected resources</h3><p>${esc(f.affectedResources.map(x => x.displayName).join(', ') || 'Not specified')}</p>${extra ? extra.left : f.validationSteps.length ? `<details class="technical-evidence"><summary>How to validate</summary><ul>${f.validationSteps.map(v => `<li>${esc(v)}</li>`).join('')}</ul></details>` : ''}</section>
+      <section class="explore-card"><p class="eyebrow">Action Plan</p>${bucket ? `<span class="pill">${esc(bucket.name)} · ${esc(bucket.window)}</span>` : ''}<h3>Recommended change</h3><p>${esc(a ? a.action : f.recommendation)}</p>${a ? `<h3>Expected outcome</h3><p>${esc(a.expectedOutcome)}</p>` : ''}<h3>Next decision</h3><p>${esc(decision(f))}</p>${tracker(f, track, owners)}${extra ? extra.right : ''}</section></div>${extra?.bottom || ''}
       <p class="section-note">${f.classification === 'requires-validation' ? 'Engineering validation is needed before treating this as a confirmed risk.' : 'Review the observed configuration and its context with your technical contact.'}${report.demo?.illustrative ? ' Fictional example · connector not implemented.' : ''}</p>`;
   }
 
@@ -5421,9 +5505,1234 @@ window.PULSE_CONTROLS = {
 
 </script>
 <script>
+/* Tech SPOC: the shared workspace with a technical layer on the same findings, actions and evidence.
+   Adds rule-level detail, the collector and API scope behind each finding, observed settings, validation-step
+   tracking, collector-to-finding coverage and NIS2 traceability. Links into the technical architecture page. */
+(() => {
+  'use strict';
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const B = () => window.PulseBusiness;
+  const sevClass = s => ['critical', 'high'].includes(s) ? 'red' : s === 'medium' ? 'amber' : 'blue';
+  const progressClass = v => v === 'In Progress' ? 'amber' : ['Verified', 'Completed'].includes(v) ? 'green' : v === 'Closed' ? 'blue' : '';
+  const cap = v => v ? v[0].toUpperCase() + v.slice(1) : '';
+
+  // The collector whose data produced each finding (Auth0 and Okta CLI collectors). Preview providers
+  // name their illustrated areas after the finding category, so those resolve by category.
+  const byId = {
+    'AUTH-SEC-001': 'guardian', 'AUTH-EXT-001': 'rules', 'AUTH-EXT-002': 'actions', 'AUTH-API-005': 'client_grants',
+    'AUTH-UX-001': 'prompts', 'AUTH-UX-003': 'custom_domains',
+    'OKTA-POL-002': 'authenticators', 'OKTA-NET-001': 'trusted_origins', 'OKTA-NET-002': 'network_zones', 'OKTA-MON-001': 'log_streams',
+  };
+  const byCategory = {
+    tenantBaseline: 'tenant', applications: 'clients', connections: 'connections', apis: 'resource_servers', rbac: 'roles',
+    actionsAndExtensibility: 'actions', monitoring: 'log_streams', attackProtection: 'attack_protection', brandingAndLoginExperience: 'branding',
+    orgBaseline: 'org', usersAndLifecycle: 'users', applicationsAndSSO: 'apps', policiesAndAuthentication: 'policies',
+    adminAndPrivilegedAccess: 'admin_roles', apiAccessManagement: 'authorization_servers', federationAndExtensibility: 'event_hooks',
+  };
+  function collectorFor(report, f) {
+    if (/-COV(ERAGE)?-?\d*$/.test(f.id) || f.category === 'Coverage') return null;
+    const name = byId[f.id] || byCategory[f.category] || f.category;
+    return report.coverage.collectors.find(c => c.collector === name) || null;
+  }
+  const preview = report => Boolean(report.demo?.illustrative);
+  // Links are built after page load, so they carry the current audience, provider and sample themselves.
+  const flowLink = (params, label) => { const {audience, context} = window.PulseExperience; return `<a class="deep-link" href="technical-flow.html?${new URLSearchParams({audience, provider: context.provider, sample: context.sample, ...params})}">${esc(label)} <span aria-hidden="true">↗</span></a>`; };
+  const stepsDone = t => (t.steps || []).filter(Boolean).length;
+  const stepsText = (f, t) => f?.validationSteps?.length ? `${stepsDone(t)}/${f.validationSteps.length} validation steps` : '';
+
+  function findingsTable(report, findings, trackOf) {
+    if (!findings.length) return '<p class="empty" role="status">No findings match this selection.</p>';
+    return `<div class="table-wrap dash-wrap"><table class="dash-table tech-table"><thead><tr><th scope="col">Severity</th><th scope="col">Finding</th><th scope="col">Type</th><th scope="col">Confidence</th><th scope="col">Data source</th><th scope="col">Action status</th><th scope="col"><span class="sr-only">Explore</span></th></tr></thead><tbody>${findings.map(f => {
+      const c = collectorFor(report, f), t = trackOf(f.id);
+      return `<tr class="dash-row" data-explore="${esc(f.id)}" tabindex="0" aria-label="Explore ${esc(B().title(f))}"><td><span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span></td><td><strong>${esc(B().title(f))}</strong><small class="rule-line"><code>${esc(f.id)}</code> ${esc(f.title)}</small></td><td><span class="pill ${f.classification === 'confirmed-risk' ? 'red' : 'amber'}">${esc(B().status(f))}</span></td><td><span class="conf conf-${esc(f.confidence)}">${esc(cap(f.confidence))}</span></td><td>${c ? `<code class="src">${esc(c.collector)}</code>${c.requiredScopes?.length ? `<small>${esc(c.requiredScopes.join(', '))}</small>` : ''}` : '<span class="muted">Coverage check</span>'}</td><td><span class="pill ${progressClass(t.status)}">${esc(t.status)}</span><small>${t.owner ? esc(t.owner) : 'Unassigned'}${stepsText(f, t) ? ` · ${stepsText(f, t)}` : ''}</small></td><td><span class="arrow" aria-hidden="true">↗</span></td></tr>`;
+    }).join('')}</tbody></table></div>`;
+  }
+
+  // Extra pop-up content: technical detail on the left, validation-step tracking on the right.
+  function exploreExtra(report, f, controls, t) {
+    const c = collectorFor(report, f), settings = c ? (controls?.controls || []).filter(x => x.collector === c.collector && x.settings) : [];
+    const left = `<div class="tech-detail"><p class="eyebrow">Technical detail</p>
+      <dl class="tech-facts"><div><dt>Rule</dt><dd><code>${esc(f.id)}</code></dd></div><div><dt>Classification</dt><dd>${esc(f.classification.replaceAll('-', ' '))}</dd></div><div><dt>Confidence</dt><dd>${esc(cap(f.confidence))}</dd></div><div><dt>Score impact</dt><dd>${preview(report) ? 'Not scored (preview)' : `−${esc(f.scoreImpact)} points`}</dd></div><div><dt>Data source</dt><dd>${c ? `<code>${esc(c.collector)}</code> · ${esc(c.status)}` : 'Assessment coverage'}</dd></div><div><dt>API scope</dt><dd>${c?.requiredScopes?.length ? `<code>${esc(c.requiredScopes.join(', '))}</code>` : preview(report) ? 'Not defined (proposed connector)' : '—'}</dd></div></dl>
+      ${f.evidence.confidenceReason ? `<p class="muted">${esc(f.evidence.confidenceReason)}</p>` : ''}
+      ${settings.length ? `<p class="settings-label">Observed settings in this data source</p>` : ''}${settings.map(s => `<h3>${esc(s.name)} · ${esc(s.status.toLowerCase())}</h3><pre class="settings-json">${esc(JSON.stringify(s.settings, null, 2))}</pre><p class="muted">${esc(s.note)}</p>`).join('')}
+      ${f.falsePositiveNotes.length ? `<h3>Context & exceptions</h3><ul>${f.falsePositiveNotes.map(v => `<li>${esc(v)}</li>`).join('')}</ul>` : ''}
+      <div class="deep-links">${flowLink({scenario: 'collect'}, preview(report) ? 'See the proposed collection design' : 'See how this is collected')}${c && c.status !== 'success' ? flowLink({scenario: 'failure', error: '403'}, 'Why this area was skipped') : ''}</div></div>`;
+    const right = f.validationSteps.length ? `<div class="validation-steps" data-steps="${esc(f.id)}"><h3>Validation steps <span class="muted">${stepsDone(t)}/${f.validationSteps.length} done</span></h3>${f.validationSteps.map((s, i) => `<label class="step-check"><input type="checkbox" data-step-index="${i}" ${(t.steps || [])[i] ? 'checked' : ''}><span>${esc(s)}</span></label>`).join('')}</div>` : '';
+    return {left, right};
+  }
+
+  // Coverage: every collector with its scope and the findings that depend on it.
+  function coverage(report) {
+    const all = report.coverage.collectors, gaps = all.filter(c => c.status !== 'success');
+    const linked = c => report.findings.filter(f => collectorFor(report, f)?.collector === c.collector);
+    return `<section class="panel"><div class="panel-head"><div><h2>Coverage</h2><p>What each data source collected, the API scope it needs and the findings that depend on it. ${preview(report) ? 'Illustrated areas only; no connector or permissions are implemented.' : 'Collector success does not guarantee every resource was covered.'}</p></div><span class="pill ${gaps.length ? 'amber' : 'green'}">${all.length - gaps.length} / ${all.length} ${preview(report) ? 'illustrated' : 'collected'}</span></div>
+      ${gaps.length ? `<div class="notice">${gaps.length} data source${gaps.length === 1 ? ' was' : 's were'} not collected. Findings that depend on ${gaps.length === 1 ? 'it' : 'them'} cannot be raised, so these areas are unknown, not safe. ${preview(report) ? '' : flowLink({scenario: 'failure', error: '403'}, 'How missing permissions are handled')}</div>` : ''}
+      <div class="table-wrap dash-wrap"><table class="dash-table coverage-table"><thead><tr><th scope="col">Data source</th><th scope="col">Status</th><th scope="col">API scope</th><th scope="col">Resources</th><th scope="col">Findings from this source</th></tr></thead><tbody>${all.map(c => {
+        const fs = linked(c);
+        return `<tr><td><code class="src">${esc(c.collector)}</code></td><td><span class="pill ${c.status === 'success' ? 'green' : 'amber'}">${esc(c.status)}</span>${c.missingScopes?.length ? `<small>Missing: <code>${esc(c.missingScopes.join(', '))}</code></small>` : ''}</td><td>${c.requiredScopes?.length ? `<code>${esc(c.requiredScopes.join(', '))}</code>` : '<span class="muted">Not defined</span>'}</td><td>${c.count ?? '<span class="muted">—</span>'}</td><td>${c.status !== 'success' ? '<span class="muted">Unknown: not collected</span>' : fs.length ? `<div class="linked-findings">${fs.slice(0, 3).map(f => `<button type="button" class="linked" data-explore="${esc(f.id)}"><span class="dot ${sevClass(f.severity)}"></span>${esc(B().title(f))}</button>`).join('')}${fs.length > 3 ? `<span class="muted">+ ${fs.length - 3} more</span>` : ''}</div>` : '<span class="muted">No findings</span>'}</td></tr>`;
+      }).join('')}</tbody></table></div></section>`;
+  }
+
+  // NIS2 traceability: rule → finding → Art. 21 measure / KSC → evidence item → action status.
+  function traceability(report, trackOf, checklistOf) {
+    const N = window.PulseNIS2, ref = id => N.measures.find(m => m.id === id);
+    const rows = report.findings.map(f => {
+      const m = N.measureFor(f), item = N.checklist.find(i => i.measure === m && i.source === 'assessment') || N.checklist.find(i => i.measure === m);
+      return {f, m: ref(m), item, t: trackOf(f.id), e: item ? checklistOf(item) : null};
+    }).sort((a, b) => a.m.ref.localeCompare(b.m.ref));
+    return `<section class="panel nis2-section" id="traceability" aria-labelledby="trace-heading"><div class="panel-head"><div><p class="eyebrow">Traceability</p><h2 id="trace-heading">From rule to requirement.</h2><p>Each finding mapped to its primary NIS2 measure and KSC article, the evidence item it supports and the progress of its fix. Select a row to open the finding.</p></div><span class="pill">${rows.length} findings</span></div>
+      <div class="table-wrap dash-wrap"><table class="dash-table trace-table"><thead><tr><th scope="col">Rule</th><th scope="col">Finding</th><th scope="col">NIS2 / KSC</th><th scope="col">Evidence item</th><th scope="col">Action status</th></tr></thead><tbody>${rows.map(({f, m, item, t, e}) => `<tr class="dash-row" data-explore="${esc(f.id)}" tabindex="0"><td><code>${esc(f.id)}</code></td><td><strong>${esc(B().title(f))}</strong></td><td><span class="trace-ref">${esc(m.ref)}</span><small>${esc(m.name)} · KSC art. 8</small></td><td>${item ? `${esc(item.label.replace(/^21\([a-j]\) /, ''))}<small>${esc(e.status)}</small>` : '<span class="muted">—</span>'}</td><td><span class="pill ${progressClass(t.status)}">${esc(t.status)}</span></td></tr>`).join('')}</tbody></table></div>
+      <p class="section-note">Indicative mapping to the primary measure only. KSC art. 8 covers the information security management system areas that correspond to NIS2 Art. 21. Not a compliance verdict.</p></section>`;
+  }
+
+  window.PulseTech = {collectorFor, findingsTable, exploreExtra, coverage, traceability, stepsText};
+})();
+
+</script>
+<script>
+/* Generated by support/generate-apps.py from synthetic CLI fixtures. Do not edit. */
+window.PULSE_APPS = {
+ "auth0": {
+  "risk": {
+   "source": "fixtures/auth0/risky-tenant.snapshot.json",
+   "tenant": {
+    "session_lifetime": 8760,
+    "idle_session_lifetime": 720,
+    "flags": {
+     "disable_clickjack_protection_headers": true
+    }
+   },
+   "clients": [
+    {
+     "client_id": "spa-bad",
+     "name": "Legacy SPA",
+     "app_type": "spa",
+     "oidc_conformant": false,
+     "grant_types": [
+      "implicit",
+      "password",
+      "refresh_token"
+     ],
+     "callbacks": [
+      "http://app1.risky.example/cb",
+      "https://app1.risky.example/cb",
+      "https://app2.risky.example/cb",
+      "https://app3.risky.example/cb",
+      "https://app4.risky.example/cb",
+      "https://app5.risky.example/cb",
+      "https://app6.risky.example/cb",
+      "https://app7.risky.example/cb",
+      "https://app8.risky.example/cb",
+      "https://app9.risky.example/cb",
+      "https://app10.risky.example/cb",
+      "https://app11.risky.example/cb",
+      "https://app12.risky.example/cb",
+      "https://app13.risky.example/cb",
+      "https://app14.risky.example/cb",
+      "https://app15.risky.example/cb",
+      "https://app16.risky.example/cb"
+     ],
+     "web_origins": [
+      "http://app1.risky.example"
+     ],
+     "token_endpoint_auth_method": "none",
+     "refresh_token": {
+      "rotation_type": "non-rotating",
+      "expiration_type": "non-expiring"
+     }
+    },
+    {
+     "client_id": "confidential-bad",
+     "name": "Backend API",
+     "app_type": "regular_web",
+     "grant_types": [
+      "authorization_code"
+     ],
+     "token_endpoint_auth_method": "none"
+    }
+   ],
+   "connections": [
+    {
+     "id": "con-bad",
+     "name": "Legacy DB",
+     "strategy": "auth0",
+     "options": {
+      "password_policy": "low",
+      "brute_force_protection": false,
+      "enabledDatabaseCustomization": true,
+      "customScripts": {
+       "login": "function login(){ /* ... */ }"
+      }
+     }
+    }
+   ],
+   "resourceServers": [
+    {
+     "id": "rs-bad",
+     "name": "Public API",
+     "identifier": "https://api.risky.example",
+     "signing_alg": "HS256",
+     "enforce_policies": false,
+     "token_lifetime": 2592000,
+     "scopes": [
+      {
+       "value": "read:all"
+      },
+      {
+       "value": "write:all"
+      }
+     ]
+    }
+   ],
+   "clientGrants": [
+    {
+     "id": "cg-bad",
+     "client_id": "m2m-bad",
+     "audience": "https://api.risky.example",
+     "scope": [
+      "s1",
+      "s2",
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s7",
+      "s8",
+      "s9",
+      "s10",
+      "s11",
+      "s12",
+      "s13",
+      "s14",
+      "s15",
+      "s16",
+      "s17",
+      "s18",
+      "s19",
+      "s20",
+      "s21",
+      "s22",
+      "s23",
+      "s24",
+      "s25",
+      "s26",
+      "s27",
+      "s28",
+      "s29",
+      "s30",
+      "s31",
+      "s32"
+     ],
+     "allow_any_organization": true
+    }
+   ],
+   "actions": [
+    {
+     "id": "a-old",
+     "name": "Old action",
+     "runtime": "node12",
+     "deployed": true
+    }
+   ],
+   "rules": [
+    {
+     "id": "rule1",
+     "name": "legacy enrich",
+     "enabled": true,
+     "stage": "login_success"
+    }
+   ],
+   "hooks": [
+    {
+     "id": "hook1",
+     "name": "legacy hook",
+     "enabled": true
+    }
+   ],
+   "guardian": {
+    "policy": "never",
+    "factors": []
+   },
+   "attackProtection": {
+    "breached_password_detection": {
+     "enabled": false
+    },
+    "brute_force_protection": {
+     "enabled": false
+    },
+    "suspicious_ip_throttling": {
+     "enabled": false
+    }
+   },
+   "prompts": {
+    "universal_login_experience": "classic"
+   },
+   "customDomains": [],
+   "logStreams": []
+  },
+  "healthy": {
+   "source": "fixtures/auth0/healthy-tenant.snapshot.json",
+   "tenant": {
+    "friendly_name": "Healthy Co",
+    "support_email": "support@healthy.example",
+    "support_url": "https://healthy.example/support",
+    "picture_url": "https://healthy.example/logo.png",
+    "session_lifetime": 168,
+    "idle_session_lifetime": 72,
+    "flags": {
+     "disable_clickjack_protection_headers": false,
+     "no_disclose_enterprise_connections": true,
+     "revoke_refresh_token_grant": true
+    }
+   },
+   "clients": [
+    {
+     "client_id": "spa1",
+     "name": "Customer Portal",
+     "app_type": "spa",
+     "oidc_conformant": true,
+     "grant_types": [
+      "authorization_code",
+      "refresh_token"
+     ],
+     "callbacks": [
+      "https://app.healthy.example/callback"
+     ],
+     "web_origins": [
+      "https://app.healthy.example"
+     ],
+     "allowed_logout_urls": [
+      "https://app.healthy.example/logout"
+     ],
+     "token_endpoint_auth_method": "none",
+     "refresh_token": {
+      "rotation_type": "rotating",
+      "expiration_type": "expiring",
+      "token_lifetime": 2592000,
+      "idle_token_lifetime": 1296000
+     }
+    },
+    {
+     "client_id": "m2m1",
+     "name": "Backend Worker",
+     "app_type": "non_interactive",
+     "oidc_conformant": true,
+     "grant_types": [
+      "client_credentials"
+     ],
+     "token_endpoint_auth_method": "client_secret_post"
+    }
+   ],
+   "connections": [
+    {
+     "id": "con1",
+     "name": "Username-Password-Authentication",
+     "strategy": "auth0",
+     "options": {
+      "password_policy": "good",
+      "brute_force_protection": true,
+      "disable_signup": false
+     }
+    }
+   ],
+   "resourceServers": [
+    {
+     "id": "rs1",
+     "name": "Customer API",
+     "identifier": "https://api.healthy.example",
+     "signing_alg": "RS256",
+     "enforce_policies": true,
+     "token_lifetime": 86400,
+     "scopes": [
+      {
+       "value": "read:profile"
+      },
+      {
+       "value": "write:profile"
+      }
+     ]
+    }
+   ],
+   "clientGrants": [
+    {
+     "id": "cg1",
+     "client_id": "m2m1",
+     "audience": "https://api.healthy.example",
+     "scope": [
+      "read:profile"
+     ]
+    }
+   ],
+   "actions": [
+    {
+     "id": "a1",
+     "name": "Add user metadata",
+     "runtime": "node22",
+     "deployed": true
+    }
+   ],
+   "rules": [],
+   "hooks": [],
+   "guardian": {
+    "policy": "all-applications",
+    "factors": [
+     {
+      "name": "otp",
+      "enabled": true
+     }
+    ]
+   },
+   "attackProtection": {
+    "breached_password_detection": {
+     "enabled": true,
+     "shields": [
+      "block",
+      "admin_notification"
+     ]
+    },
+    "brute_force_protection": {
+     "enabled": true,
+     "shields": [
+      "block"
+     ]
+    },
+    "suspicious_ip_throttling": {
+     "enabled": true
+    }
+   },
+   "prompts": {
+    "universal_login_experience": "new",
+    "identifier_first": true
+   },
+   "customDomains": [
+    {
+     "domain": "login.healthy.example",
+     "primary": true,
+     "status": "ready",
+     "type": "auth0_managed_certs",
+     "tls_policy": "recommended"
+    }
+   ],
+   "logStreams": [
+    {
+     "id": "ls1",
+     "name": "datadog",
+     "type": "datadog",
+     "status": "active"
+    }
+   ]
+  },
+  "partial": {
+   "source": "fixtures/auth0/partial-scope.snapshot.json",
+   "tenant": {
+    "friendly_name": "Partial Co",
+    "support_email": "support@partial.example",
+    "support_url": "https://partial.example/support",
+    "picture_url": "https://partial.example/logo.png",
+    "session_lifetime": 168,
+    "idle_session_lifetime": 72,
+    "flags": {}
+   },
+   "clients": [
+    {
+     "client_id": "spa1",
+     "name": "Partial SPA",
+     "app_type": "spa",
+     "grant_types": [
+      "authorization_code",
+      "refresh_token"
+     ],
+     "callbacks": [
+      "https://app.partial.example/callback"
+     ],
+     "web_origins": [
+      "https://app.partial.example"
+     ],
+     "token_endpoint_auth_method": "none",
+     "refresh_token": {
+      "rotation_type": "rotating",
+      "expiration_type": "expiring"
+     }
+    }
+   ],
+   "connections": [
+    {
+     "id": "con1",
+     "name": "DB",
+     "strategy": "auth0",
+     "options": {
+      "password_policy": "good",
+      "brute_force_protection": true
+     }
+    }
+   ],
+   "resourceServers": [
+    {
+     "id": "rs1",
+     "name": "API",
+     "identifier": "https://api.partial.example",
+     "signing_alg": "RS256",
+     "enforce_policies": true,
+     "token_lifetime": 86400,
+     "scopes": [
+      {
+       "value": "read"
+      }
+     ]
+    }
+   ],
+   "clientGrants": [],
+   "actions": [],
+   "rules": null,
+   "hooks": null,
+   "guardian": {
+    "policy": "all-applications",
+    "factors": [
+     {
+      "name": "otp",
+      "enabled": true
+     }
+    ]
+   },
+   "attackProtection": null,
+   "prompts": {
+    "universal_login_experience": "new"
+   },
+   "customDomains": [],
+   "logStreams": null
+  }
+ },
+ "okta": {
+  "risk": {
+   "source": "fixtures/okta/risky-org.snapshot.json",
+   "org": {
+    "id": "00orisky",
+    "subdomain": "risky",
+    "companyName": "Risky Corp"
+   },
+   "apps": [
+    {
+     "id": "0oa1",
+     "name": "oidc_client",
+     "label": "Legacy Workforce App",
+     "status": "ACTIVE",
+     "signOnMode": "OPENID_CONNECT",
+     "settings": {
+      "oauthClient": {
+       "application_type": "web",
+       "grant_types": [
+        "authorization_code",
+        "implicit",
+        "refresh_token"
+       ],
+       "response_types": [
+        "code",
+        "token"
+       ],
+       "redirect_uris": [
+        "http://legacy.risky.example/callback"
+       ],
+       "post_logout_redirect_uris": [
+        "http://legacy.risky.example/logout"
+       ]
+      }
+     }
+    }
+   ],
+   "policies": {
+    "all": [],
+    "globalSessionPolicies": [],
+    "passwordPolicies": [],
+    "authenticatorEnrollmentPolicies": [],
+    "appSignInPolicies": [],
+    "unknownTypePolicies": []
+   },
+   "authenticators": [
+    {
+     "id": "aut1",
+     "key": "sms",
+     "name": "SMS",
+     "status": "ACTIVE"
+    }
+   ],
+   "authorizationServers": [
+    {
+     "id": "aus1",
+     "name": "default",
+     "status": "ACTIVE",
+     "issuer": "https://risky.okta.com/oauth2/default"
+    }
+   ],
+   "authorizationServerPolicies": [],
+   "idps": [],
+   "eventHooks": [
+    {
+     "id": "eh1",
+     "name": "Legacy Event Hook",
+     "status": "ACTIVE",
+     "channel": {
+      "type": "HTTP",
+      "uri": "http://hooks.risky.example/event"
+     }
+    }
+   ],
+   "inlineHooks": [
+    {
+     "id": "ih1",
+     "name": "Legacy Inline Hook",
+     "status": "ACTIVE",
+     "channel": {
+      "type": "HTTP",
+      "uri": "http://hooks.risky.example/inline"
+     }
+    }
+   ],
+   "logStreams": [],
+   "domains": [],
+   "trustedOrigins": [
+    {
+     "id": "to1",
+     "name": "Legacy Portal",
+     "origin": "http://legacy.risky.example",
+     "status": "ACTIVE"
+    }
+   ],
+   "networkZones": []
+  },
+  "healthy": {
+   "source": "fixtures/okta/healthy-org.snapshot.json",
+   "org": {
+    "id": "00ohealthy",
+    "subdomain": "healthy",
+    "companyName": "Healthy Corp",
+    "website": "https://healthy.example"
+   },
+   "apps": [
+    {
+     "id": "0oa1",
+     "name": "oidc_client",
+     "label": "Healthy App",
+     "status": "ACTIVE",
+     "signOnMode": "OPENID_CONNECT",
+     "settings": {
+      "oauthClient": {
+       "application_type": "web",
+       "grant_types": [
+        "authorization_code",
+        "refresh_token"
+       ],
+       "response_types": [
+        "code"
+       ],
+       "redirect_uris": [
+        "https://app.healthy.example/callback"
+       ],
+       "post_logout_redirect_uris": [
+        "https://app.healthy.example/logout"
+       ],
+       "refresh_token": {
+        "rotation_type": "ROTATE",
+        "expiration_type": "EXPIRING"
+       }
+      }
+     }
+    }
+   ],
+   "policies": {
+    "all": [
+     {
+      "id": "pol1",
+      "name": "Global Session",
+      "type": "OKTA_SIGN_ON",
+      "status": "ACTIVE",
+      "rules": [
+       {
+        "id": "rule1",
+        "name": "Default",
+        "status": "ACTIVE"
+       }
+      ]
+     },
+     {
+      "id": "pol2",
+      "name": "App Sign-In",
+      "type": "ACCESS_POLICY",
+      "status": "ACTIVE",
+      "rules": [
+       {
+        "id": "rule2",
+        "name": "Default",
+        "status": "ACTIVE"
+       }
+      ]
+     }
+    ],
+    "globalSessionPolicies": [
+     {
+      "id": "pol1",
+      "name": "Global Session",
+      "type": "OKTA_SIGN_ON",
+      "status": "ACTIVE",
+      "rules": [
+       {
+        "id": "rule1",
+        "name": "Default",
+        "status": "ACTIVE"
+       }
+      ]
+     }
+    ],
+    "passwordPolicies": [],
+    "authenticatorEnrollmentPolicies": [],
+    "appSignInPolicies": [
+     {
+      "id": "pol2",
+      "name": "App Sign-In",
+      "type": "ACCESS_POLICY",
+      "status": "ACTIVE",
+      "rules": [
+       {
+        "id": "rule2",
+        "name": "Default",
+        "status": "ACTIVE"
+       }
+      ]
+     }
+    ],
+    "unknownTypePolicies": []
+   },
+   "authenticators": [
+    {
+     "id": "aut1",
+     "key": "okta_verify",
+     "name": "Okta Verify",
+     "status": "ACTIVE"
+    }
+   ],
+   "authorizationServers": [
+    {
+     "id": "aus1",
+     "name": "default",
+     "status": "ACTIVE",
+     "issuer": "https://healthy.okta.com/oauth2/default"
+    }
+   ],
+   "authorizationServerPolicies": [
+    {
+     "authorizationServerId": "aus1",
+     "id": "asp1",
+     "name": "Default Policy",
+     "status": "ACTIVE",
+     "rules": [
+      {
+       "id": "asr1",
+       "name": "Rule",
+       "status": "ACTIVE"
+      }
+     ]
+    }
+   ],
+   "idps": [],
+   "eventHooks": [
+    {
+     "id": "eh1",
+     "name": "Audit Hook",
+     "status": "ACTIVE",
+     "channel": {
+      "type": "HTTP",
+      "uri": "https://hooks.healthy.example/event"
+     }
+    }
+   ],
+   "inlineHooks": [
+    {
+     "id": "ih1",
+     "name": "Claims Hook",
+     "status": "ACTIVE",
+     "channel": {
+      "type": "HTTP",
+      "uri": "https://hooks.healthy.example/inline"
+     }
+    }
+   ],
+   "logStreams": [
+    {
+     "id": "ls1",
+     "name": "SIEM",
+     "type": "splunk_cloud_logstreaming",
+     "status": "ACTIVE"
+    }
+   ],
+   "domains": [
+    {
+     "id": "dom1",
+     "domain": "login.healthy.example",
+     "validationStatus": "VERIFIED"
+    }
+   ],
+   "trustedOrigins": [
+    {
+     "id": "to1",
+     "name": "Portal",
+     "origin": "https://portal.healthy.example",
+     "status": "ACTIVE"
+    }
+   ],
+   "networkZones": [
+    {
+     "id": "zn1",
+     "name": "HQ",
+     "status": "ACTIVE",
+     "type": "IP"
+    }
+   ]
+  },
+  "partial": {
+   "source": "fixtures/okta/partial-scope-org.snapshot.json",
+   "org": {
+    "id": "00opartial",
+    "subdomain": "partial",
+    "companyName": "Partial Corp",
+    "website": "https://partial.example"
+   },
+   "apps": [
+    {
+     "id": "0oa1",
+     "name": "oidc_client",
+     "label": "Partial App",
+     "status": "ACTIVE",
+     "signOnMode": "OPENID_CONNECT",
+     "settings": {
+      "oauthClient": {
+       "application_type": "web",
+       "grant_types": [
+        "authorization_code"
+       ],
+       "response_types": [
+        "code"
+       ],
+       "redirect_uris": [
+        "https://partial.example/callback"
+       ]
+      }
+     }
+    }
+   ],
+   "policies": {
+    "all": [
+     {
+      "id": "pol1",
+      "name": "Global Session",
+      "type": "OKTA_SIGN_ON",
+      "status": "ACTIVE",
+      "rules": [
+       {
+        "id": "rule1",
+        "name": "Default",
+        "status": "ACTIVE"
+       }
+      ]
+     }
+    ],
+    "globalSessionPolicies": [
+     {
+      "id": "pol1",
+      "name": "Global Session",
+      "type": "OKTA_SIGN_ON",
+      "status": "ACTIVE",
+      "rules": [
+       {
+        "id": "rule1",
+        "name": "Default",
+        "status": "ACTIVE"
+       }
+      ]
+     }
+    ],
+    "passwordPolicies": [],
+    "authenticatorEnrollmentPolicies": [],
+    "appSignInPolicies": [],
+    "unknownTypePolicies": []
+   },
+   "authenticators": [
+    {
+     "id": "aut1",
+     "key": "okta_verify",
+     "name": "Okta Verify",
+     "status": "ACTIVE"
+    }
+   ],
+   "authorizationServers": [],
+   "authorizationServerPolicies": [],
+   "idps": [],
+   "eventHooks": [],
+   "inlineHooks": [],
+   "logStreams": null,
+   "domains": [],
+   "trustedOrigins": [
+    {
+     "id": "to1",
+     "name": "Portal",
+     "origin": "https://partial.example",
+     "status": "ACTIVE"
+    }
+   ],
+   "networkZones": [
+    {
+     "id": "zn1",
+     "name": "HQ",
+     "status": "ACTIVE",
+     "type": "IP"
+    }
+   ]
+  }
+ }
+};
+
+</script>
+<script>
+/* Remediation as code: example Terraform and Management API changes for a finding, generated from the
+   synthetic fixture snapshot (window.PULSE_APPS). Identity Pulse stays read-only; these are snippets for an
+   engineer to review and apply through their own pipeline. Only Auth0 and Okta (implemented connectors). */
+(() => {
+  'use strict';
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const list = values => JSON.stringify(values);
+  const slug = value => String(value).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'this';
+  const json = value => JSON.stringify(value, null, 2);
+  const auth0Call = (method, path, body) => `curl -X ${method} "https://$AUTH0_DOMAIN/api/v2${path}" \\\n  -H "Authorization: Bearer $AUTH0_MGMT_TOKEN" \\\n  -H "Content-Type: application/json"${body === undefined ? '' : ` \\\n  -d '${JSON.stringify(body)}'`}`;
+  const oktaCall = (method, path, body) => `curl -X ${method} "https://$OKTA_ORG_URL/api/v1${path}" \\\n  -H "Authorization: Bearer $OKTA_ACCESS_TOKEN" \\\n  -H "Accept: application/json" -H "Content-Type: application/json"${body === undefined ? '' : ` \\\n  -d '${JSON.stringify(body)}'`}`;
+  const fix = (target, before, after, terraform, api, note = '') => ({target, before, after, terraform, api, note});
+
+  function auth0(f, c, report) {
+    const clients = c.clients || [], apis = c.resourceServers || [], conns = c.connections || [];
+    const spaRisk = clients.find(x => (x.grant_types || []).some(g => ['implicit', 'password'].includes(g))) || clients[0];
+    const nonRotating = clients.find(x => x.refresh_token && x.refresh_token.rotation_type !== 'rotating') || clients.find(x => (x.grant_types || []).includes('refresh_token'));
+    const publicConf = clients.find(x => x.app_type === 'regular_web' && x.token_endpoint_auth_method === 'none') || clients.find(x => x.app_type === 'regular_web');
+    const httpCb = clients.find(x => (x.callbacks || []).some(u => u.startsWith('http://')) || (x.callbacks || []).length > 10);
+    const api = apis[0], grant = (c.clientGrants || [])[0], db = conns.find(x => x.strategy === 'auth0') || conns[0], action = (c.actions || [])[0], rule = (c.rules || [])[0];
+    const ap = (block, enabled, extra) => fix('Tenant attack protection', {[block]: {enabled}}, {[block]: {enabled: true, ...extra}},
+      `resource "auth0_attack_protection" "this" {\n  ${block} {\n    enabled = true\n${Object.entries(extra).map(([k, v]) => `    ${k} = ${typeof v === 'string' ? `"${v}"` : list(v)}`).join('\n')}\n  }\n}`,
+      auth0Call('PATCH', `/attack-protection/${block.replaceAll('_', '-')}`, {enabled: true, ...extra}));
+    const attack = c.attackProtection || {};
+    switch (f.id) {
+      case 'AUTH-SEC-004': return ap('brute_force_protection', attack.brute_force_protection?.enabled ?? false, {shields: ['block', 'user_notification'], mode: 'count_per_identifier_and_ip', max_attempts: 10});
+      case 'AUTH-SEC-005': return ap('breached_password_detection', attack.breached_password_detection?.enabled ?? false, {shields: ['block', 'admin_notification'], method: 'standard'});
+      case 'AUTH-SEC-006': return ap('suspicious_ip_throttling', attack.suspicious_ip_throttling?.enabled ?? false, {shields: ['block', 'admin_notification']});
+      case 'AUTH-SEC-001': return fix('Guardian MFA policy', c.guardian || {}, {policy: 'all-applications', factors: [{name: 'otp', enabled: true}, {name: 'webauthn-roaming', enabled: true}]},
+        `resource "auth0_guardian" "this" {\n  policy = "all-applications"\n  otp    = true\n\n  webauthn_roaming {\n    user_verification = "required"\n  }\n}`,
+        `${auth0Call('PUT', '/guardian/policies', ['all-applications'])}\n\n${auth0Call('PUT', '/guardian/factors/otp', {enabled: true})}`,
+        'Requiring MFA on every login can affect sign-in conversion. For customer identity, consider step-up MFA for sensitive actions through a post-login Action instead of "all-applications".');
+      case 'AUTH-CLI-001': if (!spaRisk) break; {
+        const grants = ['authorization_code', 'refresh_token'];
+        return fix(`Application "${spaRisk.name}" (${spaRisk.client_id})`, {grant_types: spaRisk.grant_types, oidc_conformant: spaRisk.oidc_conformant ?? false}, {grant_types: grants, oidc_conformant: true},
+          `resource "auth0_client" "${slug(spaRisk.name)}" {\n  name            = "${spaRisk.name}"\n  app_type        = "${spaRisk.app_type}"\n  oidc_conformant = true\n  grant_types     = ${list(grants)}\n}`,
+          auth0Call('PATCH', `/clients/${spaRisk.client_id}`, {grant_types: grants, oidc_conformant: true}),
+          'Removing implicit and password grants breaks clients that still use them. Move the app to authorization code with PKCE first.');
+      }
+      case 'AUTH-CLI-002': if (!httpCb) break; {
+        const keep = (httpCb.callbacks || []).filter(u => u.startsWith('https://')).slice(0, 3), origins = (httpCb.web_origins || []).map(u => u.replace(/^http:/, 'https:'));
+        return fix(`Application "${httpCb.name}" (${httpCb.client_id})`, {callbacks: `${(httpCb.callbacks || []).length} URLs, ${(httpCb.callbacks || []).filter(u => u.startsWith('http://')).length} over http://`, web_origins: httpCb.web_origins}, {callbacks: keep, web_origins: origins},
+          `resource "auth0_client" "${slug(httpCb.name)}" {\n  name        = "${httpCb.name}"\n  app_type    = "${httpCb.app_type}"\n  # Keep only the HTTPS callbacks the application really uses.\n  callbacks   = ${list(keep)}\n  web_origins = ${list(origins)}\n}`,
+          auth0Call('PATCH', `/clients/${httpCb.client_id}`, {callbacks: keep, web_origins: origins}),
+          'The callback list here is an example. Confirm the real redirect URLs with the application owner before removing any.');
+      }
+      case 'AUTH-CLI-004': if (!nonRotating) break; {
+        const rt = {rotation_type: 'rotating', expiration_type: 'expiring', token_lifetime: 2592000, idle_token_lifetime: 1296000, leeway: 0};
+        return fix(`Application "${nonRotating.name}" (${nonRotating.client_id})`, {refresh_token: nonRotating.refresh_token || 'not configured'}, {refresh_token: rt},
+          `resource "auth0_client" "${slug(nonRotating.name)}" {\n  name     = "${nonRotating.name}"\n  app_type = "${nonRotating.app_type}"\n\n  refresh_token {\n    rotation_type       = "rotating"\n    expiration_type     = "expiring"\n    token_lifetime      = 2592000 # 30 days absolute\n    idle_token_lifetime = 1296000 # 15 days idle\n    leeway              = 0\n  }\n}`,
+          auth0Call('PATCH', `/clients/${nonRotating.client_id}`, {refresh_token: rt}));
+      }
+      case 'AUTH-CLI-005': if (!publicConf) break;
+        return fix(`Application "${publicConf.name}" (${publicConf.client_id})`, {token_endpoint_auth_method: publicConf.token_endpoint_auth_method}, {token_endpoint_auth_method: 'client_secret_post'},
+          `resource "auth0_client_credentials" "${slug(publicConf.name)}" {\n  client_id             = "${publicConf.client_id}"\n  authentication_method = "client_secret_post"\n  # Prefer "private_key_jwt" for high-assurance integrations.\n}`,
+          auth0Call('PATCH', `/clients/${publicConf.client_id}`, {token_endpoint_auth_method: 'client_secret_post'}),
+          'The application must be updated to send its client secret (or a signed JWT) before this change, or token requests will fail.');
+      case 'AUTH-API-001': case 'AUTH-API-002': case 'AUTH-API-003': if (!api) break; {
+        const change = f.id === 'AUTH-API-001' ? {signing_alg: 'RS256'} : f.id === 'AUTH-API-002' ? {enforce_policies: true, token_dialect: 'access_token_authz'} : {token_lifetime: 86400};
+        const before = Object.fromEntries(Object.keys(change).map(k => [k, api[k] ?? 'not set']));
+        return fix(`API "${api.name}" (${api.identifier})`, before, change,
+          `resource "auth0_resource_server" "${slug(api.name)}" {\n  name       = "${api.name}"\n  identifier = "${api.identifier}"\n${Object.entries(change).map(([k, v]) => `  ${k.padEnd(16)} = ${typeof v === 'string' ? `"${v}"` : v}`).join('\n')}\n}`,
+          auth0Call('PATCH', `/resource-servers/${api.id}`, change),
+          f.id === 'AUTH-API-001' ? 'APIs that validate tokens with the shared HS256 secret must switch to the tenant JWKS (RS256) at the same time.' : f.id === 'AUTH-API-003' ? 'Shorter access tokens rely on refresh tokens or silent authentication; check client behavior.' : '');
+      }
+      case 'AUTH-API-005': if (!grant) break;
+        return fix(`Client grant ${grant.id} (${grant.client_id} → ${grant.audience})`, {scope: `${(grant.scope || []).length} scopes`, allow_any_organization: grant.allow_any_organization ?? false}, {scope: ['<only the scopes the worker needs>'], allow_any_organization: false},
+          `resource "auth0_client_grant" "${slug(grant.client_id)}" {\n  client_id = "${grant.client_id}"\n  audience  = "${grant.audience}"\n  scopes    = ["<only the scopes the worker needs>"]\n}`,
+          auth0Call('PATCH', `/client-grants/${grant.id}`, {scope: ['<only the scopes the worker needs>'], allow_any_organization: false}));
+      case 'AUTH-CON-001': case 'AUTH-CON-002': if (!db) break; {
+        const change = f.id === 'AUTH-CON-001' ? {password_policy: 'good'} : {brute_force_protection: true};
+        return fix(`Connection "${db.name}" (${db.id})`, Object.fromEntries(Object.keys(change).map(k => [k, db.options?.[k] ?? 'not set'])), change,
+          `resource "auth0_connection" "${slug(db.name)}" {\n  name     = "${db.name}"\n  strategy = "${db.strategy}"\n\n  options {\n${Object.entries(change).map(([k, v]) => `    ${k} = ${typeof v === 'string' ? `"${v}"` : v}`).join('\n')}\n  }\n}`,
+          auth0Call('PATCH', `/connections/${db.id}`, {options: {...(db.options || {}), ...change, customScripts: undefined}}),
+          'PATCH replaces the whole options object. Read the current options first and send them back with only this value changed.');
+      }
+      case 'AUTH-TEN-001': return fix('Tenant settings', {friendly_name: c.tenant?.friendly_name ?? 'not set', support_email: c.tenant?.support_email ?? 'not set'}, {friendly_name: '<Your brand>', support_email: 'support@example.com', support_url: 'https://example.com/support', picture_url: 'https://example.com/logo.png'},
+        'resource "auth0_tenant" "this" {\n  friendly_name = "<Your brand>"\n  support_email = "support@example.com"\n  support_url   = "https://example.com/support"\n  picture_url   = "https://example.com/logo.png"\n}',
+        auth0Call('PATCH', '/tenants/settings', {friendly_name: '<Your brand>', support_email: 'support@example.com', support_url: 'https://example.com/support', picture_url: 'https://example.com/logo.png'}));
+      case 'AUTH-TEN-003-A': case 'AUTH-TEN-003-B':
+        return fix('Tenant session policy', {session_lifetime: `${c.tenant?.session_lifetime ?? '?'} h`, idle_session_lifetime: `${c.tenant?.idle_session_lifetime ?? '?'} h`}, {session_lifetime: '168 h (7 days)', idle_session_lifetime: '72 h (3 days)'},
+          'resource "auth0_tenant" "this" {\n  session_lifetime      = 168 # hours, absolute\n  idle_session_lifetime = 72  # hours, idle\n}',
+          auth0Call('PATCH', '/tenants/settings', {session_lifetime: 168, idle_session_lifetime: 72}),
+          'Values are examples. Set them from your own risk appetite and the user experience you need.');
+      case 'AUTH-TEN-004-A': return fix('Tenant flags', {disable_clickjack_protection_headers: c.tenant?.flags?.disable_clickjack_protection_headers ?? 'not set'}, {disable_clickjack_protection_headers: false},
+        'resource "auth0_tenant" "this" {\n  flags {\n    disable_clickjack_protection_headers = false\n  }\n}',
+        auth0Call('PATCH', '/tenants/settings', {flags: {disable_clickjack_protection_headers: false}}));
+      case 'AUTH-UX-001': return fix('Universal Login', {universal_login_experience: c.prompts?.universal_login_experience ?? 'not set'}, {universal_login_experience: 'new', identifier_first: true},
+        'resource "auth0_prompt" "this" {\n  universal_login_experience = "new"\n  identifier_first           = true\n}',
+        auth0Call('PATCH', '/prompts', {universal_login_experience: 'new', identifier_first: true}),
+        'Custom classic login pages need to be rebuilt with Universal Login branding or page templates.');
+      case 'AUTH-UX-003': return fix('Custom domain', {custom_domains: (c.customDomains || []).length ? c.customDomains.map(d => d.domain) : 'none'}, {custom_domain: 'login.example.com', type: 'auth0_managed_certs'},
+        'resource "auth0_custom_domain" "login" {\n  domain = "login.example.com"\n  type   = "auth0_managed_certs"\n}\n\nresource "auth0_custom_domain_verification" "login" {\n  custom_domain_id = auth0_custom_domain.login.id\n  # Requires the DNS CNAME record to be in place first.\n}',
+        auth0Call('POST', '/custom-domains', {domain: 'login.example.com', type: 'auth0_managed_certs'}));
+      case 'AUTH-OBS-001': return fix('Log streams', {log_streams: (c.logStreams || []).length || 'none active'}, {log_stream: 'HTTP stream to your SIEM'},
+        'resource "auth0_log_stream" "siem" {\n  name = "SIEM"\n  type = "http"\n\n  sink {\n    http_endpoint       = "https://siem.example.com/ingest/auth0"\n    http_content_type   = "application/json"\n    http_content_format = "JSONLINES"\n    http_authorization  = var.siem_token\n  }\n}',
+        auth0Call('POST', '/log-streams', {name: 'SIEM', type: 'http', sink: {httpEndpoint: 'https://siem.example.com/ingest/auth0', httpContentType: 'application/json', httpContentFormat: 'JSONLINES', httpAuthorization: '<token>'}}));
+      case 'AUTH-EXT-001': return fix(`Rule "${rule?.name ?? 'legacy rule'}"`, {rules_enabled: (c.rules || []).filter(r => r.enabled).map(r => r.name), hooks_enabled: (c.hooks || []).filter(h => h.enabled).map(h => h.name)}, {post_login_action: `${rule?.name ?? 'migrated logic'} (node22)`, rules_enabled: []},
+        `resource "auth0_action" "${slug(rule?.name ?? 'migrated')}" {\n  name    = "${rule?.name ?? 'migrated logic'}"\n  runtime = "node22"\n  deploy  = true\n  code    = file("\${path.module}/actions/${slug(rule?.name ?? 'migrated')}.js")\n\n  supported_triggers {\n    id      = "post-login"\n    version = "v3"\n  }\n}\n\nresource "auth0_trigger_actions" "post_login" {\n  trigger = "post-login"\n\n  actions {\n    id           = auth0_action.${slug(rule?.name ?? 'migrated')}.id\n    display_name = auth0_action.${slug(rule?.name ?? 'migrated')}.name\n  }\n}\n\n# After testing, disable the rule.\nresource "auth0_rule" "${slug(rule?.name ?? 'legacy')}" {\n  name    = "${rule?.name ?? 'legacy'}"\n  script  = file("\${path.module}/rules/${slug(rule?.name ?? 'legacy')}.js")\n  enabled = false\n}`,
+        `${auth0Call('POST', '/actions/actions', {name: rule?.name ?? 'migrated logic', runtime: 'node22', code: '<ported rule code>', supported_triggers: [{id: 'post-login', version: 'v3'}]})}\n\n# Then deploy it, bind it to the post-login trigger and disable the rule:\n${auth0Call('POST', '/actions/actions/{action_id}/deploy')}\n\n${auth0Call('PATCH', '/actions/triggers/post-login/bindings', {bindings: [{ref: {type: 'action_id', value: '{action_id}'}, display_name: rule?.name ?? 'migrated logic'}]})}\n\n${auth0Call('PATCH', `/rules/${rule?.id ?? '{rule_id}'}`, {enabled: false})}`,
+        'Rules and Hooks reach end of life on 18 November 2026. Port and test the logic in a development tenant first.');
+      case 'AUTH-EXT-002': if (!action) break;
+        return fix(`Action "${action.name}" (${action.id})`, {runtime: action.runtime}, {runtime: 'node22'},
+          `resource "auth0_action" "${slug(action.name)}" {\n  name    = "${action.name}"\n  runtime = "node22"\n  deploy  = true\n  code    = file("\${path.module}/actions/${slug(action.name)}.js")\n}`,
+          `${auth0Call('PATCH', `/actions/actions/${action.id}`, {runtime: 'node22'})}\n\n${auth0Call('POST', `/actions/actions/${action.id}/deploy`)}`,
+          'Test the Action on the new runtime; npm dependencies may need updating.');
+      case 'AUTH-RBAC-001': return fix('Roles', {roles: 0}, {roles: ['<role per access level>']},
+        `resource "auth0_role" "customer_admin" {\n  name        = "Customer admin"\n  description = "Manages their own organization"\n}\n\nresource "auth0_role_permissions" "customer_admin" {\n  role_id = auth0_role.customer_admin.id\n\n  permissions {\n    resource_server_identifier = "${api?.identifier ?? 'https://api.example.com'}"\n    name                       = "${api?.scopes?.[0]?.value ?? 'read:profile'}"\n  }\n}`,
+        auth0Call('POST', '/roles', {name: 'Customer admin', description: 'Manages their own organization'}),
+        'Only needed if authorization is meant to live in Auth0. Confirm where it is managed first.');
+      case 'AUTH-COV-001': {
+        const missing = report.coverage.missingScopes || [];
+        return fix('Pulse scanner application', {missing_scopes: missing}, {scopes_added: missing},
+          `resource "auth0_client_grant" "pulse_scanner" {\n  client_id = var.pulse_scanner_client_id\n  audience  = "https://\${var.auth0_domain}/api/v2/"\n  scopes    = ${list(['read:tenant_settings', 'read:clients', '...existing scopes', ...missing])}\n}`,
+          auth0Call('PATCH', '/client-grants/{pulse_scanner_grant_id}', {scope: ['...existing scopes', ...missing]}),
+          'Read-only scopes only. Re-run the assessment afterwards to close the coverage gap.');
+      }
+    }
+    return null;
+  }
+
+  function okta(f, c, report) {
+    const app = (c.apps || [])[0], oc = app?.settings?.oauthClient || {}, hook = (c.eventHooks || [])[0], inline = (c.inlineHooks || [])[0], origin = (c.trustedOrigins || [])[0];
+    switch (f.id) {
+      case 'OKTA-APP-001': if (!app) break; {
+        const after = {grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'], redirect_uris: (oc.redirect_uris || []).map(u => u.replace(/^http:/, 'https:'))};
+        return fix(`App "${app.label}" (${app.id})`, {grant_types: oc.grant_types, response_types: oc.response_types}, after,
+          `resource "okta_app_oauth" "${slug(app.label)}" {\n  label                  = "${app.label}"\n  type                   = "${oc.application_type || 'web'}"\n  grant_types            = ${list(after.grant_types)}\n  response_types         = ${list(after.response_types)}\n  redirect_uris          = ${list(after.redirect_uris)}\n  refresh_token_rotation = "ROTATE"\n}`,
+          oktaCall('PUT', `/apps/${app.id}`, {name: app.name, label: app.label, signOnMode: app.signOnMode, settings: {oauthClient: {...oc, ...after}}}),
+          'PUT replaces the whole app. Read the current app object first and send it back with only these values changed.');
+      }
+      case 'OKTA-HOOK-001': if (!hook && !inline) break; {
+        const h = hook || inline, uri = h.channel?.uri?.replace(/^http:/, 'https:');
+        return fix(`${hook ? 'Event' : 'Inline'} hook "${h.name}" (${h.id})`, {uri: h.channel?.uri}, {uri},
+          hook ? `resource "okta_event_hook" "${slug(h.name)}" {\n  name   = "${h.name}"\n  events = ["user.lifecycle.create"] # keep your existing events\n\n  channel = {\n    type    = "HTTP"\n    version = "1.0.0"\n    uri     = "${uri}"\n  }\n}` : `resource "okta_inline_hook" "${slug(h.name)}" {\n  name    = "${h.name}"\n  type    = "com.okta.oauth2.tokens.transform"\n  version = "1.0.0"\n\n  channel = {\n    version = "1.0.0"\n    uri     = "${uri}"\n    method  = "POST"\n  }\n}`,
+          oktaCall('PUT', `/${hook ? 'eventHooks' : 'inlineHooks'}/${h.id}`, {name: h.name, channel: {...h.channel, uri}}),
+          'The receiving endpoint must serve a valid TLS certificate before the change.');
+      }
+      case 'OKTA-NET-001': if (!origin) break; {
+        const o = origin.origin.replace(/^http:/, 'https:');
+        return fix(`Trusted origin "${origin.name}" (${origin.id})`, {origin: origin.origin}, {origin: o},
+          `resource "okta_trusted_origin" "${slug(origin.name)}" {\n  name   = "${origin.name}"\n  origin = "${o}"\n  scopes = ["CORS", "REDIRECT"]\n}`,
+          oktaCall('PUT', `/trustedOrigins/${origin.id}`, {name: origin.name, origin: o, scopes: [{type: 'CORS'}, {type: 'REDIRECT'}]}));
+      }
+      case 'OKTA-POL-002': return fix('Authenticators', {active: (c.authenticators || []).filter(a => a.status === 'ACTIVE').map(a => a.key)}, {active: ['okta_verify', 'webauthn']},
+        'resource "okta_authenticator" "okta_verify" {\n  name   = "Okta Verify"\n  key    = "okta_verify"\n  status = "ACTIVE"\n}\n\nresource "okta_authenticator" "passkeys" {\n  name   = "FIDO2 (WebAuthn)"\n  key    = "webauthn"\n  status = "ACTIVE"\n}',
+        `${oktaCall('POST', '/authenticators/{okta_verify_authenticator_id}/lifecycle/activate')}\n\n${oktaCall('POST', '/authenticators/{webauthn_authenticator_id}/lifecycle/activate')}`,
+        'Then require these authenticators in the relevant app sign-in policies; activation alone does not enforce them.');
+      case 'OKTA-POL-001': case 'OKTA-APP-006': return fix(app ? `App "${app.label}"` : 'App sign-in policy', {app_sign_in_policies: (c.policies?.appSignInPolicies || []).length}, {app_sign_in_policy: 'MFA required'},
+        `resource "okta_app_signon_policy" "standard" {\n  name        = "Standard app sign-in"\n  description = "Requires two factors"\n}\n\nresource "okta_app_signon_policy_rule" "mfa" {\n  policy_id   = okta_app_signon_policy.standard.id\n  name        = "Require MFA"\n  factor_mode = "2FA"\n  re_authentication_frequency = "PT12H"\n}`,
+        oktaCall('POST', '/policies', {type: 'ACCESS_POLICY', name: 'Standard app sign-in', description: 'Requires two factors'}),
+        'Assign the policy to each app after creating it. Rule constraints depend on your authenticators.');
+      case 'OKTA-MON-001': return fix('Log streams', {log_streams: (c.logStreams || []).length || 'none active'}, {log_stream: 'Splunk Cloud'},
+        'resource "okta_log_stream" "splunk" {\n  name = "Splunk Cloud"\n  type = "splunk_cloud_logstreaming"\n\n  settings {\n    host    = "acme.splunkcloud.com"\n    edition = "aws"\n    token   = var.splunk_hec_token\n  }\n}',
+        oktaCall('POST', '/logStreams', {type: 'splunk_cloud_logstreaming', name: 'Splunk Cloud', settings: {host: 'acme.splunkcloud.com', edition: 'aws', token: '<HEC token>'}}));
+      case 'OKTA-ADM-001': return fix('Admin role assignments', {assignment: 'direct to users'}, {assignment: 'via an admin group'},
+        'resource "okta_group" "super_admins" {\n  name = "Okta Super Admins"\n}\n\nresource "okta_group_role" "super_admin" {\n  group_id  = okta_group.super_admins.id\n  role_type = "SUPER_ADMIN"\n}',
+        `${oktaCall('POST', '/groups/{admin_group_id}/roles', {type: 'SUPER_ADMIN'})}\n\n# Then remove the direct assignment from each user:\n${oktaCall('DELETE', '/users/{user_id}/roles/{role_assignment_id}')}`,
+        'Keep at least one break-glass admin while moving assignments.');
+      case 'OKTA-API-001': { const as = (c.authorizationServers || [])[0];
+        return fix(`Authorization server "${as?.name ?? 'default'}"`, {access_policies: (c.authorizationServerPolicies || []).length}, {access_policy: 'Default policy with explicit lifetimes'},
+          `resource "okta_auth_server_policy" "default" {\n  auth_server_id   = "${as?.id ?? '{auth_server_id}'}"\n  name             = "Default policy"\n  description      = "Explicit token lifetimes"\n  priority         = 1\n  client_whitelist = ["ALL_CLIENTS"]\n}\n\nresource "okta_auth_server_policy_rule" "default" {\n  auth_server_id                 = "${as?.id ?? '{auth_server_id}'}"\n  policy_id                      = okta_auth_server_policy.default.id\n  name                           = "Default rule"\n  priority                       = 1\n  grant_type_whitelist           = ["authorization_code"]\n  scope_whitelist                = ["*"]\n  group_whitelist                = ["EVERYONE"]\n  access_token_lifetime_minutes  = 60\n  refresh_token_lifetime_minutes = 43200\n}`,
+          oktaCall('POST', `/authorizationServers/${as?.id ?? '{auth_server_id}'}/policies`, {type: 'OAUTH_AUTHORIZATION_POLICY', name: 'Default policy', priority: 1, conditions: {clients: {include: ['ALL_CLIENTS']}}}));
+      }
+      case 'OKTA-ORG-001': return fix(`Org "${c.org?.companyName ?? c.org?.subdomain ?? 'org'}"`, {website: c.org?.website ?? 'not set'}, {website: 'https://www.example.com', supportPhoneNumber: '+48 22 000 00 00'},
+        'resource "okta_org_configuration" "this" {\n  company_name         = "' + (c.org?.companyName ?? '<Company>') + '"\n  website              = "https://www.example.com"\n  support_phone_number = "+48 22 000 00 00"\n}',
+        oktaCall('POST', '/org', {website: 'https://www.example.com', supportPhoneNumber: '+48 22 000 00 00'}),
+        'Values are placeholders; use your organization\'s real website and support contact.');
+      case 'OKTA-NET-002': { const zone = (c.networkZones || [])[0], pol = (c.policies?.globalSessionPolicies || [])[0];
+        return fix(`Global session policy "${pol?.name ?? 'Global Session'}"`, {network_zones_referenced: 0}, {network_connection: 'ZONE', network_includes: [zone?.name ?? '<trusted zone>']},
+          `resource "okta_policy_rule_signon" "trusted_network" {\n  policy_id          = "${pol?.id ?? '{policy_id}'}"\n  name               = "Trusted network"\n  status             = "ACTIVE"\n  access             = "ALLOW"\n  network_connection = "ZONE"\n  network_includes   = ["${zone?.id ?? '{zone_id}'}"]\n  mfa_required       = true\n}`,
+          oktaCall('POST', `/policies/${pol?.id ?? '{policy_id}'}/rules`, {type: 'SIGN_ON', name: 'Trusted network', conditions: {network: {connection: 'ZONE', include: [zone?.id ?? '{zone_id}']}}, actions: {signon: {access: 'ALLOW', requireFactor: true}}}),
+          'Decide what each zone should allow (for example, block or require MFA outside trusted networks) before referencing it.');
+      }
+      case 'OKTA-USR-002': return fix('Dormant users', {dormant_users: 'present'}, {dormant_users: 'reviewed and deactivated'}, null,
+        `# List users who have not signed in for 90 days (adjust the date):\n${oktaCall('GET', '/users?search=lastLogin+lt+"2026-07-01T00:00:00.000Z"')}\n\n# Deactivate a confirmed dormant user:\n${oktaCall('POST', '/users/{user_id}/lifecycle/deactivate')}`,
+        'User lifecycle is not managed in Terraform here. Confirm with account owners before deactivating.');
+      case 'OKTA-COV-001': { const missing = report.coverage.missingScopes || [];
+        return fix('Pulse scanner app', {missing_scopes: missing}, {scopes_granted: missing},
+          `resource "okta_app_oauth_api_scope" "pulse_scanner" {\n  app_id = var.pulse_scanner_app_id\n  issuer = "https://\${var.okta_org_url}"\n  scopes = ${list(missing.length ? missing : ['<missing read scopes>'])}\n}`,
+          oktaCall('POST', '/apps/{pulse_scanner_app_id}/grants', {issuer: 'https://$OKTA_ORG_URL', scopeId: missing[0] || '<scope>'}),
+          'Read-only scopes only. Re-run the assessment afterwards to close the coverage gap.');
+      }
+    }
+    return null;
+  }
+
+  // Returns {available, reason?, fix?} for a finding.
+  function forFinding(provider, sample, finding, report) {
+    if (report.demo?.illustrative || !['auth0', 'okta'].includes(provider)) return {available: false, reason: `No snippet: the ${window.PulseProviders.get(provider).name} connector is a proposed design, so no API or Terraform contract is defined.`};
+    const config = window.PULSE_APPS?.[provider]?.[sample];
+    const result = config ? (provider === 'auth0' ? auth0 : okta)(finding, config, report) : null;
+    return result ? {available: true, fix: result, source: config.source} : {available: false, reason: 'No generated snippet for this rule. Follow the recommended change and validation steps.'};
+  }
+
+  function panel(provider, sample, finding, report) {
+    const r = forFinding(provider, sample, finding, report);
+    if (!r.available) return `<section class="remediation"><div class="rem-head"><p class="eyebrow">Remediation as code</p></div><p class="muted">${esc(r.reason)}</p></section>`;
+    const {fix: x} = r, tfName = provider === 'auth0' ? 'Terraform · auth0/auth0' : 'Terraform · okta/okta', apiName = provider === 'auth0' ? 'Management API' : 'Okta API';
+    const tabs = [x.terraform && ['tf', tfName, x.terraform], ['api', apiName, x.api]].filter(Boolean);
+    return `<section class="remediation" data-remediation><div class="rem-head"><div><p class="eyebrow">Remediation as code</p><h3>${esc(x.target)}</h3></div><span class="pill">Generated example · review before applying</span></div>
+      <div class="rem-diff"><div><span>Current</span><pre>${esc(json(x.before))}</pre></div><span class="rem-arrow" aria-hidden="true">→</span><div><span>Proposed</span><pre>${esc(json(x.after))}</pre></div></div>
+      <div class="rem-tabs" role="tablist">${tabs.map(([id, label], i) => `<button type="button" role="tab" data-rem-tab="${id}" aria-selected="${i === 0}">${esc(label)}</button>`).join('')}<button type="button" class="rem-copy" data-rem-copy>Copy</button></div>
+      ${tabs.map(([id, , code], i) => `<pre class="rem-code" data-rem-panel="${id}" ${i ? 'hidden' : ''}><code>${esc(code)}</code></pre>`).join('')}
+      ${x.note ? `<p class="rem-note"><strong>Before you apply:</strong> ${esc(x.note)}</p>` : ''}
+      <p class="section-note">Generated from ${esc(r.source)} (synthetic). Check attribute names against your provider version and apply through your own pipeline; Identity Pulse never writes to the tenant.</p></section>`;
+  }
+
+  // Tabs and copy, delegated so the panel works in any dialog.
+  document.addEventListener('click', async e => {
+    const tab = e.target.closest('[data-rem-tab]'), copy = e.target.closest('[data-rem-copy]'), box = e.target.closest('[data-remediation]');
+    if (!box) return;
+    if (tab) { box.querySelectorAll('[data-rem-tab]').forEach(b => b.setAttribute('aria-selected', String(b === tab))); box.querySelectorAll('[data-rem-panel]').forEach(p => { p.hidden = p.dataset.remPanel !== tab.dataset.remTab; }); }
+    if (copy) { const code = box.querySelector('[data-rem-panel]:not([hidden])').textContent; try { await navigator.clipboard.writeText(code); copy.textContent = 'Copied'; } catch { copy.textContent = 'Select to copy'; } setTimeout(() => { copy.textContent = 'Copy'; }, 1600); }
+  });
+
+  window.PulseRemediation = {forFinding, panel};
+})();
+
+</script>
+<script>
+/* Applications tab (Tech SPOC): per-app token lifetime matrix and login journey,
+   built from the synthetic fixture snapshot in window.PULSE_APPS. Read-only; nothing here changes a tenant. */
+(() => {
+  'use strict';
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const B = () => window.PulseBusiness;
+  const RISKY_GRANTS = ['implicit', 'password'];
+  const duration = seconds => {
+    if (seconds == null) return null;
+    const d = seconds / 86400;
+    return d >= 1 ? `${+d.toFixed(1)} day${d === 1 ? '' : 's'}` : `${+(seconds / 3600).toFixed(1)} h`;
+  };
+  const hours = h => h == null ? null : h >= 24 ? `${+(h / 24).toFixed(1)} days` : `${h} h`;
+  const tag = (text, level) => `<span class="lvl lvl-${level}">${esc(text)}</span>`;
+  const notCollected = '<span class="muted">Not collected</span>';
+  const typeLabel = {spa: 'Single-page app', regular_web: 'Regular web app', native: 'Native app', non_interactive: 'Machine-to-machine', web: 'Web app', browser: 'Single-page app', service: 'Service'};
+
+  // ---- Auth0 ----
+  function auth0Apps(c) {
+    return (c.clients || []).map(x => {
+      const rt = x.refresh_token, hasRefresh = (x.grant_types || []).includes('refresh_token'), m2m = x.app_type === 'non_interactive';
+      const exposure = !hasRefresh ? ['No refresh tokens', 'ok'] : !rt || rt.expiration_type === 'non-expiring' ? ['Unlimited', 'risk']
+        : rt.rotation_type !== 'rotating' ? [duration(rt.token_lifetime) || 'Expiring', 'warn'] : [`${duration(rt.token_lifetime) || 'Expiring'} · reuse detected`, 'ok'];
+      const http = (x.callbacks || []).filter(u => u.startsWith('http://')).length;
+      return {
+        id: x.client_id, name: x.name, type: x.app_type, m2m,
+        grants: x.grant_types || [],
+        clientAuth: x.token_endpoint_auth_method ? [x.token_endpoint_auth_method, x.token_endpoint_auth_method === 'none' && ['regular_web', 'non_interactive'].includes(x.app_type) ? 'risk' : 'ok'] : ['not set', 'warn'],
+        refresh: !hasRefresh ? null : rt ? {rotation: rt.rotation_type, expiration: rt.expiration_type, absolute: duration(rt.token_lifetime), idle: duration(rt.idle_token_lifetime)} : {rotation: 'not set', expiration: 'not set'},
+        window: exposure,
+        callbacks: (x.callbacks || []).length ? [`${x.callbacks.length}${http ? ` · ${http} over http://` : ''}`, http || x.callbacks.length > 10 ? 'warn' : 'ok'] : m2m ? null : ['None', 'ok'],
+      };
+    });
+  }
+  function auth0Journey(app, c) {
+    const t = c.tenant || {}, ap = c.attackProtection, g = c.guardian, domain = (c.customDomains || []).find(d => d.primary) || (c.customDomains || [])[0];
+    const on = v => v ? 'on' : 'off';
+    if (app.m2m) return [
+      {title: 'Client authentication', level: app.clientAuth[1], detail: `Client credentials grant · ${app.clientAuth[0]}`, rules: ['AUTH-CLI-005']},
+      {title: 'API permissions', level: (c.clientGrants || []).some(g2 => g2.client_id === app.id && (g2.scope || []).length > 10) ? 'warn' : 'ok', detail: (c.clientGrants || []).filter(g2 => g2.client_id === app.id).map(g2 => `${g2.audience} · ${(g2.scope || []).length} scopes`).join('; ') || 'No client grants', rules: ['AUTH-API-005']},
+      {title: 'Access token', level: (c.resourceServers || []).some(r => r.signing_alg === 'HS256') ? 'risk' : 'ok', detail: (c.resourceServers || []).map(r => `${r.name}: ${r.signing_alg}, ${duration(r.token_lifetime)}`).join('; ') || notCollected, rules: ['AUTH-API-001', 'AUTH-API-003']},
+      {title: 'Monitoring', level: c.logStreams == null ? 'unknown' : c.logStreams.length ? 'ok' : 'warn', detail: c.logStreams == null ? 'Not collected' : c.logStreams.length ? `${c.logStreams.length} log stream(s)` : 'No log stream to a SIEM', rules: ['AUTH-OBS-001']},
+    ];
+    return [
+      {title: 'Sign-in page', level: c.prompts?.universal_login_experience === 'classic' || !domain ? 'warn' : 'ok', detail: `${domain ? domain.domain : 'Default *.auth0.com domain'} · ${c.prompts ? `${c.prompts.universal_login_experience === 'new' ? 'Universal Login' : 'Classic login'}${c.prompts.identifier_first ? ', identifier first' : ''}` : 'login experience not collected'}${t.flags?.disable_clickjack_protection_headers ? ' · clickjack headers off' : ''}`, rules: ['AUTH-UX-001', 'AUTH-UX-003', 'AUTH-TEN-004-A']},
+      {title: 'Identity source', level: (c.connections || []).some(x => x.options?.password_policy === 'low' || x.options?.brute_force_protection === false) ? 'risk' : 'ok', detail: (c.connections || []).map(x => `${x.name} (${x.strategy}) · password policy ${x.options?.password_policy ?? '?'}, brute force ${on(x.options?.brute_force_protection)}${x.options?.enabledDatabaseCustomization ? ', custom DB scripts' : ''}`).join('; ') || 'No connections', rules: ['AUTH-CON-001', 'AUTH-CON-002', 'AUTH-CON-003'], hint: 'Per-application connection enablement is not in the snapshot; all connections are shown.'},
+      {title: 'Attack protection', level: ap == null ? 'unknown' : [ap.brute_force_protection, ap.breached_password_detection, ap.suspicious_ip_throttling].every(x => x?.enabled) ? 'ok' : 'risk', detail: ap == null ? 'Not collected' : `Brute force ${on(ap.brute_force_protection?.enabled)} · breached passwords ${on(ap.breached_password_detection?.enabled)} · IP throttling ${on(ap.suspicious_ip_throttling?.enabled)}`, rules: ['AUTH-SEC-004', 'AUTH-SEC-005', 'AUTH-SEC-006']},
+      {title: 'MFA', level: g == null ? 'unknown' : g.policy === 'never' || !(g.factors || []).some(x => x.enabled) ? 'risk' : 'ok', detail: g == null ? 'Not collected' : `Policy "${g.policy}" · factors: ${(g.factors || []).filter(x => x.enabled).map(x => x.name).join(', ') || 'none'}`, rules: ['AUTH-SEC-001']},
+      {title: 'Login pipeline', level: (c.rules || []).some(r => r.enabled) || (c.hooks || []).some(h => h.enabled) ? 'risk' : c.rules == null || c.hooks == null || c.actions == null ? 'unknown' : (c.actions || []).some(a => /node1[0-8]/.test(a.runtime)) ? 'warn' : 'ok', detail: [c.rules == null ? 'Rules not collected' : `${(c.rules || []).filter(r => r.enabled).length} rule(s)${(c.rules || []).some(r => r.enabled) ? ' — end of life 18 Nov 2026' : ''}`, c.actions == null ? 'Actions not collected' : `${(c.actions || []).length} Action(s)${(c.actions || []).length ? ` (${c.actions.map(a => a.runtime).join(', ')})` : ''}`, c.hooks == null ? 'Hooks not collected' : `${(c.hooks || []).filter(h => h.enabled).length} hook(s)`].join(' · '), rules: ['AUTH-EXT-001', 'AUTH-EXT-002']},
+      {title: 'Tokens & session', level: app.window[1] === 'risk' || app.grants.some(x => RISKY_GRANTS.includes(x)) ? 'risk' : app.window[1], detail: `Grants: ${app.grants.join(', ')} · refresh: ${app.refresh ? `${app.refresh.rotation}, ${app.refresh.expiration}` : 'none'} · session ${hours(t.session_lifetime) ?? '?'} absolute / ${hours(t.idle_session_lifetime) ?? '?'} idle`, rules: ['AUTH-CLI-001', 'AUTH-CLI-004', 'AUTH-TEN-003-A', 'AUTH-TEN-003-B']},
+      {title: 'Monitoring', level: c.logStreams == null ? 'unknown' : c.logStreams.length ? 'ok' : 'warn', detail: c.logStreams == null ? 'Not collected' : c.logStreams.length ? `${c.logStreams.length} log stream(s)` : 'No log stream to a SIEM', rules: ['AUTH-OBS-001']},
+    ];
+  }
+  function auth0Apis(c) {
+    const apis = c.resourceServers;
+    if (apis == null) return '';
+    return `<h3 class="apps-sub">APIs and access tokens</h3><div class="table-wrap dash-wrap"><table class="dash-table apps-table"><thead><tr><th scope="col">API</th><th scope="col">Signing</th><th scope="col">Access token lifetime</th><th scope="col">Authorization</th></tr></thead><tbody>${apis.map(r => `<tr><td><strong>${esc(r.name)}</strong><small>${esc(r.identifier)}</small></td><td>${tag(r.signing_alg, r.signing_alg === 'HS256' ? 'risk' : 'ok')}</td><td>${tag(duration(r.token_lifetime) ?? 'default', r.token_lifetime > 86400 ? 'warn' : 'ok')}</td><td>${tag(r.enforce_policies ? 'RBAC enforced' : 'RBAC not enforced', r.enforce_policies ? 'ok' : 'warn')}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+
+  // ---- Okta ----
+  function oktaApps(c) {
+    return (c.apps || []).map(a => {
+      const oc = a.settings?.oauthClient || {}, grants = oc.grant_types || [], rt = oc.refresh_token, hasRefresh = grants.includes('refresh_token');
+      const http = (oc.redirect_uris || []).filter(u => u.startsWith('http://')).length;
+      return {
+        id: a.id, name: a.label, type: oc.application_type, m2m: oc.application_type === 'service', grants,
+        clientAuth: [oc.token_endpoint_auth_method || 'set in app', 'ok'],
+        refresh: !hasRefresh ? null : {rotation: rt?.rotation_type || 'not set', expiration: rt?.expiration_type || 'not set', absolute: null, idle: null},
+        window: !hasRefresh ? ['No refresh tokens', 'ok'] : rt?.rotation_type === 'ROTATE' ? ['Per auth server policy · reuse detected', 'ok'] : ['Per auth server policy · no rotation', 'warn'],
+        callbacks: [`${(oc.redirect_uris || []).length}${http ? ` · ${http} over http://` : ''}`, http ? 'warn' : 'ok'],
+      };
+    });
+  }
+  function oktaJourney(app, c) {
+    const p = c.policies || {}, auth = c.authenticators, active = (auth || []).filter(a => a.status === 'ACTIVE').map(a => a.key);
+    const strong = active.some(k => ['okta_verify', 'webauthn', 'smart_card_idp'].includes(k));
+    return [
+      {title: 'Sign-in domain', level: c.domains == null ? 'unknown' : (c.domains || []).length ? 'ok' : 'warn', detail: c.domains == null ? 'Not collected' : (c.domains || []).length ? c.domains.map(d => d.domain).join(', ') : `Default ${c.org?.subdomain ?? 'org'}.okta.com domain`, rules: ['OKTA-ORG-001']},
+      {title: 'Global session policy', level: (p.globalSessionPolicies || []).length ? 'ok' : 'warn', detail: (p.globalSessionPolicies || []).map(x => `${x.name} (${(x.rules || []).length} rule)`).join('; ') || 'No global session policy collected', rules: ['OKTA-POL-001', 'OKTA-NET-002']},
+      {title: 'App sign-in policy', level: (p.appSignInPolicies || []).length ? 'ok' : 'risk', detail: (p.appSignInPolicies || []).map(x => x.name).join('; ') || 'No app sign-in policy identified', rules: ['OKTA-APP-006', 'OKTA-POL-001']},
+      {title: 'Authenticators', level: auth == null ? 'unknown' : strong ? 'ok' : 'risk', detail: auth == null ? 'Not collected' : `Active: ${active.join(', ') || 'none'}${strong ? '' : ' · no phishing-resistant or app-based factor'}`, rules: ['OKTA-POL-002']},
+      {title: 'Token inline hooks', level: c.inlineHooks == null ? 'unknown' : (c.inlineHooks || []).some(h => h.channel?.uri?.startsWith('http://')) ? 'risk' : 'ok', detail: c.inlineHooks == null ? 'Not collected' : (c.inlineHooks || []).map(h => `${h.name} → ${h.channel?.uri}`).join('; ') || 'None', rules: ['OKTA-HOOK-001']},
+      {title: 'Tokens', level: app.grants.some(x => RISKY_GRANTS.includes(x)) ? 'risk' : app.window[1], detail: `Grants: ${app.grants.join(', ')} · refresh: ${app.refresh ? `${app.refresh.rotation}, ${app.refresh.expiration}` : 'none'} · auth server policies: ${(c.authorizationServerPolicies || []).length}`, rules: ['OKTA-APP-001', 'OKTA-API-001', 'OKTA-NET-001']},
+      {title: 'Monitoring', level: c.logStreams == null ? 'unknown' : (c.logStreams || []).length ? 'ok' : 'warn', detail: `${c.logStreams == null ? 'Log streams not collected' : `${(c.logStreams || []).length} log stream(s)`} · ${(c.eventHooks || []).length} event hook(s)`, rules: ['OKTA-MON-001', 'OKTA-HOOK-001']},
+    ];
+  }
+  function oktaServers(c) {
+    const servers = c.authorizationServers;
+    if (servers == null) return '';
+    return `<h3 class="apps-sub">Authorization servers and token policy</h3><div class="table-wrap dash-wrap"><table class="dash-table apps-table"><thead><tr><th scope="col">Authorization server</th><th scope="col">Status</th><th scope="col">Access policies</th><th scope="col">Token lifetimes</th></tr></thead><tbody>${servers.map(s => { const pol = (c.authorizationServerPolicies || []).filter(x => x.authorizationServerId === s.id); return `<tr><td><strong>${esc(s.name)}</strong><small>${esc(s.issuer)}</small></td><td>${tag(s.status, s.status === 'ACTIVE' ? 'ok' : 'warn')}</td><td>${tag(pol.length ? `${pol.length} policy` : 'None', pol.length ? 'ok' : 'risk')}</td><td><span class="muted">Set in policy rules (not in this snapshot)</span></td></tr>`; }).join('') || '<tr><td colspan="4" class="muted">No authorization servers</td></tr>'}</tbody></table></div>`;
+  }
+
+  // ---- Rendering ----
+  function render(provider, sample, report, selectedId, findingAttr) {
+    const c = window.PULSE_APPS?.[provider]?.[sample];
+    if (report.demo?.illustrative || !c) return `<section class="panel"><div class="panel-head"><div><h2>Applications</h2><p>Per-application token settings and login journeys.</p></div></div><p class="empty">Not available for ${esc(window.PulseProviders.get(provider).name)}: the connector is a proposed design, so no application configuration is collected. Choose Auth0 or Okta to explore this view.</p></section>`;
+    const apps = provider === 'auth0' ? auth0Apps(c) : oktaApps(c), app = apps.find(a => a.id === selectedId) || apps.find(a => !a.m2m) || apps[0];
+    const ids = new Set(report.findings.map(f => f.id));
+    const finding = id => report.findings.find(f => f.id === id);
+    const t = c.tenant || {};
+    const matrix = `<div class="table-wrap dash-wrap"><table class="dash-table apps-table token-matrix"><thead><tr><th scope="col">Application</th><th scope="col">Grant types</th><th scope="col">Client auth</th><th scope="col">Refresh token</th><th scope="col">Stolen refresh token usable for</th><th scope="col">Session</th><th scope="col">Callbacks</th></tr></thead><tbody>${apps.map(a => `<tr class="dash-row ${a.id === app?.id ? 'selected' : ''}" data-app-select="${esc(a.id)}" tabindex="0" aria-label="Show login journey for ${esc(a.name)}"><td><strong>${esc(a.name)}</strong><small>${esc(typeLabel[a.type] || a.type || 'App')} · <code>${esc(a.id)}</code></small></td><td><div class="grant-list">${a.grants.map(g => tag(g, RISKY_GRANTS.includes(g) ? 'risk' : 'neutral')).join('')}</div></td><td>${tag(a.clientAuth[0], a.clientAuth[1])}</td><td>${a.refresh ? `${tag(a.refresh.rotation, /^(rotating|ROTATE)$/.test(a.refresh.rotation) ? 'ok' : 'warn')}${tag(a.refresh.expiration, /non-expiring/.test(a.refresh.expiration) ? 'risk' : /^(expiring|EXPIRING)$/.test(a.refresh.expiration) ? 'ok' : 'warn')}${a.refresh.absolute ? `<small>${esc(a.refresh.absolute)} absolute · ${esc(a.refresh.idle ?? '—')} idle</small>` : ''}` : '<span class="muted">Not used</span>'}</td><td>${tag(a.window[0], a.window[1])}</td><td>${a.m2m ? '<span class="muted">n/a</span>' : provider === 'auth0' ? `<small class="nowrap">${esc(hours(t.session_lifetime) ?? '?')} absolute</small><small class="nowrap">${esc(hours(t.idle_session_lifetime) ?? '?')} idle</small>` : '<small>Global session policy</small>'}</td><td>${a.callbacks ? tag(a.callbacks[0], a.callbacks[1]) : '<span class="muted">n/a</span>'}</td></tr>`).join('')}</tbody></table></div>`;
+    const steps = app ? (provider === 'auth0' ? auth0Journey(app, c) : oktaJourney(app, c)) : [];
+    const levelText = {ok: 'OK', warn: 'Review', risk: 'Risk', unknown: 'Not collected'};
+    const journey = app ? `<div class="journey-head"><h3 class="apps-sub">Login journey · ${esc(app.name)}</h3><div class="app-pills">${apps.map(a => `<button type="button" class="app-pill" data-app-select="${esc(a.id)}" aria-pressed="${a.id === app.id}">${esc(a.name)}</button>`).join('')}</div></div>
+      <ol class="journey">${steps.map((s, i) => { const fs = s.rules.filter(id => ids.has(id)).map(finding); return `<li class="journey-step lvl-border-${s.level}"><div class="js-top"><span class="js-num">${i + 1}</span>${tag(levelText[s.level], s.level)}</div><h4>${esc(s.title)}</h4><p>${esc(s.detail)}</p>${s.hint ? `<p class="js-hint">${esc(s.hint)}</p>` : ''}${fs.length ? `<div class="js-findings">${fs.map(f => `<button type="button" class="js-finding" ${findingAttr}="${esc(f.id)}"><span class="dot ${['critical', 'high'].includes(f.severity) ? 'red' : f.severity === 'medium' ? 'amber' : ''}"></span>${esc(findingAttr === 'data-explore' ? B().title(f) : f.title)}</button>`).join('')}</div>` : ''}</li>`; }).join('')}</ol>` : '';
+    const risky = apps.filter(a => a.window[1] === 'risk' || a.grants.some(g => RISKY_GRANTS.includes(g))).length;
+    return `<section class="panel"><div class="panel-head"><div><h2>Applications</h2><p>Token lifetimes for every application and the path a user takes to sign in. Select an application to see its login journey; select a finding to open it.</p></div><span class="pill ${risky ? 'amber' : 'green'}">${apps.length} application${apps.length === 1 ? '' : 's'}${risky ? ` · ${risky} with token risks` : ''}</span></div>
+      <h3 class="apps-sub">Token lifetime matrix</h3>${matrix}
+      ${journey}
+      ${provider === 'auth0' ? auth0Apis(c) : oktaServers(c)}
+      <p class="section-note">Built from ${esc(c.source)} (synthetic fixture). "Stolen refresh token usable for" is the longest time a leaked refresh token could keep working under these settings; rotation lets the provider detect reuse.</p></section>`;
+  }
+
+  window.PulseApps = {render};
+})();
+
+</script>
+<script>
 'use strict';
 const $=id=>document.getElementById(id),esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:window.PulseExperience.audience==='business'?'nis2':'overview',query:'',severity:'all',type:'all',planQuery:'',planStatus:'all',planOwner:'all',planSeverity:'all',planDue:'all',clCategory:'all',clStatus:'all',clOwner:'all',clSource:'all'};
+const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:'nis2',query:'',severity:'all',type:'all',planQuery:'',planStatus:'all',planOwner:'all',planSeverity:'all',planDue:'all',appId:null,clCategory:'all',clStatus:'all',clOwner:'all',clSource:'all'};
 // Action-plan tracking entered in the explore dialog; kept in memory for this page session only.
 const owners=['Jan Czajkowski','Nathanael Chu'],tracking={};
 const trackKey=id=>state.provider+'/'+state.scenario+'/'+id;
@@ -5436,79 +6745,50 @@ const track=id=>tracking[trackKey(id)]??=seedTrack(id);
 const checklistState={};
 const checklistOf=item=>checklistState[trackKey('nis2:'+item.id)]??=window.PulseNIS2.seed(item,window.PulseNIS2.checklist.indexOf(item));
 const severityOrder={critical:0,high:1,medium:2,low:3,info:4};
-const business=()=>window.PulseExperience.audience==='business';
+// Both audiences share one workspace; the Tech SPOC adds the technical layer (tech-view.js, Applications tab, remediation code).
+const tech=()=>window.PulseExperience.audience==='tech';
 const report=()=>window.PULSE_REPORTS[state.provider][state.scenario];
 const sorted=()=>[...report().findings].sort((a,b)=>(severityOrder[a.severity]??5)-(severityOrder[b.severity]??5));
-const severityPill=s=>`<span class="pill ${['critical','high'].includes(s)?'red':s==='medium'?'amber':'blue'}">${esc(s)}</span>`;
-const row=f=>`<button type="button" class="finding-row" data-finding="${esc(f.id)}"><span><strong>${esc(business()?window.PulseBusiness.title(f):f.title)}</strong><small>${business()?esc(window.PulseBusiness.impact(f)):esc(f.id)+' · '+esc(f.classification.replaceAll('-',' '))}</small></span><span class="finding-meta">${business()?`<span class="pill ${f.classification==='confirmed-risk'?'red':'amber'}">${esc(window.PulseBusiness.status(f))}</span>`:''}${severityPill(f.severity)}<span class="arrow" aria-hidden="true">↗</span></span></button>`;
 function render(){
   const summary=$('business-summary');
   if(summary.parentElement!==$('main'))$('assessment-view').before(summary);
   renderTabs();
-  const r=report(),preview=Boolean(r.demo?.illustrative),provider=window.PulseProviders.get(state.provider),fs=r.findings;
-  const critical=fs.filter(f=>f.severity==='critical').length,high=fs.filter(f=>f.severity==='high').length,validation=fs.filter(f=>f.classification==='requires-validation').length;
-  const success=r.coverage.collectors.filter(c=>c.status==='success').length,total=r.coverage.collectors.length;
+  const r=report(),preview=Boolean(r.demo?.illustrative),provider=window.PulseProviders.get(state.provider);
   $('sample-context').textContent=provider.name+' · '+provider.scope+(preview?'':' · Example collected '+new Date(r.provider.collectedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}));
   $('scenario-description').textContent=window.PulseProviders.scenarios[state.scenario].description;
-  if(business())$('demo-banner-context').textContent=$('sample-context').textContent;
+  $('demo-banner-context').textContent=$('sample-context').textContent;
   $('provider-status').innerHTML=preview?`<div class="notice neutral"><strong>${esc(provider.name)} · Illustrative preview.</strong> Explore fictional findings and NIS2 material. The connector and scoring are not implemented.${state.provider==='ping'?' This example covers PingOne customer identity.':''}</div>`:'';
   $('report-origin').textContent=preview?'Hand-authored UI examples; no collection or analysis was performed. Each scenario is independent and does not prove remediation.':'Auth0 and Okta examples are generated by the CLI from synthetic repository fixtures. Each scenario is independent and does not prove remediation.';
-  $('run-demo').hidden=business()||preview;
   $('export-json').textContent=preview?'Download illustrative example JSON ↓':'Download sample report JSON ↓';
-  $('score-ring').hidden=preview;
-  $('score').textContent=r.score.overall;
-  $('score-ring').style.setProperty('--score',r.score.overall??0);
-  $('score-label').textContent=preview?'Provider preview':'Identity posture score';
-  $('score-title').textContent=preview?'Explore the example findings':r.coverage.partial?'A score with blind spots':critical+high?'Review priority risks':'A stronger starting point';
-  $('score-description').textContent=preview?'No posture score is calculated. These examples show the proposed assessment experience.':r.coverage.partial?'Interpret this score alongside uncollected evidence.':critical+high?'Prioritize the findings and validate their context.':'Review remaining signals and assessment boundaries.';
-  $('grade').textContent=preview?provider.name+' · Illustrative results':`Engine grade ${r.score.grade} · ${provider.name}`;
-  $('finding-total').textContent=`${fs.length} ${preview?'example ':''}findings`;
-  $('stats').innerHTML=`<div class="stat"><span class="stat-label">Critical</span><strong>${critical}</strong><small>Highest severity</small></div><div class="stat"><span class="stat-label">High</span><strong>${high}</strong><small>Priority review</small></div><div class="stat"><span class="stat-label">To validate</span><strong>${validation}</strong><small>Requires context</small></div>`;
-  $('coverage-summary').textContent=preview?`${success} / ${total} areas illustrated`:`${success} / ${total} collectors successful`;
   $('coverage-notice').innerHTML=r.coverage.partial?'<div class="notice"><strong>Incomplete assessment example.</strong> Some evidence could not be collected. Missing evidence is not proof that a control is safe.</div>':'';
   $('assessment-view').setAttribute('aria-labelledby','tab-'+state.view);
-  if(business())summary.innerHTML=window.PulseBusiness.metrics(r);
+  summary.innerHTML=window.PulseBusiness.metrics(r);
   renderView();
-  if(business()&&state.view==='nis2')$('assessment-view').querySelector('.nis2-focus').after(summary);
+  if(state.view==='nis2')$('assessment-view').querySelector('.nis2-focus').after(summary);
 }
-function renderView(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='overview'){view.innerHTML=`<div class="overview-grid"><section class="panel"><div class="panel-head"><div><h2>Start with these findings</h2><p>Highest severity first · evidence behind every result</p></div><button class="textlink" data-view="findings">View all ↗</button></div>${sorted().slice(0,4).map(row).join('')||'<p class="empty">No findings in this sample. Review positive signals and collection boundaries before drawing conclusions.</p>'}</section><section class="panel"><div class="panel-head"><div><h2>${r.demo?.illustrative?'What this preview covers':'Where the score comes from'}</h2><p>${r.demo?.illustrative?'Illustrated areas · no engine rules or scores':'Weighted category points, as reported by the engine'}</p></div></div>${r.categories.map(c=>`<div class="bar-row"><div class="bar-label"><span>${esc(c.name)}</span><b>${c.assessed?(r.demo?.illustrative?'Illustrated':`${c.score??0} / ${c.weight}`):'Not assessed'}</b></div><div class="bar-track" ${r.demo?.illustrative?'hidden':''}><span style="width:${c.assessed&&!r.demo?.illustrative?Math.max(0,Math.min(100,(c.score||0)/c.weight*100)):0}%"></span></div></div>`).join('')}<p class="section-note">Provider scoring models differ. Scores are posture indicators, not a certification or a direct provider ranking.</p></section></div><section class="panel" style="margin-top:20px"><div class="panel-head"><h2>Positive signals</h2><span class="pill green">Keep what is working</span></div>${r.positiveSignals.length?r.positiveSignals.slice(0,3).map(s=>`<p style="font-size:14px;margin-top:10px"><strong>${esc(s.title)}</strong> <span class="muted">${esc(s.detail)}</span></p>`).join(''):'<p class="empty">No positive signals are supplied for this sample.</p>'}</section>`;}
-else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${business()?'Findings':'Findings & evidence'}</h2><p>${business()?'Every finding with its severity, type and recommended action plan. Select a finding for the full detail.':'Inspect classification, evidence and validation needs.'}</p></div><span class="pill">${r.findings.length} ${business()?'Total Findings':'total'}</span></div>${business()?window.PulseBusiness.findingCharts(r,{severity:state.severity,type:state.type}):''}<div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">${business()?'Severity':'All severities'}</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select>${business()?`<select id="type-filter" aria-label="Filter by type"><option value="all">Type</option>${[['confirmed-risk','Confirmed configuration risk'],['requires-validation','Needs validation'],['advisory','Advisory · review context']].map(([v,l])=>`<option value="${v}" ${state.type===v?'selected':''}>${l}</option>`).join('')}</select>`:''}</div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;business()?renderView():renderResults();});$('type-filter')?.addEventListener('change',e=>{state.type=e.target.value;renderView();});}
-else if(state.view==='coverage'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>${r.demo?.illustrative?'Example coverage':'What was actually collected'}</h2><p>${r.demo?.illustrative?'Simulated outcomes, not live collection. Required permissions have not been defined.':'Collector success does not guarantee exhaustive resource coverage.'}</p></div><span class="pill ${r.coverage.partial?'amber':'green'}">${r.coverage.partial?'Partial coverage':'No reported collector gaps'}</span></div><div class="table-wrap"><table><thead><tr><th>Collector</th><th>Reported state</th><th>Required scopes</th><th>Count</th></tr></thead><tbody>${r.coverage.collectors.map(c=>`<tr><td>${esc(c.collector)}</td><td><span class="pill ${c.status==='success'?'green':'amber'}">${esc(c.status)}</span></td><td><code>${esc((c.requiredScopes||[]).join(', ')||'Not specified')}</code></td><td>${c.count??'—'}</td></tr>`).join('')}</tbody></table></div>${r.coverage.missingScopes.length?`<p class="section-note"><strong>Missing scopes:</strong> ${esc(r.coverage.missingScopes.join(', '))}</p>`:''}<h3 style="margin-top:24px">What this assessment does not establish</h3><ul class="section-note">${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></section>`;}
-else if(state.view==='plan'&&business()){const items=window.PulseBusiness.actions(r),progress=['Not Started','In Progress','Verified','Completed','Closed'];view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Action Plans</h2><p>Track the owner, target date and progress of each recommended action. Select a row to update it. Owners, dates, statuses and comments are pre-filled sample data.</p></div><span class="pill">${items.length} Total Actions</span></div>${window.PulseBusiness.planCharts(r,track,owners,{status:state.planStatus,owner:state.planOwner,due:state.planDue})}<div class="filters"><input id="plan-search" type="search" aria-label="Search actions" placeholder="Search finding or action" value="${esc(state.planQuery)}"><select id="plan-severity" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(v=>`<option value="${v}" ${state.planSeverity===v?'selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select><select id="plan-status" aria-label="Filter by status"><option value="all">Status</option>${progress.map(v=>`<option ${state.planStatus===v?'selected':''}>${v}</option>`).join('')}</select><select id="plan-owner" aria-label="Filter by owner"><option value="all">Owner</option><option value="" ${state.planOwner===''?'selected':''}>Unassigned</option>${owners.map(o=>`<option ${state.planOwner===o?'selected':''}>${esc(o)}</option>`).join('')}</select><select id="plan-due" aria-label="Filter by due date"><option value="all">Due date</option>${window.PulseBusiness.dueBuckets.map(([v,l])=>`<option value="${v}" ${state.planDue===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="plan-results"></div></section>`;renderPlanResults();$('plan-search').addEventListener('input',e=>{state.planQuery=e.target.value;renderPlanResults();});$('plan-severity').addEventListener('change',e=>{state.planSeverity=e.target.value;renderPlanResults();});$('plan-status').addEventListener('change',e=>{state.planStatus=e.target.value;renderView();});$('plan-owner').addEventListener('change',e=>{state.planOwner=e.target.value;renderView();});$('plan-due').addEventListener('change',e=>{state.planDue=e.target.value;renderView();});}
-else{view.innerHTML=`<div class="notice neutral"><strong>Action Plans · recommended next steps.</strong> Assign an owner, implement the change and collect validation evidence outside this demo. No completion or ownership is recorded in these samples.</div><div class="plan-grid">${r.remediationPlan.buckets.map(b=>`<section class="panel"><div class="panel-head"><div><h2>${esc(b.name)}</h2><p>${esc(b.window)}</p></div></div>${b.items.map(i=>`<div class="plan-item">${i.severity?severityPill(i.severity):''}<p style="margin-top:9px">${esc(i.action)}</p><small>Expected outcome: ${esc(i.expectedOutcome)}</small><dl class="action-status"><div><dt>Owner</dt><dd>Unassigned</dd></div><div><dt>Status</dt><dd>Recommended</dd></div><div><dt>Validation</dt><dd>Not verified</dd></div></dl><button class="textlink" data-finding="${esc(i.findingId)}">${esc(i.findingId)} · Review evidence ↗</button></div>`).join('')||'<p class="empty">No actions in this bucket.</p>'}</section>`).join('')}</div>`;}}
-function renderPlanResults(){const r=report(),q=state.planQuery.toLowerCase(),items=window.PulseBusiness.actions(r).filter(a=>{const t=track(a.findingId),f=r.findings.find(x=>x.id===a.findingId);return(state.planDue==='all'||window.PulseBusiness.dueBucket(t)===state.planDue)&&(state.planSeverity==='all'||f?.severity===state.planSeverity)&&(state.planStatus==='all'||t.status===state.planStatus)&&(state.planOwner==='all'||t.owner===state.planOwner)&&((f?window.PulseBusiness.title(f):'')+' '+a.findingId+' '+a.action+' '+t.comments).toLowerCase().includes(q);});$('plan-results').innerHTML=window.PulseBusiness.plan(r,items,track);}
-function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(!business()||state.type==='all'||f.classification===state.type)&&(f.title+' '+f.id+' '+(business()?window.PulseBusiness.title(f)+' '+f.businessRisk:'')).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=business()?window.PulseBusiness.dashboard(report(),matches):matches.map(row).join('')||'<p class="empty" role="status">No findings match this selection.</p>';}
-function exploreFinding(id){const f=report().findings.find(x=>x.id===id);if(!f)return;$('explore-detail').innerHTML=window.PulseBusiness.explore(report(),f,track(id),owners);$('explore-dialog').showModal();}
-function finding(id){
-  const f=report().findings.find(x=>x.id===id);if(!f)return;
-  const technical=`${business()?`<h3>Technical finding</h3><p>${esc(f.title)}</p>`:''}<div class="finding-meta"><span class="pill">${esc(f.classification)}</span><span class="pill">${esc(f.confidence)} confidence</span></div><p class="section-note">${esc(f.id)} · ${report().demo?.illustrative?'illustrative finding · no score calculated':'score impact '+f.scoreImpact}</p><h3>${report().demo?.illustrative?'Illustrative evidence':'Observed evidence'}</h3><div class="evidence">${esc(f.evidence.summary)}</div><h3>How to validate</h3>${f.validationSteps.length?`<ul>${f.validationSteps.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:'<p class="muted">The current report does not supply validation steps for this finding. Engineering review is required.</p>'}${f.falsePositiveNotes.length?`<h3>Context & exceptions</h3><ul>${f.falsePositiveNotes.map(v=>`<li>${esc(v)}</li>`).join('')}</ul>`:''}<h3>Affected resources</h3><p>${esc(f.affectedResources.map(x=>x.displayName).join(', ')||'Not specified')}</p>`;
-  $('finding-detail').innerHTML=`${severityPill(f.severity)}<h2 id="finding-title">${esc(business()?window.PulseBusiness.title(f):f.title)}</h2>${report().demo?.illustrative?'<p class="notice neutral">Fictional example · connector not implemented · no environment assessed.</p>':''}<h3>Why it matters</h3><p>${esc(business()?window.PulseBusiness.impact(f):f.businessRisk)}</p><h3>Recommended action</h3><p>${esc(f.recommendation)}</p>${business()?`<p class="section-note">${f.classification==='requires-validation'?'Engineering validation is needed before treating this as a confirmed risk.':'Review the observed configuration and its context with your technical contact.'}</p><details class="technical-evidence"><summary>Technical evidence & validation</summary>${technical}</details>`:technical}`;
-  $('finding-dialog').showModal();
-}
-document.addEventListener('click',e=>{const v=e.target.closest('[data-view]'),f=e.target.closest('[data-finding]');if(v){state.view=business()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}const x=e.target.closest('textarea,input,select')?null:e.target.closest('[data-explore]');if(x)exploreFinding(x.dataset.explore);else if(f)finding(f.dataset.finding);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-finding').onclick=()=>$('finding-dialog').close();$('close-explore').onclick=()=>{$('explore-dialog').close();refreshBehindExplore();};$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-const steps=['Read local assessment settings','Collect provider configuration · GET only','Normalize snapshot & collection status','Run provider-specific deterministic rules','Calculate scores & explain findings','Render local reports'];let scanStep=0,scanTimer=null;function scanDraw(){document.querySelector('[role=progressbar]').setAttribute('aria-valuenow',scanStep);$('scan-progress').style.width=(scanStep/6*100)+'%';$('scan-steps').innerHTML=steps.map((s,i)=>`<li class="${i===scanStep?'active':''}"><span>${s}</span><span>${i<scanStep?'✓':i===scanStep?'…':'—'}</span></li>`).join('');$('scan-status').textContent=scanStep===6?'Walkthrough complete. The workspace shows the selected fixture report.':`Step ${scanStep+1} of 6 · simulated processing`;$('scan-pause').textContent=scanStep===6?'Replay':scanTimer?'Pause':'Continue';}function pauseScan(){clearInterval(scanTimer);scanTimer=null;}function playScan(){scanTimer=setInterval(()=>{scanStep++;if(scanStep>=6)pauseScan();scanDraw();},850);scanDraw();}$('run-demo').onclick=()=>{pauseScan();scanStep=0;$('scan-dialog').showModal();playScan();};$('scan-pause').onclick=()=>{if(scanStep===6)scanStep=0;if(scanTimer)pauseScan();else playScan();scanDraw();};$('scan-close').onclick=()=>$('scan-dialog').close();$('scan-dialog').addEventListener('close',pauseScan);
+function renderView(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='apps'){view.innerHTML=window.PulseApps.render(state.provider,state.scenario,r,state.appId,'data-explore');}
+else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Findings</h2><p>Every finding with its severity, type and recommended action plan. Select a finding for the full detail.</p></div><span class="pill">${r.findings.length} Total Findings</span></div>${window.PulseBusiness.findingCharts(r,{severity:state.severity,type:state.type})}<div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select><select id="type-filter" aria-label="Filter by type"><option value="all">Type</option>${[['confirmed-risk','Confirmed configuration risk'],['requires-validation','Needs validation'],['advisory','Advisory · review context']].map(([v,l])=>`<option value="${v}" ${state.type===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;renderView();});$('type-filter').addEventListener('change',e=>{state.type=e.target.value;renderView();});}
+else if(state.view==='coverage'){view.innerHTML=window.PulseTech.coverage(r);}
+else if(state.view==='plan'){const items=window.PulseBusiness.actions(r),progress=['Not Started','In Progress','Verified','Completed','Closed'];view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Action Plans</h2><p>Track the owner, target date and progress of each recommended action. Select a row to update it. Owners, dates, statuses and comments are pre-filled sample data.</p></div><span class="pill">${items.length} Total Actions</span></div>${window.PulseBusiness.planCharts(r,track,owners,{status:state.planStatus,owner:state.planOwner,due:state.planDue})}<div class="filters"><input id="plan-search" type="search" aria-label="Search actions" placeholder="Search finding or action" value="${esc(state.planQuery)}"><select id="plan-severity" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(v=>`<option value="${v}" ${state.planSeverity===v?'selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select><select id="plan-status" aria-label="Filter by status"><option value="all">Status</option>${progress.map(v=>`<option ${state.planStatus===v?'selected':''}>${v}</option>`).join('')}</select><select id="plan-owner" aria-label="Filter by owner"><option value="all">Owner</option><option value="" ${state.planOwner===''?'selected':''}>Unassigned</option>${owners.map(o=>`<option ${state.planOwner===o?'selected':''}>${esc(o)}</option>`).join('')}</select><select id="plan-due" aria-label="Filter by due date"><option value="all">Due date</option>${window.PulseBusiness.dueBuckets.map(([v,l])=>`<option value="${v}" ${state.planDue===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="plan-results"></div></section>`;renderPlanResults();$('plan-search').addEventListener('input',e=>{state.planQuery=e.target.value;renderPlanResults();});$('plan-severity').addEventListener('change',e=>{state.planSeverity=e.target.value;renderPlanResults();});$('plan-status').addEventListener('change',e=>{state.planStatus=e.target.value;renderView();});$('plan-owner').addEventListener('change',e=>{state.planOwner=e.target.value;renderView();});$('plan-due').addEventListener('change',e=>{state.planDue=e.target.value;renderView();});}}
+function renderPlanResults(){const r=report(),q=state.planQuery.toLowerCase(),items=window.PulseBusiness.actions(r).filter(a=>{const t=track(a.findingId),f=r.findings.find(x=>x.id===a.findingId);return(state.planDue==='all'||window.PulseBusiness.dueBucket(t)===state.planDue)&&(state.planSeverity==='all'||f?.severity===state.planSeverity)&&(state.planStatus==='all'||t.status===state.planStatus)&&(state.planOwner==='all'||t.owner===state.planOwner)&&((f?window.PulseBusiness.title(f):'')+' '+a.findingId+' '+a.action+' '+t.comments).toLowerCase().includes(q);});$('plan-results').innerHTML=window.PulseBusiness.plan(r,items,track,tech()?window.PulseTech.stepsText:null);}
+function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(state.type==='all'||f.classification===state.type)&&(f.title+' '+f.id+' '+window.PulseBusiness.title(f)+' '+f.businessRisk).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=tech()?window.PulseTech.findingsTable(report(),matches,track):window.PulseBusiness.dashboard(report(),matches);}
+function exploreFinding(id){const f=report().findings.find(x=>x.id===id);if(!f)return;$('explore-detail').innerHTML=window.PulseBusiness.explore(report(),f,track(id),owners,tech()?{...window.PulseTech.exploreExtra(report(),f,window.PULSE_CONTROLS[state.provider]?.[state.scenario],track(id)),bottom:window.PulseRemediation.panel(state.provider,state.scenario,f,report())}:null);$('explore-dialog').showModal();}
+document.addEventListener('click',e=>{const v=e.target.closest('[data-view]');if(v){state.view=!tech()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}const x=e.target.closest('textarea,input,select')?null:e.target.closest('[data-explore]');if(x)exploreFinding(x.dataset.explore);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-explore').onclick=()=>{$('explore-dialog').close();refreshBehindExplore();};$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 function renderTabs(){
-  const views=business()?[['nis2','NIS2 Material'],['findings','Findings'],['plan','Action Plans']]:[['overview','Overview'],['findings','Findings'],['coverage','Coverage'],['plan','Action Plans'],['nis2','NIS2 Material']];
-  if(!views.some(([id])=>id===state.view))state.view=business()?'nis2':'overview';
+  const views=[['nis2','NIS2 Material'],['findings','Findings'],['plan','Action Plans'],...(tech()?[['coverage','Coverage'],['apps','Applications']]:[])];
+  if(!views.some(([id])=>id===state.view))state.view='nis2';
   $('assessment-tabs').innerHTML=views.map(([id,label])=>`<button id="tab-${id}" type="button" role="tab" tabindex="${id===state.view?'0':'-1'}" aria-selected="${id===state.view}" aria-controls="assessment-view" data-view="${id}">${label}</button>`).join('');
-  $('review-coverage').dataset.view=business()?'nis2':'coverage';
-  $('review-coverage').textContent=business()?'Scope & evidence':'Review coverage';
 }
 function renderMaterial(){
-  if(business()){
     const r=report(),N=window.PulseNIS2,all=N.checklist.map(item=>({item,state:checklistOf(item)}));
     const rows=all.filter(({item,state:c})=>(state.clCategory==='all'||item.category===state.clCategory)&&(state.clStatus==='all'||c.status===state.clStatus)&&(state.clOwner==='all'||c.owner===state.clOwner)&&(state.clSource==='all'||item.source===state.clSource));
     const totals={completed:all.filter(x=>x.state.status==='Completed').length,total:all.length};
     const filters={category:state.clCategory,status:state.clStatus,owner:state.clOwner,source:state.clSource};
-    $('assessment-view').innerHTML=window.PulseBusiness.material(r,window.PULSE_CONTROLS[state.provider][state.scenario],N.checklistSection(rows,filters,owners,totals),N.obligations(r,checklistOf));
+    $('assessment-view').innerHTML=window.PulseBusiness.material(r,window.PULSE_CONTROLS[state.provider][state.scenario],N.checklistSection(rows,filters,owners,totals)+(tech()?window.PulseTech.traceability(r,track,checklistOf):''),N.obligations(r,checklistOf));
     [['checklist-category','clCategory'],['checklist-status','clStatus'],['checklist-owner','clOwner'],['checklist-source','clSource']].forEach(([id,key])=>$(id).addEventListener('change',e=>{state[key]=e.target.value;renderMaterialKeep(id);}));
-    return;
-  }
-  const r=report(),uncollected=r.coverage.collectors.filter(c=>c.status!=='success');
-  $('assessment-view').innerHTML=`<section class="material-hero"><div><span class="eyebrow">NIS2 Material</span><h2>Bring the evidence together.</h2><p>Prepare a clear record of what was checked, what needs attention and what still needs verification.</p><span class="pill light">Sample export · proposed capability</span></div><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button></section><div class="material-grid">${[['01','What was checked',r.coverage.collectors.length+' collectors listed, with their status, scope and collection date.'],['02','Gaps & blind spots',r.findings.length+' findings · '+uncollected.length+' unsuccessful collectors.'],['03','How gaps were addressed','Recommended actions are available. Completed work, owners and validation evidence are not recorded.'],['04','Controls & policies',r.demo?.illustrative?'Illustrative settings only; no real configuration has been collected.':'Observed MFA and protection settings, with unavailable evidence clearly marked.']].map(([n,title,text])=>`<article class="panel"><span class="material-number">${n}</span><h3>${title}</h3><p>${text}</p></article>`).join('')}</div><div class="notice neutral"><strong>For auditor review.</strong> This sample pack supports evidence preparation. It does not certify NIS2 compliance. Organizational policies and bot protection evidence have not been supplied.</div><details class="material-scope"><summary>Review collection gaps and assessment limits</summary><h3>Unsuccessful collectors</h3>${uncollected.length?`<ul>${uncollected.map(c=>`<li>${esc(c.collector)} · ${esc(c.status)}</li>`).join('')}</ul>`:'<p>No collector gaps reported. Collection success does not guarantee exhaustive coverage.</p>'}<h3>Limitations</h3><ul>${r.limitations.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></details>`;
 }
 function generatePack(){
-    currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent,{trackOf:track,nis2:business()?window.PulseNIS2.packData(report(),track,checklistOf):null});
+    currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent,{trackOf:track,nis2:window.PulseNIS2.packData(report(),track,checklistOf)});
     $('pack-preview').innerHTML=window.PulseEvidence.content(currentPack,true);
     if(currentPackURL)URL.revokeObjectURL(currentPackURL);
     currentPackURL=URL.createObjectURL(new Blob([window.PulseEvidence.html(currentPack)],{type:'text/html;charset=utf-8'}));
@@ -5533,15 +6813,16 @@ $('assessment-tabs').addEventListener('keydown',event=>{
 $('provider').value=state.provider;
 $('scenario').value=state.scenario;
 const requestedView=new URLSearchParams(location.search).get('view');
-if(['overview','findings','coverage','plan','nis2'].includes(requestedView))state.view=requestedView;
-if(business()){
+if(['findings','coverage','apps','plan','nis2'].includes(requestedView))state.view=requestedView;
+{
   $('business-navigation').append($('assessment-tabs'));
-  $('assessment-tabs').setAttribute('aria-label','Business workspace');
+  $('assessment-tabs').setAttribute('aria-label','Workspace navigation');
   $('workspace-title').textContent='Risk, actions & evidence';
   $('workspace-eyebrow').textContent='Business overview';
   $('workspace-heading').textContent='Know what needs your attention.';
   $('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence for review.';
-  document.title='Identity Pulse — Business workspace';
+  document.title=tech()?'Identity Pulse — Tech SPOC workspace':'Identity Pulse — Business workspace';
+  if(tech()){$('workspace-eyebrow').textContent='Tech SPOC workspace';$('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence, with the technical detail behind each one.';}
   const selectors=document.createElement('div');selectors.className='topbar-context';
   selectors.append(...document.querySelectorAll('.contextbar > label'));
   document.querySelector('.topbar > p').after(selectors);
@@ -5552,8 +6833,8 @@ if(business()){
   banner.innerHTML='<p><strong>Fictional assessment · <span id="demo-banner-context"></span>.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</p><button type="button" class="banner-close" aria-label="Dismiss this message">×</button>';
   $('provider-status').before(banner);
   banner.querySelector('.banner-close').onclick=()=>{banner.hidden=true;try{sessionStorage.setItem('pulse-demo-banner','closed');}catch{}};
-}else document.title='Identity Pulse — Tech SPOC workspace';
-function tabOrientation(){$('assessment-tabs').setAttribute('aria-orientation',business()&&innerWidth>850?'vertical':'horizontal');}
+}
+function tabOrientation(){$('assessment-tabs').setAttribute('aria-orientation',innerWidth>850?'vertical':'horizontal');}
 window.addEventListener('resize',tabOrientation);tabOrientation();
 render();
 
@@ -5575,7 +6856,7 @@ $('explore-detail').addEventListener('click',e=>{if(e.target.closest('[data-add-
 $('explore-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addOwner(e.target.closest('[data-track]'));}});
 $('assessment-view').addEventListener('keydown',e=>{const row=e.target.closest('tr[data-explore]');if(row&&e.target===row&&(e.key==='Enter'||e.key===' ')){e.preventDefault();exploreFinding(row.dataset.explore);}});
 // Refresh tables behind the finding pop-up; called on edits and on close, since the dialog close event is not always delivered.
-function refreshBehindExplore(){if(business()&&['plan','nis2'].includes(state.view)){const y=scrollY;render();scrollTo(0,y);}}
+function refreshBehindExplore(){if(['plan','nis2'].includes(state.view)){const y=scrollY;render();scrollTo(0,y);}}
 $('explore-dialog').addEventListener('close',refreshBehindExplore);
 $('assessment-view').addEventListener('input',e=>{const id=e.target.dataset.rowComment;if(id)track(id).comments=e.target.value;});
 // Chart marks set (or clear, when already active) the matching table filter.
@@ -5636,6 +6917,16 @@ $('evidence-detail').addEventListener('click',e=>{if(e.target.closest('[data-add
 $('evidence-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addEvidenceOwner();}});
 $('close-evidence').onclick=()=>{$('evidence-dialog').close();renderMaterialKeep();};
 $('evidence-dialog').addEventListener('close',()=>renderMaterialKeep());
+// Tech SPOC: tick off a finding's validation steps in the pop-up.
+$('explore-detail').addEventListener('change',e=>{
+  const box=e.target.closest('[data-steps]');if(!box||!e.target.matches('[data-step-index]'))return;
+  const t=track(box.dataset.steps);t.steps=t.steps||[];t.steps[Number(e.target.dataset.stepIndex)]=e.target.checked;
+  const f=report().findings.find(x=>x.id===box.dataset.steps);box.querySelector('h3 .muted').textContent=`${t.steps.filter(Boolean).length}/${f.validationSteps.length} done`;
+  refreshBehindExplore();
+});
+// Applications tab: choose which application's login journey to show.
+$('assessment-view').addEventListener('click',e=>{const a=e.target.closest('[data-app-select]');if(!a||e.target.closest('[data-explore],[data-finding]'))return;state.appId=a.dataset.appSelect;const y=scrollY;renderView();scrollTo(0,y);});
+$('assessment-view').addEventListener('keydown',e=>{const a=e.target.closest('tr[data-app-select]');if(a&&e.target===a&&(e.key==='Enter'||e.key===' ')){e.preventDefault();a.click();}});
 
 </script>
 </body></html>

@@ -41,7 +41,8 @@
   document.querySelectorAll('[data-provider-select]').forEach(select => { select.innerHTML = window.PulseProviders.options(); select.value = context.provider; });
   write('pulse-demo-audience', audience);
   document.body.dataset.audience = audience;
-  document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = el.dataset.audienceOnly !== audience; });
+  // data-audience-only may list several audiences, separated by spaces.
+  document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = !el.dataset.audienceOnly.split(' ').includes(audience); });
   const bar = document.createElement('div');
   bar.className = 'workspace-context';
   bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Tech SPOC workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
