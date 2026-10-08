@@ -1,0 +1,79 @@
+name: Deploy mockup to DEV
+
+on:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: pulse-demo-dev
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: zelto-website-dev
+  REGION: europe-west1
+  SERVICE: zelto-pulse-demo-dev
+  IMAGE: ${{ vars.DEV_DEMO_IMAGE }}
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Build only the static mockup and smoke-test it
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$IMAGE" == "europe-west1-docker.pkg.dev/zelto-website-dev/zelto-images/zelto-pulse-demo-dev" ]]
+          docker build -t "$IMAGE:$GITHUB_SHA" outputs/identity-pulse-demo
+          docker run -d --name mockup -p 8080:8080 "$IMAGE:$GITHUB_SHA"
+          trap 'docker rm -f mockup' EXIT
+          curl --fail --retry 10 --retry-connrefused --retry-delay 1 http://localhost:8080/ -o /dev/null
+          for file in outputs/identity-pulse-demo/dist/*; do
+            curl --fail --silent --show-error "http://localhost:8080/$(basename "$file")" -o /tmp/served
+            cmp "$file" /tmp/served
+          done
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/.env)" = 404
+
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          project_id: zelto-website-dev
+          workload_identity_provider: ${{ vars.DEV_WIF_PROVIDER }}
+          service_account: ${{ vars.DEV_DEPLOY_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3
+
+      - name: Push image and update the existing DEV service
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+          docker push "$IMAGE:$GITHUB_SHA"
+          DIGEST=$(gcloud artifacts docker images describe "$IMAGE:$GITHUB_SHA" --project="$PROJECT_ID" --format='value(image_summary.digest)')
+          [[ "$DIGEST" == sha256:* ]]
+          gcloud run services update "$SERVICE" --project="$PROJECT_ID" --region="$REGION" --image="$IMAGE@$DIGEST" --quiet
+          gcloud run services describe "$SERVICE" --project="$PROJECT_ID" --region="$REGION" --format=json > /tmp/service.json
+          EXPECTED_IMAGE="$IMAGE@$DIGEST" python3 - <<'PY'
+          import json, os
+          service = json.load(open('/tmp/service.json'))
+          assert service['spec']['template']['spec']['containers'][0]['image'] == os.environ['EXPECTED_IMAGE']
+          status = service['status']
+          assert status['latestReadyRevisionName'] == status['latestCreatedRevisionName']
+          assert any(c['type'] == 'Ready' and c['status'] == 'True' for c in status['conditions'])
+          assert any(t.get('revisionName') == status['latestReadyRevisionName'] and t.get('percent') == 100 for t in status['traffic'])
+          PY
+          URL=$(python3 -c "import json; print(json.load(open('/tmp/service.json'))['status']['url'])")
+          for file in outputs/identity-pulse-demo/dist/*; do
+            curl --fail --silent --show-error --retry 5 --retry-all-errors --retry-delay 2 "$URL/$(basename "$file")" -o /tmp/served
+            cmp "$file" /tmp/served
+          done
+          curl --fail --silent --show-error "$URL/" -o /tmp/entry
+          cmp outputs/identity-pulse-demo/dist/index.html /tmp/entry
+          echo "### Public mockup: $URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Commit: $GITHUB_SHA — image: $IMAGE@$DIGEST" >> "$GITHUB_STEP_SUMMARY"
