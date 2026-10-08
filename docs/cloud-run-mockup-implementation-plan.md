@@ -32,7 +32,7 @@ Changes in `zelto-website-gcp-dev`:
 - Give that deploy account write access to the existing DEV image repository and permission to act as the new runtime account. Reuse its existing Cloud Run deployment permissions.
 - Add a service URL output and a short README deployment note.
 
-Terraform owns infrastructure and public-access settings. CI updates only the container image; ignore Terraform drift on that image field only. Leave existing DEV services, their IAP settings and expiry jobs unchanged.
+Terraform owns infrastructure and public-access settings. CI updates the container image; ignore that image field plus gcloud's client/version bookkeeping metadata. Existing DEV services, their IAP settings and expiry jobs remain unchanged.
 
 Use the service-level public-access setting rather than an `allUsers` grant: the DEV documentation notes domain-restricted sharing. Google recommends disabling the invoker IAM check for this case. Do not change organization policies. [Cloud Run public access](https://docs.cloud.google.com/run/docs/authenticating/public).
 
@@ -97,4 +97,6 @@ Open `http://localhost:8080/`. No npm install, CLI build or credentials are need
 
 Validation so far: container build and actionlint passed; all 24 static files match the source over HTTP; private/missing paths return 404; business and technical workspaces and both diagrams render in the browser. DEV Terraform validation and CI security scanning passed with pre-existing warnings. The three GitHub deployment variables are configured.
 
-Implementation PRs: [static container and workflow #2](https://github.com/zelto-id/zelto-identity-pulse/pull/2), [DEV Terraform #28](https://github.com/zelto-id/zelto-website-gcp-dev/pull/28). DEV Terraform was merged and applied on 2026-10-08: 5 additions, 1 WIF condition update, 0 destroys, with no existing service changes. The infrastructure dependency is satisfied. The first workflow deployment and post-deployment targeted drift check are next.
+Implementation PRs: [static container and workflow #2](https://github.com/zelto-id/zelto-identity-pulse/pull/2), [DEV Terraform #28](https://github.com/zelto-id/zelto-website-gcp-dev/pull/28), both merged to `dev`. DEV Terraform was applied on 2026-10-08: 5 additions, 1 WIF condition update, 0 destroys, with no existing service changes.
+
+The [first successful deployment](https://github.com/zelto-id/zelto-identity-pulse/actions/runs/37741583534) deployed commit `5b2c5978cac6f1e077060141506b5f8ec2a00271` and passed readiness, traffic, image-digest and all 24 public file checks. The initial startup smoke check was corrected to retry connection resets while Nginx starts. The [live mockup](https://zelto-pulse-demo-dev-xd4ms6zu5q-ew.a.run.app) also passed browser verification without sign-in. Public access is enabled, IAP is off, and the runtime has no environment variables or mounted secrets. Post-deployment Terraform review found zero resource changes after declaring the returned minimum-scaling default and excluding only CI image/client metadata from drift.

@@ -12,7 +12,7 @@ License: Apache-2.0.
 
 ## Interactive Presentation Demo
 
-The public DEV mockup runs as the separate Cloud Run service `zelto-pulse-demo-dev` in `zelto-website-dev`. Every push or merge to `dev` builds and deploys only `outputs/identity-pulse-demo/dist/`; no CLI, backend, provider credentials or real reports are deployed. Access is public, with no IAP. Infrastructure belongs to `zelto-website-gcp-dev`. See the [deployment guide](docs/cloud-run-mockup-implementation-plan.md) for setup and rollback.
+The [public DEV mockup](https://zelto-pulse-demo-dev-xd4ms6zu5q-ew.a.run.app) runs as the separate Cloud Run service `zelto-pulse-demo-dev` in `zelto-website-dev`. Every push or merge to `dev` builds and deploys only `outputs/identity-pulse-demo/dist/`; no CLI, backend, provider credentials or real reports are deployed. Access is public, with no IAP. Infrastructure belongs to `zelto-website-gcp-dev`. See the [deployment guide](docs/cloud-run-mockup-implementation-plan.md) for setup and rollback.
 
 The [Identity Pulse demo](outputs/identity-pulse-demo/README.md) opens with a single Business User or Tech SPOC choice, followed by a tailored workspace. The business workspace leads with NIS2 evidence preparation, priority decisions, action ownership and collection gaps. It includes a sample evidence-pack preview/download, an animated data-flow diagram with explicit stage progress, and a technical API/payload inspector with a first-visit guide using the [Zelto](https://zelto.id/) brand palette.
 
