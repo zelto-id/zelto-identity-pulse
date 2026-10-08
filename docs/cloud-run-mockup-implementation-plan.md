@@ -95,4 +95,6 @@ docker run --rm -p 127.0.0.1:8080:8080 pulse-demo
 
 Open `http://localhost:8080/`. No npm install, CLI build or credentials are needed. The Nginx base image is pinned by digest; update that pin deliberately for base-image updates. The deploy job's summary records the public URL, commit and image digest. Rerun a previous successful workflow run to rebuild and deploy that commit for rollback.
 
-Validation so far: container build passed; all 24 static files match the source over HTTP; private/missing paths return 404; the business workspace renders in the browser; Terraform validation passed with pre-existing warnings. Cloud deployment and the post-apply drift check are pending a fresh GCP login.
+Validation so far: container build and actionlint passed; all 24 static files match the source over HTTP; private/missing paths return 404; business and technical workspaces and both diagrams render in the browser. DEV Terraform validation and CI security scanning passed with pre-existing warnings. The three GitHub deployment variables are configured.
+
+Implementation PRs: [static container and workflow #2](https://github.com/zelto-id/zelto-identity-pulse/pull/2), [DEV Terraform #28](https://github.com/zelto-id/zelto-website-gcp-dev/pull/28). Cloud plan/apply, deployment and the post-apply drift check are pending a fresh GCP login. No GCP resources have been changed yet; the application PR stays unmerged until the infrastructure dependency is satisfied.
