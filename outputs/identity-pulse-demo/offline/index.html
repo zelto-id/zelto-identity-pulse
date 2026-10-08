@@ -323,8 +323,9 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
 .entry-radar-grid{position:absolute;inset:20px 30px;border-radius:50%;background:linear-gradient(transparent calc(50% - .5px),#7addc619 50%,transparent calc(50% + .5px)),linear-gradient(90deg,transparent calc(50% - .5px),#7addc619 50%,transparent calc(50% + .5px))}
 .entry-radar-grid i{position:absolute;border:1px solid #7addc625;border-radius:50%;inset:0}
 .entry-radar-grid i:nth-child(2){inset:17%}.entry-radar-grid i:nth-child(3){inset:33%}
-.entry-radar-sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 25deg,transparent 270deg,#7addc608 315deg,#7addc63a 360deg);animation:entry-sweep 4s ease-out 1 both}
-@keyframes entry-sweep{from{transform:rotate(-200deg)}to{transform:rotate(20deg)}}
+.entry-radar-sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 25deg,transparent 270deg,#7addc608 315deg,#7addc63a 360deg);animation:entry-sweep 6s linear infinite;animation-play-state:paused}
+.entry-radar-card[data-motion=running] .entry-radar-sweep{animation-play-state:running}
+@keyframes entry-sweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .entry-radar-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:114px;height:114px;border-radius:50%;border:1px solid #7addc65c;background:#191b32;box-shadow:0 0 50px #7addc60b;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
 .entry-radar-center>span{font-size:8px;letter-spacing:2px;color:var(--muted)}
 .entry-radar-center strong{font-size:17px;letter-spacing:-.3px;color:var(--primary)}
@@ -338,7 +339,10 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
 .entry-radar-detail{border-top:1px solid var(--line);padding-top:16px;min-height:101px}
 .entry-radar-detail strong{font-size:14px;font-weight:550;color:var(--primary)}
 .entry-radar-detail p{color:var(--muted);font-size:12px;line-height:1.7;margin-top:7px}
-.entry-radar-caption{color:var(--muted);font-size:10px;margin-top:8px}
+.entry-radar-caption{color:var(--muted);font-size:10px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.entry-radar-motion{background:transparent;border:1px solid var(--line);border-radius:5px;color:var(--primary);padding:7px 9px;font:inherit;white-space:nowrap}
+.entry-radar-motion:disabled{color:var(--muted);cursor:default}
+.entry-radar-motion[hidden]{display:none}
 .entry-s46{margin:38px 0 44px;padding:22px 24px;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:start;border:1px solid #7addc626;border-left:3px solid var(--primary);border-radius:8px;background:#7addc606}
 .entry-live{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:10px;letter-spacing:.6px;color:var(--primary);padding-top:5px}
 .entry-s46 h2{font-size:17px;font-weight:550;margin-bottom:7px}
@@ -383,7 +387,7 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
           <button type="button" class="entry-radar-node radar-evidence" data-radar="evidence" aria-pressed="false" aria-controls="radar-detail"><span class="radar-dot" aria-hidden="true"></span><strong>Evidence</strong><small>Review preparation</small></button>
         </div>
         <div class="entry-radar-detail" id="radar-detail" aria-live="polite" aria-atomic="true"><strong id="radar-title">Make strong authentication visible.</strong><p id="radar-copy">Review MFA settings and policy gaps. Separate what is configured from what still needs to be verified.</p></div>
-        <p class="entry-radar-caption">A map of preparation areas, not a compliance score.</p>
+        <p class="entry-radar-caption"><span>A map of preparation areas, not a compliance score.</span><button type="button" class="entry-radar-motion" id="radar-motion" hidden>Pause radar</button></p>
       </div>
     </section>
     <aside class="entry-s46" aria-labelledby="s46-title">
@@ -465,6 +469,23 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
       document.getElementById('radar-copy').textContent = copy;
     });
   });
+
+  const motionControl = document.getElementById('radar-motion');
+  const radarCard = document.querySelector('.entry-radar-card');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let paused = false;
+  const updateMotion = () => {
+    radarCard.dataset.motion = paused || reducedMotion.matches ? 'paused' : 'running';
+    motionControl.disabled = reducedMotion.matches;
+    motionControl.textContent = reducedMotion.matches ? 'Reduced motion' : paused ? 'Resume radar' : 'Pause radar';
+  };
+  motionControl.hidden = false;
+  motionControl.addEventListener('click', () => {
+    paused = !paused;
+    updateMotion();
+  });
+  reducedMotion.addEventListener('change', updateMotion);
+  updateMotion();
 })();
 
 </script>

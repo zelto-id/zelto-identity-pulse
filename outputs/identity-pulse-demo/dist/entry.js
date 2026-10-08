@@ -26,4 +26,21 @@
       document.getElementById('radar-copy').textContent = copy;
     });
   });
+
+  const motionControl = document.getElementById('radar-motion');
+  const radarCard = document.querySelector('.entry-radar-card');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let paused = false;
+  const updateMotion = () => {
+    radarCard.dataset.motion = paused || reducedMotion.matches ? 'paused' : 'running';
+    motionControl.disabled = reducedMotion.matches;
+    motionControl.textContent = reducedMotion.matches ? 'Reduced motion' : paused ? 'Resume radar' : 'Pause radar';
+  };
+  motionControl.hidden = false;
+  motionControl.addEventListener('click', () => {
+    paused = !paused;
+    updateMotion();
+  });
+  reducedMotion.addEventListener('change', updateMotion);
+  updateMotion();
 })();
