@@ -9,4 +9,21 @@
     url.searchParams.set('sample', sample);
     link.setAttribute('href', 'workspace.html' + url.search);
   });
+
+  // These are preparation topics, not assessed controls or a live compliance score.
+  const radar = {
+    mfa: ['Make strong authentication visible.', 'Review MFA settings and policy gaps. Separate what is configured from what still needs to be verified.'],
+    jml: ['Follow access through its lifecycle.', 'Explore application access and privileged identities. Identify where joiner, mover and leaver processes still need organizational evidence.'],
+    logs: ['Keep the trail behind the finding.', 'Trace findings to observed settings and collection coverage. Use the gaps to guide a review of logging and detection practices.'],
+    s46: ['Prepare the people and the process.', 'Review incident contacts, reporting ownership and supporting records. S46 is an external government platform; this demo does not connect to it.'],
+    evidence: ['Give each review a starting point.', 'Preview a sample NIS2 evidence pack with observed controls, recommended actions and missing records. A pack supports review; it does not certify compliance.']
+  };
+  document.querySelectorAll('[data-radar]').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('[data-radar]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      const [title, copy] = radar[button.dataset.radar];
+      document.getElementById('radar-title').textContent = title;
+      document.getElementById('radar-copy').textContent = copy;
+    });
+  });
 })();
