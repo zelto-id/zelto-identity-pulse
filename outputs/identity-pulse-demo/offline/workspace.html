@@ -280,6 +280,58 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
 .js-finding .dot{margin-top:4px}
 .js-finding:hover{color:var(--primary)}
 
+/* Phone layouts: preserve the column labels without requiring sideways scrolling. */
+@media(max-width:700px){
+  .panel,.panel-head>div,.nis2-focus>*,.explore-card,.filters>*{min-width:0}
+  .panel-head{flex-wrap:wrap;align-items:flex-start}
+  .topbar-context{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .topbar-context label{display:grid;gap:6px;min-width:0}
+  .topbar-context select{width:100%;min-width:0;max-width:100%}
+  .shell select,.shell input,.shell textarea,.dialog select,.dialog input,.dialog textarea{font-size:16px;min-height:44px;max-width:100%}
+  .shell button,.shell .button,.dialog button,.dialog .button,.change-view,.business-explore summary,.business-explore a{min-height:44px}
+  .banner-close{min-width:44px;align-self:flex-start}
+  .change-view{display:inline-flex;align-items:center}
+  .business-explore summary{display:flex;align-items:center}
+  .business-explore summary::before{content:'▸';margin-right:6px}
+  .business-explore[open] summary::before{content:'▾'}
+  .business-navigation .tabs button{flex:1 1 95px}
+  .filters input{width:100%}
+  .donut-wrap{flex-wrap:wrap;gap:18px}
+  .chart-legend.vertical{min-width:125px}
+  .coverage-detail{flex:1 1 140px}
+  .matrix th{padding:4px 2px;font-size:11px;overflow-wrap:anywhere}
+  .matrix .cell{height:44px}
+  .stack{height:44px}
+  .dialog{max-height:calc(100dvh - 24px);width:calc(100% - 24px);max-width:calc(100% - 24px)}
+  .dialog-header{flex-wrap:wrap;gap:12px}
+  .dialog-content,.dialog-header{padding:18px}
+  .dialog-content{overflow-wrap:anywhere}
+  .rem-tabs{flex-wrap:wrap}
+  .rem-copy{margin-left:0}
+  .add-owner{flex-wrap:wrap}.add-owner input{min-width:0}
+  .obligations li button{flex-wrap:wrap}.ob-text{flex:1 1 150px}
+  .journey-step:not(:last-child)::after{display:none}
+}
+
+@media(max-width:1100px){
+  .table-wrap{max-width:100%;min-width:0}
+  .mobile-table{display:block;min-width:0;width:100%;table-layout:auto}
+  .mobile-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .mobile-table tbody{display:block}
+  .mobile-table tr{display:block;padding:14px;border-bottom:1px solid var(--line)}
+  .mobile-table tr:last-child{border-bottom:0}
+  .mobile-table td,.mobile-table td:nth-child(n){display:block;width:auto!important;padding:7px 0;border:0;white-space:normal!important;overflow-wrap:anywhere}
+  .mobile-table td::before{content:attr(data-label);display:block;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--muted);margin-bottom:4px}
+  .mobile-table td:has(>.arrow){text-align:right;padding-top:0}
+  .mobile-table td:has(>.arrow)::before{display:none}
+  .mobile-table .pill{max-width:100%;white-space:normal;text-align:left}
+  .mobile-table .generate-evidence{width:100%}
+  .mobile-table code{overflow-wrap:anywhere}
+}
+@media(min-width:701px) and (max-width:1100px){
+  .mobile-table tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+}
+
 </style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">∿</span><span><strong>Identity Pulse</strong><small>BY ZELTO</small></span></a><div class="workspace">Demo assessment workspace<small>Five providers · example assessments</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business tech"><p class="navlabel">Business workspace</p></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="tech-deepdive" data-audience-only="tech"><p class="navlabel">Technical deep dive</p><nav class="sidenav" aria-label="Technical deep dive"><a href="data-flow.html"><span class="num">↗</span> Animated data flow</a><a href="technical-flow.html"><span class="num">↗</span> Technical architecture</a></nav></div><div class="sidefoot">See the risk.<br>Trace the evidence.<br>Decide what changes.<small>LOCAL-FIRST · READ-ONLY<br>Interactive concept / synthetic data</small></div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p><span class="pill">Product concept · offline demo</span></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Your identity posture, in focus.</h1><p id="workspace-intro">From configuration to evidence and a clear next action.</p></div></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer"><strong>You are exploring a fictional assessment.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business tech"></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><dialog class="dialog explore-dialog" id="evidence-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Evidence item · NIS2 &amp; KSC requirement</span><button class="button" id="close-evidence">Close ×</button></div><div class="dialog-content" id="evidence-detail"></div></dialog><dialog class="dialog explore-dialog" id="explore-dialog" aria-labelledby="explore-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding &amp; action plan</span><button class="button" id="close-explore">Close ×</button></div><div class="dialog-content" id="explore-detail"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
 /* Presentation catalog only. This does not register production CLI connectors. */
 (() => {
@@ -6732,6 +6784,21 @@ window.PULSE_APPS = {
 <script>
 'use strict';
 const $=id=>document.getElementById(id),esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Keep column context and native table semantics when rows stack on narrow screens.
+function mobileTables(root){
+  root.querySelectorAll('.dash-table, .pack-document table').forEach(table=>{
+    table.classList.add('mobile-table');
+    table.setAttribute('role','table');
+    const labels=[...table.querySelectorAll('thead th')].map(th=>th.textContent.trim());
+    table.querySelectorAll('thead,tbody').forEach(group=>group.setAttribute('role','rowgroup'));
+    table.querySelectorAll('tr').forEach(row=>row.setAttribute('role','row'));
+    table.querySelectorAll('th').forEach(th=>th.setAttribute('role','columnheader'));
+    table.querySelectorAll('tbody tr').forEach(row=>[...row.cells].forEach((cell,i)=>{
+      cell.setAttribute('role','cell');
+      cell.dataset.label=labels[i]||'';
+    }));
+  });
+}
 const state={provider:window.PulseExperience.context.provider,scenario:window.PulseExperience.context.sample,view:'nis2',query:'',severity:'all',type:'all',planQuery:'',planStatus:'all',planOwner:'all',planSeverity:'all',planDue:'all',appId:null,clCategory:'all',clStatus:'all',clOwner:'all',clSource:'all'};
 // Action-plan tracking entered in the explore dialog; kept in memory for this page session only.
 const owners=['Jan Czajkowski','Nathanael Chu'],tracking={};
@@ -6766,12 +6833,13 @@ function render(){
   renderView();
   if(state.view==='nis2')$('assessment-view').querySelector('.nis2-focus').after(summary);
 }
-function renderView(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='apps'){view.innerHTML=window.PulseApps.render(state.provider,state.scenario,r,state.appId,'data-explore');}
+function renderView(){renderViewContent();mobileTables($('assessment-view'));}
+function renderViewContent(){if(state.view==='nis2'){renderMaterial();return;}const r=report(),view=$('assessment-view');if(state.view==='apps'){view.innerHTML=window.PulseApps.render(state.provider,state.scenario,r,state.appId,'data-explore');}
 else if(state.view==='findings'){view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Findings</h2><p>Every finding with its severity, type and recommended action plan. Select a finding for the full detail.</p></div><span class="pill">${r.findings.length} Total Findings</span></div>${window.PulseBusiness.findingCharts(r,{severity:state.severity,type:state.type})}<div class="filters"><input id="finding-search" type="search" aria-label="Search findings" placeholder="Search finding or rule ID" value="${esc(state.query)}"><select id="severity-filter" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(s=>`<option value="${s}" ${state.severity===s?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select><select id="type-filter" aria-label="Filter by type"><option value="all">Type</option>${[['confirmed-risk','Confirmed configuration risk'],['requires-validation','Needs validation'],['advisory','Advisory · review context']].map(([v,l])=>`<option value="${v}" ${state.type===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="finding-results"></div></section>`;renderResults();$('finding-search').addEventListener('input',e=>{state.query=e.target.value;renderResults();});$('severity-filter').addEventListener('change',e=>{state.severity=e.target.value;renderView();});$('type-filter').addEventListener('change',e=>{state.type=e.target.value;renderView();});}
 else if(state.view==='coverage'){view.innerHTML=window.PulseTech.coverage(r);}
 else if(state.view==='plan'){const items=window.PulseBusiness.actions(r),progress=['Not Started','In Progress','Verified','Completed','Closed'];view.innerHTML=`<section class="panel"><div class="panel-head"><div><h2>Action Plans</h2><p>Track the owner, target date and progress of each recommended action. Select a row to update it. Owners, dates, statuses and comments are pre-filled sample data.</p></div><span class="pill">${items.length} Total Actions</span></div>${window.PulseBusiness.planCharts(r,track,owners,{status:state.planStatus,owner:state.planOwner,due:state.planDue})}<div class="filters"><input id="plan-search" type="search" aria-label="Search actions" placeholder="Search finding or action" value="${esc(state.planQuery)}"><select id="plan-severity" aria-label="Filter by severity"><option value="all">Severity</option>${Object.keys(severityOrder).map(v=>`<option value="${v}" ${state.planSeverity===v?'selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select><select id="plan-status" aria-label="Filter by status"><option value="all">Status</option>${progress.map(v=>`<option ${state.planStatus===v?'selected':''}>${v}</option>`).join('')}</select><select id="plan-owner" aria-label="Filter by owner"><option value="all">Owner</option><option value="" ${state.planOwner===''?'selected':''}>Unassigned</option>${owners.map(o=>`<option ${state.planOwner===o?'selected':''}>${esc(o)}</option>`).join('')}</select><select id="plan-due" aria-label="Filter by due date"><option value="all">Due date</option>${window.PulseBusiness.dueBuckets.map(([v,l])=>`<option value="${v}" ${state.planDue===v?'selected':''}>${l}</option>`).join('')}</select></div><div id="plan-results"></div></section>`;renderPlanResults();$('plan-search').addEventListener('input',e=>{state.planQuery=e.target.value;renderPlanResults();});$('plan-severity').addEventListener('change',e=>{state.planSeverity=e.target.value;renderPlanResults();});$('plan-status').addEventListener('change',e=>{state.planStatus=e.target.value;renderView();});$('plan-owner').addEventListener('change',e=>{state.planOwner=e.target.value;renderView();});$('plan-due').addEventListener('change',e=>{state.planDue=e.target.value;renderView();});}}
-function renderPlanResults(){const r=report(),q=state.planQuery.toLowerCase(),items=window.PulseBusiness.actions(r).filter(a=>{const t=track(a.findingId),f=r.findings.find(x=>x.id===a.findingId);return(state.planDue==='all'||window.PulseBusiness.dueBucket(t)===state.planDue)&&(state.planSeverity==='all'||f?.severity===state.planSeverity)&&(state.planStatus==='all'||t.status===state.planStatus)&&(state.planOwner==='all'||t.owner===state.planOwner)&&((f?window.PulseBusiness.title(f):'')+' '+a.findingId+' '+a.action+' '+t.comments).toLowerCase().includes(q);});$('plan-results').innerHTML=window.PulseBusiness.plan(r,items,track,tech()?window.PulseTech.stepsText:null);}
-function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(state.type==='all'||f.classification===state.type)&&(f.title+' '+f.id+' '+window.PulseBusiness.title(f)+' '+f.businessRisk).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=tech()?window.PulseTech.findingsTable(report(),matches,track):window.PulseBusiness.dashboard(report(),matches);}
+function renderPlanResults(){const r=report(),q=state.planQuery.toLowerCase(),items=window.PulseBusiness.actions(r).filter(a=>{const t=track(a.findingId),f=r.findings.find(x=>x.id===a.findingId);return(state.planDue==='all'||window.PulseBusiness.dueBucket(t)===state.planDue)&&(state.planSeverity==='all'||f?.severity===state.planSeverity)&&(state.planStatus==='all'||t.status===state.planStatus)&&(state.planOwner==='all'||t.owner===state.planOwner)&&((f?window.PulseBusiness.title(f):'')+' '+a.findingId+' '+a.action+' '+t.comments).toLowerCase().includes(q);});$('plan-results').innerHTML=window.PulseBusiness.plan(r,items,track,tech()?window.PulseTech.stepsText:null);mobileTables($('plan-results'));}
+function renderResults(){const matches=sorted().filter(f=>(state.severity==='all'||f.severity===state.severity)&&(state.type==='all'||f.classification===state.type)&&(f.title+' '+f.id+' '+window.PulseBusiness.title(f)+' '+f.businessRisk).toLowerCase().includes(state.query.toLowerCase()));$('finding-results').innerHTML=tech()?window.PulseTech.findingsTable(report(),matches,track):window.PulseBusiness.dashboard(report(),matches);mobileTables($('finding-results'));}
 function exploreFinding(id){const f=report().findings.find(x=>x.id===id);if(!f)return;$('explore-detail').innerHTML=window.PulseBusiness.explore(report(),f,track(id),owners,tech()?{...window.PulseTech.exploreExtra(report(),f,window.PULSE_CONTROLS[state.provider]?.[state.scenario],track(id)),bottom:window.PulseRemediation.panel(state.provider,state.scenario,f,report())}:null);$('explore-dialog').showModal();}
 document.addEventListener('click',e=>{const v=e.target.closest('[data-view]');if(v){state.view=!tech()&&v.dataset.view==='coverage'?'nis2':v.dataset.view;render();if(v.hasAttribute('data-evidence-limits')){const limits=$('material-scope');if(limits){limits.open=true;limits.querySelector('summary').focus();limits.scrollIntoView({block:'start'});}}else if(v.getAttribute('role')==='tab')$('tab-'+state.view).focus();}const x=e.target.closest('textarea,input,select')?null:e.target.closest('[data-explore]');if(x)exploreFinding(x.dataset.explore);if(e.target.closest('[data-generate-pack]'))generatePack();});$('provider').addEventListener('change',e=>{state.provider=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('scenario').addEventListener('change',e=>{state.scenario=e.target.value;window.PulseExperience.updateContext(state.provider,state.scenario);render();});$('close-explore').onclick=()=>{$('explore-dialog').close();refreshBehindExplore();};$('export-json').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`identity-pulse-${state.provider}-${state.scenario}-sample.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 function renderTabs(){
@@ -6785,11 +6853,13 @@ function renderMaterial(){
     const totals={completed:all.filter(x=>x.state.status==='Completed').length,total:all.length};
     const filters={category:state.clCategory,status:state.clStatus,owner:state.clOwner,source:state.clSource};
     $('assessment-view').innerHTML=window.PulseBusiness.material(r,window.PULSE_CONTROLS[state.provider][state.scenario],N.checklistSection(rows,filters,owners,totals)+(tech()?window.PulseTech.traceability(r,track,checklistOf):''),N.obligations(r,checklistOf));
+    mobileTables($('assessment-view'));
     [['checklist-category','clCategory'],['checklist-status','clStatus'],['checklist-owner','clOwner'],['checklist-source','clSource']].forEach(([id,key])=>$(id).addEventListener('change',e=>{state[key]=e.target.value;renderMaterialKeep(id);}));
 }
 function generatePack(){
     currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent,{trackOf:track,nis2:window.PulseNIS2.packData(report(),track,checklistOf)});
     $('pack-preview').innerHTML=window.PulseEvidence.content(currentPack,true);
+    mobileTables($('pack-preview'));
     if(currentPackURL)URL.revokeObjectURL(currentPackURL);
     currentPackURL=URL.createObjectURL(new Blob([window.PulseEvidence.html(currentPack)],{type:'text/html;charset=utf-8'}));
     $('download-pack').href=currentPackURL;

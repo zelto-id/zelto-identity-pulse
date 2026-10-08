@@ -8,3 +8,14 @@
 .stage-strip{gap:8px;padding:12px;background:var(--deep);border-top:1px solid var(--line)}.stage-strip button{border:1px solid var(--line)!important;border-radius:7px;background:var(--panel);padding:15px 12px;min-width:0}.stage-strip button strong{font-size:14px;font-weight:600;display:block}.stage-strip button small{display:block;margin-top:7px;font-size:12px}.stage-strip .stage-number{font-size:18px;font-weight:600;margin-bottom:12px}.stage-strip button.stage-complete{border-color:#467d73!important;background:#203d40;color:var(--ink)}.stage-strip button[aria-current=step]{background:var(--primary);border-color:var(--primary)!important;color:var(--canvas);box-shadow:0 0 0 2px var(--accent)}.stage-strip button[aria-current=step] span{color:var(--canvas)}.stage-strip button.stage-complete span{color:var(--primary)}
 .diagram-node.selected,.engine-node.selected{background:#244b49;border:2px solid var(--primary);box-shadow:0 0 0 3px #7addc62b}.diagram-node.selected p,.engine-node.selected p{color:#d3e9e4}.node-stage{display:inline-block;font-size:12px;font-weight:650;color:var(--canvas);background:var(--accent);padding:4px 8px;border-radius:4px;margin-top:13px}.flow-wires path.active-wire{stroke:var(--accent);stroke-width:4}
 @media(max-width:560px){.stage-progress{padding:20px;align-items:flex-start;flex-direction:column}.stage-progress strong{font-size:22px}.stage-strip{gap:6px;padding:10px}.stage-strip button{padding:12px 8px}.stage-strip button strong{font-size:13px}.stage-strip button small{font-size:12px}}
+
+@media(max-width:700px){
+  .diagram-page button,.diagram-page .button,.diagram-page nav a{min-height:44px}
+  .diagram-page nav a{display:inline-flex;align-items:center}
+  .diagram-page select{font-size:16px;min-height:44px}
+  .flow-diagram>section,.provider-nodes>*{min-width:0}
+  .diagram-node,.engine-node{overflow-wrap:anywhere}
+  .stage-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .actors b{overflow-wrap:anywhere}
+  .sequence-controls{flex-wrap:wrap}
+}

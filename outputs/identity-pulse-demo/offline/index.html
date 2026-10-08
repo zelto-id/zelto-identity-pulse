@@ -289,6 +289,58 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
 .js-finding .dot{margin-top:4px}
 .js-finding:hover{color:var(--primary)}
 
+/* Phone layouts: preserve the column labels without requiring sideways scrolling. */
+@media(max-width:700px){
+  .panel,.panel-head>div,.nis2-focus>*,.explore-card,.filters>*{min-width:0}
+  .panel-head{flex-wrap:wrap;align-items:flex-start}
+  .topbar-context{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .topbar-context label{display:grid;gap:6px;min-width:0}
+  .topbar-context select{width:100%;min-width:0;max-width:100%}
+  .shell select,.shell input,.shell textarea,.dialog select,.dialog input,.dialog textarea{font-size:16px;min-height:44px;max-width:100%}
+  .shell button,.shell .button,.dialog button,.dialog .button,.change-view,.business-explore summary,.business-explore a{min-height:44px}
+  .banner-close{min-width:44px;align-self:flex-start}
+  .change-view{display:inline-flex;align-items:center}
+  .business-explore summary{display:flex;align-items:center}
+  .business-explore summary::before{content:'▸';margin-right:6px}
+  .business-explore[open] summary::before{content:'▾'}
+  .business-navigation .tabs button{flex:1 1 95px}
+  .filters input{width:100%}
+  .donut-wrap{flex-wrap:wrap;gap:18px}
+  .chart-legend.vertical{min-width:125px}
+  .coverage-detail{flex:1 1 140px}
+  .matrix th{padding:4px 2px;font-size:11px;overflow-wrap:anywhere}
+  .matrix .cell{height:44px}
+  .stack{height:44px}
+  .dialog{max-height:calc(100dvh - 24px);width:calc(100% - 24px);max-width:calc(100% - 24px)}
+  .dialog-header{flex-wrap:wrap;gap:12px}
+  .dialog-content,.dialog-header{padding:18px}
+  .dialog-content{overflow-wrap:anywhere}
+  .rem-tabs{flex-wrap:wrap}
+  .rem-copy{margin-left:0}
+  .add-owner{flex-wrap:wrap}.add-owner input{min-width:0}
+  .obligations li button{flex-wrap:wrap}.ob-text{flex:1 1 150px}
+  .journey-step:not(:last-child)::after{display:none}
+}
+
+@media(max-width:1100px){
+  .table-wrap{max-width:100%;min-width:0}
+  .mobile-table{display:block;min-width:0;width:100%;table-layout:auto}
+  .mobile-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .mobile-table tbody{display:block}
+  .mobile-table tr{display:block;padding:14px;border-bottom:1px solid var(--line)}
+  .mobile-table tr:last-child{border-bottom:0}
+  .mobile-table td,.mobile-table td:nth-child(n){display:block;width:auto!important;padding:7px 0;border:0;white-space:normal!important;overflow-wrap:anywhere}
+  .mobile-table td::before{content:attr(data-label);display:block;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--muted);margin-bottom:4px}
+  .mobile-table td:has(>.arrow){text-align:right;padding-top:0}
+  .mobile-table td:has(>.arrow)::before{display:none}
+  .mobile-table .pill{max-width:100%;white-space:normal;text-align:left}
+  .mobile-table .generate-evidence{width:100%}
+  .mobile-table code{overflow-wrap:anywhere}
+}
+@media(min-width:701px) and (max-width:1100px){
+  .mobile-table tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+}
+
 </style>
   <style>
 /* Landing-page styles are isolated from the assessment workspace. */
@@ -358,6 +410,21 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
 @media(max-width:850px){.entry-hero{grid-template-columns:1fr;gap:32px}.entry-page .entry-main{padding-top:24px}.entry-story{max-width:590px}.entry-radar-card{max-width:530px;width:100%;justify-self:center;padding:22px}.entry-radar-heading{display:flex}.entry-radar-hint{margin:0}.entry-page .entry-main h1{font-size:56px}.entry-page .entry-intro{font-size:19px;max-width:100%}.entry-outcomes{gap:24px;font-size:12px}.entry-s46{margin:28px 0 34px}.entry-section-heading{display:block}.entry-section-heading>p{max-width:none;margin-top:12px}.entry-footer{flex-direction:column;gap:10px}}
 @media(max-width:480px){.entry-page .entry-brand{padding:22px 20px}.entry-page .entry-main{padding:20px}.entry-page .entry-demo{font-size:9px;max-width:76px;line-height:1.6}.entry-demo>span{flex-shrink:0}.entry-story>.eyebrow{font-size:9px;letter-spacing:1.3px;margin-bottom:19px}.entry-page .entry-main h1{font-size:42px;letter-spacing:-1.8px}.entry-page .entry-intro{font-size:17px;margin-top:20px}.entry-explanation{font-size:13px}.entry-hero-actions{gap:12px}.entry-primary{font-size:13px;padding:14px 16px;gap:16px}.entry-hero-actions>span{font-size:9px}.entry-outcomes{gap:12px;justify-content:space-between;font-size:10px}.entry-outcomes li{display:block;line-height:1.7}.entry-outcomes span{display:block}.entry-radar-card{padding:18px 12px;border-radius:14px}.entry-radar-heading h2{font-size:15px}.entry-radar-heading{display:block}.entry-radar-hint{margin-top:8px}.entry-radar{height:290px}.entry-radar-grid{inset:25px 12px}.entry-radar-node{width:85px;min-height:63px;padding:8px 4px}.entry-radar-node strong{font-size:12px}.entry-radar-node small{font-size:7px}.entry-radar-center{width:94px;height:94px}.entry-radar-center strong{font-size:14px}.entry-radar-center small{font-size:7px}.radar-logs{right:5%}.radar-s46{left:5%}.entry-radar-detail{padding:15px 4px 0;min-height:112px}.entry-radar-caption{font-size:9px;padding:0 4px}.entry-s46{grid-template-columns:1fr;padding:18px;gap:12px}.entry-s46 h2{font-size:17px;line-height:1.5}.entry-s46>a{justify-self:start}.entry-section-heading h2{font-size:26px}.entry-page .entry-card{padding:22px}.entry-footer{font-size:10px}}
 @media(max-width:360px){.entry-page .entry-main h1{font-size:36px}.entry-radar-node{width:74px}.entry-radar-center{width:80px;height:80px}.entry-radar-center strong{font-size:12px}.entry-radar-center small{font-size:6px}.entry-radar-center>span{font-size:7px;letter-spacing:1px}.entry-primary{padding:13px 14px;gap:12px}.entry-hero-actions>span{font-size:8px}}
+
+@media(max-width:700px){
+  .entry-radar-motion,.entry-s46>a,.entry-footer a{min-height:44px;display:inline-flex;align-items:center}
+  .entry-radar-caption,.entry-radar-hint,.entry-live,.entry-s46 small,.entry-section-heading .eyebrow,.entry-footer{font-size:12px}
+  .entry-radar-detail p,.entry-s46 p,.entry-section-heading>p{font-size:14px}
+  .entry-radar-node small{font-size:10px}.entry-radar-center small{font-size:9px}
+  .entry-radar-center>span{font-size:9px;letter-spacing:1px}
+  .entry-radar-center{text-align:center}.entry-radar-center small{max-width:90%}
+  .entry-hero-actions{flex-wrap:wrap}
+  .entry-hero-actions>span{font-size:12px}
+  .entry-page .entry-demo,.entry-story>.eyebrow{font-size:11px}
+  .entry-page .entry-demo{max-width:90px}
+  .entry-explanation{font-size:15px}
+  .entry-outcomes{font-size:12px}
+}
 
 </style>
 

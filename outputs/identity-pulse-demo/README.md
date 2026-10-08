@@ -92,6 +92,10 @@ python3 outputs/identity-pulse-demo/support/package.py
 
 Run those commands from the repository root. Packaging alone can be run from any directory. It refreshes content-based revisions in source asset links for local preview caching, then inlines assets into the four portable pages. `generate-controls.py` projects only named MFA, attack-protection, session and policy fields from the six fixtures; it does not copy user identities or credentials. Provider, assessment target, collection date and collector status must match before settings are labeled observed. Existing sample reports were retained for this UI update. Fixture generation uses no provider credentials and reads no repository `.env` file; it invokes snapshot mode from a temporary working directory. Timestamps and scan IDs may change between generations, and time-sensitive rules can change their result.
 
+## Mobile layout
+
+Assessment and evidence-preview tables use labeled cards below 1100 px, with two columns on tablets and a single column on phones. Column headings and table roles remain available to assistive technology. Phone controls use larger tap targets and 16 px form text; dialogs fit the dynamic viewport. Radar descriptions remain interactive and the sweep retains its pause/resume and reduced-motion behavior.
+
 ## Validation
 
 See `verification.md` for the checks performed for this artifact. Production TypeScript and provider behavior were not modified. The pre-existing verification-toolchain task remains open.

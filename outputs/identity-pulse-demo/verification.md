@@ -90,3 +90,12 @@ The existing in-app download and direct-file testing limitations above remain. T
 
 - Replaced the one-shot 220-degree sweep with a linear, infinite 360-degree rotation every six seconds. Added Pause / Resume; reduced-motion preferences disable animation and show the disabled “Reduced motion” control. Without JavaScript the sweep stays paused.
 - Browser checks confirmed the computed animation stays running past the first cycle, uses infinite iterations, freezes at the same transform while paused, and resumes through keyboard Space. Source and portable JavaScript syntax, offline/ZIP parity, ZIP CRC and diff checks passed. Repackaged the offline entry page and ZIP; no assessment or infrastructure behavior changed.
+
+
+## Mobile layout audit — 2026-10-08
+
+- Added labeled responsive cards for evidence checklists, business/technical findings, action plans, coverage, applications, traceability and evidence-preview tables. Tables retain explicit accessibility roles and desktop columns. Labels are reapplied after filtering and provider changes.
+- Enlarged phone controls, added 16 px form text, wrapped chart legends, adapted dialog height to the dynamic viewport, improved small radar text and made diagram stage buttons a two-column grid.
+- Browser viewport checks at 320, 390, 430, 768, 1024 and 1440 px covered the landing and representative workspace layouts. At 320 px all five technical tabs and both diagrams fit without document overflow; the initial findings coverage-chart overflow was fixed and rechecked. Business findings/action plans, partial Okta evidence, the finding and requirement dialogs, evidence-pack preview and first-visit architecture guide were checked. Screenshots were reviewed on phone and desktop. This is browser viewport testing, not a physical-device test.
+- Verified finding search refreshes card labels and keyboard Enter opens its detail dialog. Evidence-preview tables retain their column labels and the dialog has equal client/scroll width. No browser console errors were reported.
+- Repackaged all four portable pages and ZIP. Source/inline JavaScript syntax, local asset references, unique HTML IDs, offline/ZIP parity, ZIP CRC and git diff whitespace checks passed. CLI behavior, provider data and Terraform were not changed.
