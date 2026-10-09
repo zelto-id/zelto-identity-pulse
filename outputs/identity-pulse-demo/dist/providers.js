@@ -9,9 +9,9 @@
     keycloak: {name:'Keycloak', scope:'Realm & application security', implemented:false},
   };
   const scenarios = {
-    risk: {name:'Security gaps found', description:'This fictional assessment contains security gaps. Start with the priority findings, then review the recommended actions.'},
-    healthy: {name:'Stronger controls', description:'This separate fictional assessment has stronger settings and fewer findings. It is not proof of compliance or evidence that the first example was fixed.'},
-    partial: {name:'Incomplete assessment', description:'Some settings could not be read in this fictional assessment. Missing evidence means unknown, even if the visible results look reassuring.'},
+    risk: {name:'Security gaps found', description:'This example has security gaps. Start with the priority findings, then review the recommended actions.'},
+    healthy: {name:'Stronger controls', description:'This example has stronger settings and fewer findings.'},
+    partial: {name:'Incomplete assessment', description:'Some settings could not be read. Missing evidence means unknown.'},
   };
   const resolve = id => Object.hasOwn(providers, id) ? id : 'auth0';
   const get = id => providers[resolve(id)];

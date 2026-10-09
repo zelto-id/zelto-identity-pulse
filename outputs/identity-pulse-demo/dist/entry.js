@@ -16,7 +16,7 @@
     jml: ['Follow access through its lifecycle.', 'Explore application access and privileged identities. Identify where joiner, mover and leaver processes still need organizational evidence.'],
     logs: ['Keep the trail behind the finding.', 'Trace findings to observed settings and collection coverage. Use the gaps to guide a review of logging and detection practices.'],
     s46: ['Prepare the people and the process.', 'Review incident contacts, reporting ownership and supporting records. S46 is an external government platform; this demo does not connect to it.'],
-    evidence: ['Give each review a starting point.', 'Preview a sample NIS2 evidence pack with observed controls, recommended actions and missing records. A pack supports review; it does not certify compliance.']
+    evidence: ['Give each review a starting point.', 'Preview a sample NIS2 evidence pack with observed controls, recommended actions and missing records.']
   };
   document.querySelectorAll('[data-radar]').forEach(button => {
     button.addEventListener('click', () => {

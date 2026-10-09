@@ -116,7 +116,7 @@ if(['findings','coverage','apps','plan','nis2'].includes(requestedView))state.vi
   document.querySelector('.contextbar').hidden=true;
   let dismissed=false;try{dismissed=sessionStorage.getItem('pulse-demo-banner')==='closed';}catch{}
   const banner=document.createElement('div');banner.className='notice neutral demo-banner';banner.id='demo-banner';banner.setAttribute('role','note');banner.hidden=dismissed;
-  banner.innerHTML='<p><strong>Fictional assessment · <span id="demo-banner-context"></span>.</strong> Choose an example to see how the findings and NIS2 material change. This does not scan or change your environment.</p><button type="button" class="banner-close" aria-label="Dismiss this message">×</button>';
+  banner.innerHTML='<p><strong>This is a synthetic example.</strong> <span id="demo-banner-context"></span>. Choose a scenario to see how findings and NIS2 material change.</p><button type="button" class="banner-close" aria-label="Dismiss this message">×</button>';
   $('provider-status').before(banner);
   banner.querySelector('.banner-close').onclick=()=>{banner.hidden=true;try{sessionStorage.setItem('pulse-demo-banner','closed');}catch{}};
 }
