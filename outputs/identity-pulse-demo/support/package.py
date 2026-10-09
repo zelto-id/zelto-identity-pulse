@@ -12,8 +12,11 @@ dest.mkdir(exist_ok=True)
 # Fonts and raster brand files stay as siblings of the HTML so @font-face and <img> resolve.
 binary_assets = (
     'Lato-Regular.woff2',
+    'Lato-Regular-Ext.woff2',
     'Lato-Bold.woff2',
+    'Lato-Bold-Ext.woff2',
     'Lato-Black.woff2',
+    'Lato-Black-Ext.woff2',
     'favicon.png',
     'zelto-logo.png',
 )

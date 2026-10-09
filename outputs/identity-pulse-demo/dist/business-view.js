@@ -70,7 +70,7 @@
   function material(report, evidence, sections = '', obligations = '') {
     const gaps = report.coverage.collectors.filter(c => c.status !== 'success');
     const preview = Boolean(report.demo?.illustrative);
-    return `<section class="nis2-focus" aria-labelledby="nis2-heading"><div class="nis2-lead"><span class="eyebrow">NIS2 Material</span><h2 id="nis2-heading">Prepare your<br><span>NIS2 evidence.</span></h2><p>${preview?'Explore how example findings, action plans and illustrative controls would appear in an evidence pack.':'Bring the identity-security findings, action plans and observed controls into one reviewable record.'}</p><div class="actions"><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button><span class="pill amber">Supporting evidence incomplete</span></div><small>Sample pack · identity-security scope</small></div>
+    return `<section class="nis2-focus" aria-labelledby="nis2-heading"><div class="nis2-lead"><span class="eyebrow">NIS2 Material</span><h2 id="nis2-heading">Prepare your<br><span>NIS2 evidence.</span></h2><p>${preview?'Explore how example findings, action plans and illustrative controls would appear in an evidence pack.':'Bring the identity-security findings, action plans and observed controls into one reviewable record.'}</p><div class="actions"><button class="button primary" id="generate-pack" data-generate-pack>Generate evidence pack</button><span class="pill amber">Supporting evidence incomplete</span></div></div>
       ${obligations}</section>
       ${sections}
       ${decisions(report)}
