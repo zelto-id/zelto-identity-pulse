@@ -333,3 +333,68 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
 @media(min-width:701px) and (max-width:1100px){
   .mobile-table tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
 }
+
+/* Pass B: phone + landscape. Desktop Pass A type and chrome stay unchanged. */
+@media(max-width:700px){
+  html,body{overflow-x:clip}
+  .shell,.main-wrap,.main,.topbar,.panel,.heading,.nis2-focus,.nis2-lead,.entry-card{min-width:0}
+  .topbar{align-items:stretch}
+  .topbar>p{width:100%;overflow-wrap:anywhere}
+  .topbar-context{grid-template-columns:1fr;width:100%;margin:0}
+  .topbar-context label{width:100%}
+  .topbar-context select{width:100%;max-width:100%}
+  .workspace-context{width:100%;justify-content:flex-start;flex-wrap:wrap}
+  .heading h1,body:is([data-audience=business],[data-audience=tech]) .heading h1{font-size:28px;overflow-wrap:anywhere}
+  .nis2-lead h2{font-size:28px}
+  .nis2-lead>p{font-size:15px}
+  .generate-evidence{min-height:44px;width:auto;max-width:100%}
+  .pill{white-space:normal;text-align:center}
+  .ob-text small,.obligations .pill,.ob-count,.mobile-table td::before,.req-ref,.ev-links a,.coverage-gaps .pill{font-size:12px}
+  .obligations li button::before{font-size:12px;width:24px;height:24px}
+  .sidebar .brand strong{overflow-wrap:anywhere}
+  .sidenav a,.business-navigation .tabs button{min-height:44px}
+  .donut-label{font-size:12px}
+  .owner-bar{grid-template-columns:minmax(0,100px) minmax(0,1fr) 32px}
+  .owner-name{white-space:normal}
+  .chart-tip{white-space:normal;max-width:min(240px,calc(100vw - 24px))}
+  .dialog{width:calc(100% - 16px);max-width:calc(100% - 16px)}
+  .guide-visual{flex-wrap:wrap;justify-content:center}
+  .guide-actions .button,.guide-dialog .button{min-height:44px}
+}
+@media(max-width:520px){
+  .topbar{padding:12px 16px}
+  .main{padding:18px 14px 28px}
+  .sidebar{padding:16px}
+  .workspace-context .pill{flex:1 1 auto}
+  .change-view{min-height:44px}
+  .business-summary{grid-template-columns:1fr}
+  .business-summary p{display:block}
+  .nis2-focus{padding:18px 14px}
+  .evidence-checklist,.obligations{padding:16px}
+  .diagram-page .topbar{padding:14px 16px;gap:12px}
+  .diagram-page .topbar nav{width:100%;gap:8px 16px}
+  .diagram-page .heading .button,.diagram-page .heading .actions{width:100%}
+  .diagram-page .heading .button{justify-content:center}
+  .diagram-page .heading .actions{display:flex;flex-wrap:wrap}
+  .diagram-page .heading .actions .button{flex:1 1 160px}
+}
+@media(max-width:360px){
+  .brand-logo,.sidebar .brand-logo,.entry-page .brand-logo{width:110px;height:37px}
+  .heading h1,body:is([data-audience=business],[data-audience=tech]) .heading h1{font-size:26px}
+  .nis2-lead h2{font-size:26px}
+  .business-navigation .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .business-navigation .tabs button{flex:none;width:100%;padding:10px 6px;font-size:13px}
+}
+@media(orientation:landscape) and (max-height:500px){
+  .sidebar{padding:8px 16px;gap:6px}
+  .sidebar .brand{flex-direction:row;align-items:center;gap:10px;margin-bottom:0}
+  .sidebar .brand-logo{width:96px;height:32px}
+  .business-explore{display:none}
+  .topbar{min-height:0;padding:8px 16px}
+  .topbar-context{display:flex;flex-wrap:wrap;width:auto;grid-template-columns:none}
+  .main{padding:12px 16px 16px}
+  .heading{margin-bottom:10px}
+  .nis2-focus{padding:16px}
+  .diagram-page .topbar{flex-wrap:nowrap}
+  .diagram-page .topbar nav{flex-wrap:wrap;width:auto}
+}

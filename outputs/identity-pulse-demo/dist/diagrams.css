@@ -10,12 +10,43 @@
 @media(max-width:560px){.stage-progress{padding:20px;align-items:flex-start;flex-direction:column}.stage-progress strong{font-size:22px}.stage-strip{gap:6px;padding:10px}.stage-strip button{padding:12px 8px}.stage-strip button strong{font-size:13px}.stage-strip button small{font-size:12px}}
 
 @media(max-width:700px){
+  .diagram-page{overflow-x:clip}
   .diagram-page button,.diagram-page .button,.diagram-page nav a{min-height:44px}
   .diagram-page nav a{display:inline-flex;align-items:center}
-  .diagram-page select{font-size:16px;min-height:44px}
-  .flow-diagram>section,.provider-nodes>*{min-width:0}
-  .diagram-node,.engine-node{overflow-wrap:anywhere}
+  .diagram-page select{font-size:16px;min-height:44px;width:100%;max-width:100%}
+  .flow-diagram>section,.provider-nodes>*,.tech-workspace,.flow-shell,.tech-split{min-width:0}
+  .diagram-node,.engine-node,.column-title,.diagram-note{overflow-wrap:anywhere}
   .stage-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .actors b{overflow-wrap:anywhere}
+  .actors{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .actors b,.actors div{overflow-wrap:anywhere;font-size:12px}
+  .actors b{font-size:13px}
   .sequence-controls{flex-wrap:wrap}
+  .flow-toolbar{align-items:stretch}
+  .flow-toolbar .contextbar{width:100%;display:grid;grid-template-columns:1fr;gap:12px}
+  .flow-toolbar label,.tech-context label{min-width:0;width:100%}
+  .playback{flex-wrap:wrap}
+  .playback .button{min-height:44px}
+  .tech-toolbar .segmented{width:100%}
+  .tech-toolbar .segmented button{flex:1 1 140px;min-height:44px}
+  .tech-topology{display:grid;gap:10px}
+  .tech-topology .connector{transform:rotate(90deg);justify-self:center}
+  .code-panel{font-size:12px}
+  .message-kind{font-size:12px}
+  .guide-dialog{width:calc(100% - 16px);max-height:calc(100dvh - 16px)}
+  .guide-dialog .dialog-content{overflow:auto}
+}
+@media(max-width:520px){
+  .flow-diagram{padding:16px 12px;gap:28px}
+  .stage-progress{padding:16px}
+  .stage-detail{padding:16px}
+  .column-title{font-size:12px}
+  .diagram-node p,.engine-node p,.diagram-note{font-size:13px}
+  .provider-nodes,.output-nodes{grid-template-columns:1fr}
+  .output-nodes .diagram-node:last-child{grid-column:auto}
+}
+@media(orientation:landscape) and (max-height:500px){
+  .flow-toolbar{padding:12px 16px}
+  .flow-diagram{padding:16px}
+  .tech-toolbar,.tech-context{padding:12px 16px}
+  .stage-progress{padding:12px 16px}
 }

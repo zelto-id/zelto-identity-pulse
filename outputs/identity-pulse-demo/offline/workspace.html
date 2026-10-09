@@ -335,6 +335,71 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
   .mobile-table tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
 }
 
+/* Pass B: phone + landscape. Desktop Pass A type and chrome stay unchanged. */
+@media(max-width:700px){
+  html,body{overflow-x:clip}
+  .shell,.main-wrap,.main,.topbar,.panel,.heading,.nis2-focus,.nis2-lead,.entry-card{min-width:0}
+  .topbar{align-items:stretch}
+  .topbar>p{width:100%;overflow-wrap:anywhere}
+  .topbar-context{grid-template-columns:1fr;width:100%;margin:0}
+  .topbar-context label{width:100%}
+  .topbar-context select{width:100%;max-width:100%}
+  .workspace-context{width:100%;justify-content:flex-start;flex-wrap:wrap}
+  .heading h1,body:is([data-audience=business],[data-audience=tech]) .heading h1{font-size:28px;overflow-wrap:anywhere}
+  .nis2-lead h2{font-size:28px}
+  .nis2-lead>p{font-size:15px}
+  .generate-evidence{min-height:44px;width:auto;max-width:100%}
+  .pill{white-space:normal;text-align:center}
+  .ob-text small,.obligations .pill,.ob-count,.mobile-table td::before,.req-ref,.ev-links a,.coverage-gaps .pill{font-size:12px}
+  .obligations li button::before{font-size:12px;width:24px;height:24px}
+  .sidebar .brand strong{overflow-wrap:anywhere}
+  .sidenav a,.business-navigation .tabs button{min-height:44px}
+  .donut-label{font-size:12px}
+  .owner-bar{grid-template-columns:minmax(0,100px) minmax(0,1fr) 32px}
+  .owner-name{white-space:normal}
+  .chart-tip{white-space:normal;max-width:min(240px,calc(100vw - 24px))}
+  .dialog{width:calc(100% - 16px);max-width:calc(100% - 16px)}
+  .guide-visual{flex-wrap:wrap;justify-content:center}
+  .guide-actions .button,.guide-dialog .button{min-height:44px}
+}
+@media(max-width:520px){
+  .topbar{padding:12px 16px}
+  .main{padding:18px 14px 28px}
+  .sidebar{padding:16px}
+  .workspace-context .pill{flex:1 1 auto}
+  .change-view{min-height:44px}
+  .business-summary{grid-template-columns:1fr}
+  .business-summary p{display:block}
+  .nis2-focus{padding:18px 14px}
+  .evidence-checklist,.obligations{padding:16px}
+  .diagram-page .topbar{padding:14px 16px;gap:12px}
+  .diagram-page .topbar nav{width:100%;gap:8px 16px}
+  .diagram-page .heading .button,.diagram-page .heading .actions{width:100%}
+  .diagram-page .heading .button{justify-content:center}
+  .diagram-page .heading .actions{display:flex;flex-wrap:wrap}
+  .diagram-page .heading .actions .button{flex:1 1 160px}
+}
+@media(max-width:360px){
+  .brand-logo,.sidebar .brand-logo,.entry-page .brand-logo{width:110px;height:37px}
+  .heading h1,body:is([data-audience=business],[data-audience=tech]) .heading h1{font-size:26px}
+  .nis2-lead h2{font-size:26px}
+  .business-navigation .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .business-navigation .tabs button{flex:none;width:100%;padding:10px 6px;font-size:13px}
+}
+@media(orientation:landscape) and (max-height:500px){
+  .sidebar{padding:8px 16px;gap:6px}
+  .sidebar .brand{flex-direction:row;align-items:center;gap:10px;margin-bottom:0}
+  .sidebar .brand-logo{width:96px;height:32px}
+  .business-explore{display:none}
+  .topbar{min-height:0;padding:8px 16px}
+  .topbar-context{display:flex;flex-wrap:wrap;width:auto;grid-template-columns:none}
+  .main{padding:12px 16px 16px}
+  .heading{margin-bottom:10px}
+  .nis2-focus{padding:16px}
+  .diagram-page .topbar{flex-wrap:nowrap}
+  .diagram-page .topbar nav{flex-wrap:wrap;width:auto}
+}
+
 </style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><img class="brand-logo" src="zelto-logo.png" width="132" height="44" alt="Zelto"><strong>Identity Pulse</strong></a><div class="workspace">Demo assessment workspace<small>Five identity providers</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business tech"><p class="navlabel">Business workspace</p></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="tech-deepdive" data-audience-only="tech"><p class="navlabel">Technical deep dive</p><nav class="sidenav" aria-label="Technical deep dive"><a href="data-flow.html"><span class="num">↗</span> Animated data flow</a><a href="technical-flow.html"><span class="num">↗</span> Technical architecture</a></nav></div><div class="sidefoot">Priorities, actions, and NIS2 material.</div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Know what needs your attention.</h1><p id="workspace-intro">Prioritize the risks, agree ownership and prepare the evidence for review.</p></div></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer" hidden></div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business tech"></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><dialog class="dialog explore-dialog" id="evidence-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Evidence item · NIS2 &amp; KSC requirement</span><button class="button" id="close-evidence">Close ×</button></div><div class="dialog-content" id="evidence-detail"></div></dialog><dialog class="dialog explore-dialog" id="explore-dialog" aria-labelledby="explore-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding &amp; action plan</span><button class="button" id="close-explore">Close ×</button></div><div class="dialog-content" id="explore-detail"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
 /* Presentation catalog only. This does not register production CLI connectors. */
 (() => {
