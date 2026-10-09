@@ -1,4 +1,4 @@
-/* Applications tab (Tech SPOC): per-app token lifetime matrix and login journey,
+/* Applications tab (Technical User): per-app token lifetime matrix and login journey,
    built from the synthetic fixture snapshot in window.PULSE_APPS. Read-only; nothing here changes a tenant. */
 (() => {
   'use strict';

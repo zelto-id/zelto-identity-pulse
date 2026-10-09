@@ -202,7 +202,7 @@ body:is([data-audience=business],[data-audience=tech]) .heading{margin-bottom:20
 .checklist-table td:nth-child(6){padding-left:6px;padding-right:6px}
 .checklist-table td:nth-child(4),.checklist-table td:nth-child(5){font-size:13px}
 .generate-evidence.done::before{content:"✓ "}
-/* Tech SPOC: technical columns, pop-up detail, coverage and traceability. */
+/* Technical User: technical columns, pop-up detail, coverage and traceability. */
 .tech-deepdive{margin-top:18px}.tech-deepdive .sidenav a{font-size:14px}
 .tech-table{min-width:1000px;table-layout:fixed}
 .tech-table td{white-space:normal!important;width:auto!important}
@@ -603,7 +603,7 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
   document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = !el.dataset.audienceOnly.split(' ').includes(audience); });
   const bar = document.createElement('div');
   bar.className = 'workspace-context';
-  bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Tech SPOC workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
+  bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Technical User workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
   const header = document.querySelector('.topbar');
   header.querySelector(':scope > .pill')?.remove();
   header.append(bar);

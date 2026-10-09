@@ -44,7 +44,7 @@ with ZipFile(root / 'identity-pulse-demo.zip', 'w', ZIP_DEFLATED) as archive:
         file = root / name
         if file.exists():
             archive.write(file, name)
-    archive.writestr('START-HERE.txt', 'Identity Pulse presentation demo\n\nOpen index.html in a browser. Choose Business User or Tech SPOC, then explore the workspace. Keep the four HTML pages together with the Lato font files, favicon.png and zelto-logo.png.\nAll data is synthetic. No installation, account, token or provider connection is needed.\nSee demo-guide.md for a walkthrough and architecture-diagrams.md for editable diagrams.\n')
+    archive.writestr('START-HERE.txt', 'Identity Pulse presentation demo\n\nOpen index.html in a browser. Choose Business User or Technical User, then explore the workspace. Keep the four HTML pages together with the Lato font files, favicon.png and zelto-logo.png.\nAll data is synthetic. No installation, account, token or provider connection is needed.\nSee demo-guide.md for a walkthrough and architecture-diagrams.md for editable diagrams.\n')
 with ZipFile(root / 'identity-pulse-demo.zip') as archive:
     assert archive.testzip() is None
 print(f'Packaged {len(list(dest.glob("*.html")))} self-contained pages: {root / "identity-pulse-demo.zip"}')

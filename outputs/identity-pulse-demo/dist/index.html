@@ -7,9 +7,12 @@
   <meta name="description" content="Explore Identity Pulse by Zelto: turn identity-security findings into action plans and supporting NIS2 / KSC evidence.">
   <title>Identity Pulse — From identity risk to NIS2 evidence</title>
   <link rel="icon" href="favicon.png">
-  <link rel="stylesheet" href="styles.css?v=d439cab0e3bc">
-  <link rel="stylesheet" href="entry.css?v=3f5aeb70d835">
-  <script defer src="providers.js?v=9857b1f94381"></script><script defer src="entry.js?v=99ad96926ad1"></script>
+  <link rel="stylesheet" href="styles.css?v=f7ea5859174c">
+  <link rel="stylesheet" href="entry.css?v=177ea93cf331">
+  <script defer src="gsap.min.js?v=5468a19b889d"></script>
+  <script defer src="providers.js?v=9857b1f94381"></script>
+  <script defer src="entry.js?v=c164090aa8eb"></script>
+  <script defer src="landing-guide.js?v=e9cd9d47989b"></script>
 </head>
 <body class="entry-page">
   <a class="entry-skip" href="#main">Skip to content</a>
@@ -21,14 +24,44 @@
         <h1 id="intro-title">From identity risk<br>to <em>NIS2 evidence.</em></h1>
         <p class="entry-intro">Know where access is exposed. See what needs to change. Bring the evidence to your next review.</p>
         <p class="entry-explanation"><strong>Identity Pulse is Zelto’s identity-security assessment workspace.</strong> Explore how technical findings become business priorities, action plans and supporting evidence for NIS2 and Poland’s KSC.</p>
-        <div class="entry-hero-actions"><a class="entry-primary" href="#workspace-choice">Explore the demo <span aria-hidden="true">↗</span></a></div>
+        <div class="entry-choice-slot">
+          <div class="entry-twins" role="group" aria-label="Choose a starting point">
+            <button type="button" data-open-view="business" aria-expanded="false" aria-controls="view-panel"><strong>Business view</strong><small>Prioritize risks and prepare evidence</small></button>
+            <button type="button" data-open-view="tech" aria-expanded="false" aria-controls="view-panel"><strong>Technical view</strong><small>Trace findings to settings and fixes</small></button>
+          </div>
+          <p class="entry-choice-note">Same example assessment. Different starting point.</p>
+          <div class="view-layer" data-mode="guide-coach" hidden>
+            <div class="view-backdrop" data-close-view></div>
+            <div class="view-panel" id="view-panel" role="dialog" aria-modal="true" aria-labelledby="view-title">
+              <div class="view-handle" aria-hidden="true"></div>
+              <div class="view-rail" aria-hidden="true"></div>
+              <div class="view-switch" role="tablist" aria-label="Starting point">
+                <button type="button" role="tab" data-switch-view="business" aria-selected="false">Business</button>
+                <button type="button" role="tab" data-switch-view="tech" aria-selected="false">Technical</button>
+              </div>
+              <button type="button" class="view-close" data-close-view aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" fill="none"/></svg></button>
+              <p class="view-label"></p>
+              <h2 id="view-title"></h2>
+              <p class="view-body"></p>
+              <ul class="view-points"></ul>
+              <a class="entry-cta" data-view-cta data-enter="business" href="workspace.html?audience=business">Open business workspace</a>
+            </div>
+          </div>
+        </div>
         <ol class="entry-outcomes" aria-label="The assessment journey"><li><span>01</span> Find the gaps</li><li><span>02</span> Plan the work</li><li><span>03</span> Prepare evidence</li></ol>
       </div>
       <div class="entry-radar-card">
-        <div class="entry-radar-heading"><div><p class="eyebrow">PREPARATION AREAS</p><h2>Identity controls that feed evidence.</h2></div><span class="entry-radar-hint">Select an area</span></div>
+        <div class="entry-radar-heading">
+          <div><p class="eyebrow">PREPARATION AREAS</p><h2>Identity controls that feed evidence.</h2></div>
+          <button type="button" class="entry-radar-motion" id="radar-motion" aria-pressed="false" aria-label="Pause radar">
+            <svg class="icon-pause" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="2" width="3.5" height="10" rx="1"/><rect x="8.5" y="2" width="3.5" height="10" rx="1"/></svg>
+            <svg class="icon-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6L12 7z"/></svg>
+          </button>
+        </div>
         <div class="entry-radar" role="group" aria-label="Explore five NIS2 and KSC preparation areas">
-          <div class="entry-radar-grid" aria-hidden="true"><i></i><i></i><i></i><span class="entry-radar-sweep"></span></div>
-          <div class="entry-radar-center" aria-hidden="true"><span>IDENTITY</span><strong>NIS2 / KSC</strong><small>Controls → evidence</small></div>
+          <div class="entry-radar-grid" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="entry-radar-beam" aria-hidden="true"><span class="entry-radar-sweep"></span><span class="entry-radar-needle"></span><span class="entry-radar-tip"></span></div>
+          <div class="entry-radar-center" aria-hidden="true"><span>IDENTITY</span><strong>NIS2 / KSC</strong></div>
           <button type="button" class="entry-radar-node radar-mfa" data-radar="mfa" aria-pressed="true" aria-controls="radar-detail"><span class="radar-dot" aria-hidden="true"></span><strong>MFA</strong><small>Access control</small></button>
           <button type="button" class="entry-radar-node radar-jml" data-radar="jml" aria-pressed="false" aria-controls="radar-detail"><span class="radar-dot" aria-hidden="true"></span><strong>Lifecycle</strong><small>Least privilege</small></button>
           <button type="button" class="entry-radar-node radar-logs" data-radar="logs" aria-pressed="false" aria-controls="radar-detail"><span class="radar-dot" aria-hidden="true"></span><strong>Logs</strong><small>Traceability</small></button>
@@ -36,27 +69,7 @@
           <button type="button" class="entry-radar-node radar-evidence" data-radar="evidence" aria-pressed="false" aria-controls="radar-detail"><span class="radar-dot" aria-hidden="true"></span><strong>Evidence</strong><small>Review preparation</small></button>
         </div>
         <div class="entry-radar-detail" id="radar-detail" aria-live="polite" aria-atomic="true"><strong id="radar-title">Make strong authentication visible.</strong><p id="radar-copy">Review MFA settings and policy gaps. Separate what is configured from what still needs to be verified.</p></div>
-        <p class="entry-radar-caption"><button type="button" class="entry-radar-motion" id="radar-motion" hidden>Pause radar</button></p>
       </div>
-    </section>
-    <section class="entry-workspaces" id="workspace-choice" aria-labelledby="workspace-title">
-    <div class="entry-section-heading"><div><p class="eyebrow">EXPLORE IDENTITY PULSE</p><h2 id="workspace-title">Business view or technical view.</h2></div><p>Same example assessment. Different starting point.</p></div>
-    <div class="entry-options">
-      <a class="entry-card entry-business" data-enter="business" href="workspace.html?audience=business" aria-labelledby="business-choice" aria-describedby="business-description">
-        <span class="entry-card-label">FOR BUSINESS & SECURITY LEADERS</span>
-        <h2 id="business-choice">Business User</h2>
-        <p id="business-description">Prioritize risks and actions. Prepare your NIS2 evidence.</p>
-        <ul><li>NIS2 material & evidence packs</li><li>Business impact & priorities</li><li>Action plans & ownership gaps</li></ul>
-        <span class="entry-cta">Open business workspace</span>
-      </a>
-      <a class="entry-card entry-technical" data-enter="tech" href="workspace.html?audience=tech" aria-labelledby="technical-choice" aria-describedby="technical-description">
-        <span class="entry-card-label">FOR IDENTITY & SECURITY ENGINEERS</span>
-        <h2 id="technical-choice">Tech SPOC</h2>
-        <p id="technical-description">The shared workspace, with the technical evidence and fixes behind every finding.</p>
-        <ul><li>Rules, data sources, coverage & observed settings</li><li>App token lifetimes, login journeys & fixes as code</li><li>Validation steps, NIS2 traceability & architecture</li></ul>
-        <span class="entry-cta">Open technical workspace</span>
-      </a>
-    </div>
     </section>
     <footer class="entry-footer"><p>Auth0 · Okta · Microsoft Entra ID · Ping Identity · Keycloak</p><div class="entry-footer-links"><a href="https://zelto.id/nis2-ksc" target="_blank" rel="noopener noreferrer">NIS2 / KSC at Zelto ↗<span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.gov.pl/web/cyfryzacja/nowelizacja-ustawy-o-krajowym-systemie-cyberbezpieczenstwa-ksc---wpis-do-wykazu-ksc-otwiera-dostep-do-platformy-s46-cyber-hub" target="_blank" rel="noopener noreferrer">S46 guidance ↗<span class="sr-only"> (opens in a new tab)</span></a></div></footer>
   </main>

@@ -45,7 +45,7 @@
   document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = !el.dataset.audienceOnly.split(' ').includes(audience); });
   const bar = document.createElement('div');
   bar.className = 'workspace-context';
-  bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Tech SPOC workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
+  bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Technical User workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
   const header = document.querySelector('.topbar');
   header.querySelector(':scope > .pill')?.remove();
   header.append(bar);

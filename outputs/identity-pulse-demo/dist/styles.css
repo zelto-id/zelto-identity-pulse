@@ -201,7 +201,7 @@ body:is([data-audience=business],[data-audience=tech]) .heading{margin-bottom:20
 .checklist-table td:nth-child(6){padding-left:6px;padding-right:6px}
 .checklist-table td:nth-child(4),.checklist-table td:nth-child(5){font-size:13px}
 .generate-evidence.done::before{content:"✓ "}
-/* Tech SPOC: technical columns, pop-up detail, coverage and traceability. */
+/* Technical User: technical columns, pop-up detail, coverage and traceability. */
 .tech-deepdive{margin-top:18px}.tech-deepdive .sidenav a{font-size:14px}
 .tech-table{min-width:1000px;table-layout:fixed}
 .tech-table td{white-space:normal!important;width:auto!important}

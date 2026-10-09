@@ -78,7 +78,7 @@
   }
   const progressClass = v => v === 'In Progress' ? 'amber' : ['Verified', 'Completed'].includes(v) ? 'green' : v === 'Closed' ? 'blue' : '';
   const dateText = v => v ? new Date(v + 'T00:00:00Z').toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'}) : '';
-  // statusNote: optional (finding, tracking) => text shown under the status (Tech SPOC).
+  // statusNote: optional (finding, tracking) => text shown under the status (Technical User).
   function plan(report, items, trackOf, statusNote = null) {
     if (!items.length) return '<p class="empty" role="status">No actions match this selection.</p>';
     return `<div class="table-wrap dash-wrap"><table class="dash-table plan-table"><thead><tr><th scope="col">Severity</th><th scope="col">Finding</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Target date</th><th scope="col">Recommended corrective action</th><th scope="col">Additional comments</th><th scope="col"><span class="sr-only">Explore</span></th></tr></thead><tbody>${items.map(a => {
@@ -104,7 +104,7 @@
       <label class="plan-field"><span>Completion / validation</span><select data-field="status">${progress.map(v => opt(v, track.status)).join('')}</select></label>
       <label class="plan-field"><span>Additional comments</span><textarea data-field="comments" rows="3" placeholder="Add context, decisions or links to evidence">${esc(track.comments)}</textarea></label></div>`;
   }
-  // extra: optional {left, right, bottom} HTML from the Tech SPOC layer.
+  // extra: optional {left, right, bottom} HTML from the Technical User layer.
   function explore(report, f, track, owners, extra = null) {
     const a = actionFor(report, f), bucket = report.remediationPlan.buckets.find(b => b.items.includes(a));
     return `<div class="explore-head"><span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span><span class="pill ${typeClass(f)}">${esc(status(f))}</span></div><h2 id="explore-title">${esc(title(f))}</h2>

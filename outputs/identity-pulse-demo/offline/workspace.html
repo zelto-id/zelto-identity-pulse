@@ -202,7 +202,7 @@ body:is([data-audience=business],[data-audience=tech]) .heading{margin-bottom:20
 .checklist-table td:nth-child(6){padding-left:6px;padding-right:6px}
 .checklist-table td:nth-child(4),.checklist-table td:nth-child(5){font-size:13px}
 .generate-evidence.done::before{content:"✓ "}
-/* Tech SPOC: technical columns, pop-up detail, coverage and traceability. */
+/* Technical User: technical columns, pop-up detail, coverage and traceability. */
 .tech-deepdive{margin-top:18px}.tech-deepdive .sidenav a{font-size:14px}
 .tech-table{min-width:1000px;table-layout:fixed}
 .tech-table td{white-space:normal!important;width:auto!important}
@@ -499,7 +499,7 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
   document.querySelectorAll('[data-audience-only]').forEach(el => { el.hidden = !el.dataset.audienceOnly.split(' ').includes(audience); });
   const bar = document.createElement('div');
   bar.className = 'workspace-context';
-  bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Tech SPOC workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
+  bar.innerHTML = `<span class="pill light">${audience === 'business' ? 'Business workspace' : 'Technical User workspace'}</span><a href="index.html" class="change-view">Change view</a>`;
   const header = document.querySelector('.topbar');
   header.querySelector(':scope > .pill')?.remove();
   header.append(bar);
@@ -5540,7 +5540,7 @@ window.PULSE_CONTROLS = {
   }
   const progressClass = v => v === 'In Progress' ? 'amber' : ['Verified', 'Completed'].includes(v) ? 'green' : v === 'Closed' ? 'blue' : '';
   const dateText = v => v ? new Date(v + 'T00:00:00Z').toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'}) : '';
-  // statusNote: optional (finding, tracking) => text shown under the status (Tech SPOC).
+  // statusNote: optional (finding, tracking) => text shown under the status (Technical User).
   function plan(report, items, trackOf, statusNote = null) {
     if (!items.length) return '<p class="empty" role="status">No actions match this selection.</p>';
     return `<div class="table-wrap dash-wrap"><table class="dash-table plan-table"><thead><tr><th scope="col">Severity</th><th scope="col">Finding</th><th scope="col">Status</th><th scope="col">Owner</th><th scope="col">Target date</th><th scope="col">Recommended corrective action</th><th scope="col">Additional comments</th><th scope="col"><span class="sr-only">Explore</span></th></tr></thead><tbody>${items.map(a => {
@@ -5566,7 +5566,7 @@ window.PULSE_CONTROLS = {
       <label class="plan-field"><span>Completion / validation</span><select data-field="status">${progress.map(v => opt(v, track.status)).join('')}</select></label>
       <label class="plan-field"><span>Additional comments</span><textarea data-field="comments" rows="3" placeholder="Add context, decisions or links to evidence">${esc(track.comments)}</textarea></label></div>`;
   }
-  // extra: optional {left, right, bottom} HTML from the Tech SPOC layer.
+  // extra: optional {left, right, bottom} HTML from the Technical User layer.
   function explore(report, f, track, owners, extra = null) {
     const a = actionFor(report, f), bucket = report.remediationPlan.buckets.find(b => b.items.includes(a));
     return `<div class="explore-head"><span class="pill ${sevClass(f.severity)}">${esc(f.severity)}</span><span class="pill ${typeClass(f)}">${esc(status(f))}</span></div><h2 id="explore-title">${esc(title(f))}</h2>
@@ -5652,7 +5652,7 @@ window.PULSE_CONTROLS = {
 
 </script>
 <script>
-/* Tech SPOC: the shared workspace with a technical layer on the same findings, actions and evidence.
+/* Technical User: the shared workspace with a technical layer on the same findings, actions and evidence.
    Adds rule-level detail, the collector and API scope behind each finding, observed settings, validation-step
    tracking, collector-to-finding coverage and NIS2 traceability. Links into the technical architecture page. */
 (() => {
@@ -6759,7 +6759,7 @@ window.PULSE_APPS = {
 
 </script>
 <script>
-/* Applications tab (Tech SPOC): per-app token lifetime matrix and login journey,
+/* Applications tab (Technical User): per-app token lifetime matrix and login journey,
    built from the synthetic fixture snapshot in window.PULSE_APPS. Read-only; nothing here changes a tenant. */
 (() => {
   'use strict';
@@ -6907,7 +6907,7 @@ const track=id=>tracking[trackKey(id)]??=seedTrack(id);
 const checklistState={};
 const checklistOf=item=>checklistState[trackKey('nis2:'+item.id)]??=window.PulseNIS2.seed(item,window.PulseNIS2.checklist.indexOf(item));
 const severityOrder={critical:0,high:1,medium:2,low:3,info:4};
-// Both audiences share one workspace; the Tech SPOC adds the technical layer (tech-view.js, Applications tab, remediation code).
+// Both audiences share one workspace; the Technical User adds the technical layer (tech-view.js, Applications tab, remediation code).
 const tech=()=>window.PulseExperience.audience==='tech';
 const report=()=>window.PULSE_REPORTS[state.provider][state.scenario];
 const sorted=()=>[...report().findings].sort((a,b)=>(severityOrder[a.severity]??5)-(severityOrder[b.severity]??5));
@@ -6985,8 +6985,8 @@ if(['findings','coverage','apps','plan','nis2'].includes(requestedView))state.vi
   $('workspace-eyebrow').textContent='Business overview';
   $('workspace-heading').textContent='Know what needs your attention.';
   $('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence for review.';
-  document.title=tech()?'Identity Pulse — Tech SPOC workspace':'Identity Pulse — Business workspace';
-  if(tech()){$('workspace-eyebrow').textContent='Tech SPOC workspace';$('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence, with the technical detail behind each one.';}
+  document.title=tech()?'Identity Pulse — Technical User workspace':'Identity Pulse — Business workspace';
+  if(tech()){$('workspace-eyebrow').textContent='Technical User workspace';$('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence, with the technical detail behind each one.';}
   const selectors=document.createElement('div');selectors.className='topbar-context';
   selectors.append(...document.querySelectorAll('.contextbar > label'));
   document.querySelector('.topbar > p').after(selectors);
@@ -7075,7 +7075,7 @@ $('evidence-detail').addEventListener('click',e=>{if(e.target.closest('[data-add
 $('evidence-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addEvidenceOwner();}});
 $('close-evidence').onclick=()=>{$('evidence-dialog').close();renderMaterialKeep();};
 $('evidence-dialog').addEventListener('close',()=>renderMaterialKeep());
-// Tech SPOC: tick off a finding's validation steps in the pop-up.
+// Technical User: tick off a finding's validation steps in the pop-up.
 $('explore-detail').addEventListener('change',e=>{
   const box=e.target.closest('[data-steps]');if(!box||!e.target.matches('[data-step-index]'))return;
   const t=track(box.dataset.steps);t.steps=t.steps||[];t.steps[Number(e.target.dataset.stepIndex)]=e.target.checked;

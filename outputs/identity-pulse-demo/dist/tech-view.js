@@ -1,4 +1,4 @@
-/* Tech SPOC: the shared workspace with a technical layer on the same findings, actions and evidence.
+/* Technical User: the shared workspace with a technical layer on the same findings, actions and evidence.
    Adds rule-level detail, the collector and API scope behind each finding, observed settings, validation-step
    tracking, collector-to-finding coverage and NIS2 traceability. Links into the technical architecture page. */
 (() => {

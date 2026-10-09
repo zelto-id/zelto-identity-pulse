@@ -4,9 +4,9 @@
   const key = 'pulse-demo-architecture-guide-v1';
   const steps = [
     ['Start with a question', 'Choose a provider, then select API collection, Failure handling or Local analysis & reports. Auth0 and Okta illustrate existing CLI behavior; Entra ID, Ping Identity and Keycloak show proposed designs.', 'Business users: start with Failure handling to understand what missing permissions mean for the assessment.'],
-    ['Select an exchange', 'Click a message in the sequence, or use the next and previous controls. The inspector shows where information moves and what the local CLI does with it.', 'Tech SPOCs: inspect the protocol, authentication and state effect before reviewing the payload.'],
+    ['Select an exchange', 'Click a message in the sequence, or use the next and previous controls. The inspector shows where information moves and what the local CLI does with it.', 'Technical users: inspect the protocol, authentication and state effect before reviewing the payload.'],
     ['Compare request and response', 'Use Request / input and Response / output to see both sides of the selected exchange. Authentication uses placeholders; nothing is sent to a provider.', 'Read Handling & limitations for permission gaps, retry behavior and other boundaries.'],
-    ['Know what to take away', 'Business users can focus on where evidence comes from, what remains unknown and which decisions need technical review. Tech SPOCs can trace scopes, payloads, failure states and implementation references.', 'Reopen this guide with “How to use this page” whenever you need it. The assessment workspace keeps the findings and action plans together.'],
+    ['Know what to take away', 'Business users can focus on where evidence comes from, what remains unknown and which decisions need technical review. Technical users can trace scopes, payloads, failure states and implementation references.', 'Reopen this guide with “How to use this page” whenever you need it. The assessment workspace keeps the findings and action plans together.'],
   ];
   let step = 0;
   function draw() {

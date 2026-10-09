@@ -28,7 +28,7 @@ const track=id=>tracking[trackKey(id)]??=seedTrack(id);
 const checklistState={};
 const checklistOf=item=>checklistState[trackKey('nis2:'+item.id)]??=window.PulseNIS2.seed(item,window.PulseNIS2.checklist.indexOf(item));
 const severityOrder={critical:0,high:1,medium:2,low:3,info:4};
-// Both audiences share one workspace; the Tech SPOC adds the technical layer (tech-view.js, Applications tab, remediation code).
+// Both audiences share one workspace; the Technical User adds the technical layer (tech-view.js, Applications tab, remediation code).
 const tech=()=>window.PulseExperience.audience==='tech';
 const report=()=>window.PULSE_REPORTS[state.provider][state.scenario];
 const sorted=()=>[...report().findings].sort((a,b)=>(severityOrder[a.severity]??5)-(severityOrder[b.severity]??5));
@@ -106,8 +106,8 @@ if(['findings','coverage','apps','plan','nis2'].includes(requestedView))state.vi
   $('workspace-eyebrow').textContent='Business overview';
   $('workspace-heading').textContent='Know what needs your attention.';
   $('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence for review.';
-  document.title=tech()?'Identity Pulse — Tech SPOC workspace':'Identity Pulse — Business workspace';
-  if(tech()){$('workspace-eyebrow').textContent='Tech SPOC workspace';$('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence, with the technical detail behind each one.';}
+  document.title=tech()?'Identity Pulse — Technical User workspace':'Identity Pulse — Business workspace';
+  if(tech()){$('workspace-eyebrow').textContent='Technical User workspace';$('workspace-intro').textContent='Prioritize the risks, agree ownership and prepare the evidence, with the technical detail behind each one.';}
   const selectors=document.createElement('div');selectors.className='topbar-context';
   selectors.append(...document.querySelectorAll('.contextbar > label'));
   document.querySelector('.topbar > p').after(selectors);
@@ -196,7 +196,7 @@ $('evidence-detail').addEventListener('click',e=>{if(e.target.closest('[data-add
 $('evidence-detail').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-new-owner]')){e.preventDefault();addEvidenceOwner();}});
 $('close-evidence').onclick=()=>{$('evidence-dialog').close();renderMaterialKeep();};
 $('evidence-dialog').addEventListener('close',()=>renderMaterialKeep());
-// Tech SPOC: tick off a finding's validation steps in the pop-up.
+// Technical User: tick off a finding's validation steps in the pop-up.
 $('explore-detail').addEventListener('change',e=>{
   const box=e.target.closest('[data-steps]');if(!box||!e.target.matches('[data-step-index]'))return;
   const t=track(box.dataset.steps);t.steps=t.steps||[];t.steps[Number(e.target.dataset.stepIndex)]=e.target.checked;
