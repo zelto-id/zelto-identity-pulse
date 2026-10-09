@@ -36,17 +36,19 @@
   .guide-dialog .dialog-content{overflow:auto}
 }
 @media(max-width:520px){
-  .flow-diagram{padding:16px 12px;gap:28px}
-  .stage-progress{padding:16px}
-  .stage-detail{padding:16px}
-  .column-title{font-size:12px}
+  .flow-diagram{padding:20px 16px;gap:32px}
+  .stage-progress{padding:18px 16px}
+  .stage-detail{padding:18px 16px}
+  .column-title{font-size:12px;margin-bottom:14px}
   .diagram-node p,.engine-node p,.diagram-note{font-size:13px}
-  .provider-nodes,.output-nodes{grid-template-columns:1fr}
+  .provider-nodes,.output-nodes{grid-template-columns:1fr;gap:14px}
   .output-nodes .diagram-node:last-child{grid-column:auto}
+  .flow-toolbar{padding:18px 16px}
+  .playback{gap:12px}
 }
 @media(orientation:landscape) and (max-height:500px){
-  .flow-toolbar{padding:12px 16px}
-  .flow-diagram{padding:16px}
-  .tech-toolbar,.tech-context{padding:12px 16px}
-  .stage-progress{padding:12px 16px}
+  .flow-toolbar{padding:14px 18px}
+  .flow-diagram{padding:18px}
+  .tech-toolbar,.tech-context{padding:14px 18px}
+  .stage-progress{padding:14px 18px}
 }
