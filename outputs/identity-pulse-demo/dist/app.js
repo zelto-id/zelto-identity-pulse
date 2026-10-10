@@ -71,20 +71,24 @@ function renderMaterial(){
     mobileTables($('assessment-view'));
     [['checklist-category','clCategory'],['checklist-status','clStatus'],['checklist-owner','clOwner'],['checklist-source','clSource']].forEach(([id,key])=>$(id).addEventListener('change',e=>{state[key]=e.target.value;renderMaterialKeep(id);}));
 }
-function generatePack(){
+async function generatePack(){
     currentPack=window.PulseEvidence.build(report(),window.PULSE_CONTROLS[state.provider][state.scenario],$('scenario').selectedOptions[0].textContent,{trackOf:track,nis2:window.PulseNIS2.packData(report(),track,checklistOf)});
-    $('pack-preview').innerHTML=window.PulseEvidence.content(currentPack,true);
+    $('pack-preview').innerHTML=window.PulseEvidence.content(currentPack,true,{logo:'zelto-logo.png'});
     mobileTables($('pack-preview'));
+    $('pack-download-status').textContent='Preparing download…';
+    $('download-pack').removeAttribute('href');
+    $('pack-dialog').showModal();
+    const html=await window.PulseEvidence.html(currentPack);
     if(currentPackURL)URL.revokeObjectURL(currentPackURL);
-    currentPackURL=URL.createObjectURL(new Blob([window.PulseEvidence.html(currentPack)],{type:'text/html;charset=utf-8'}));
+    currentPackURL=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
     $('download-pack').href=currentPackURL;
     $('download-pack').download=`identity-pulse-${currentPack.report.provider.id}-sample-evidence-pack.html`;
-    $('pack-download-status').textContent='Self-contained HTML · browser mockup';
-    $('pack-dialog').showModal();
+    $('pack-download-status').textContent='Self-contained HTML';
 }
 let currentPack=null,currentPackURL=null;
 $('close-pack').onclick=()=>$('pack-dialog').close();
-$('download-pack').onclick=()=>{
+$('download-pack').onclick=e=>{
+  if(!$('download-pack').getAttribute('href')){e.preventDefault();return;}
   $('pack-download-status').textContent='Sample HTML download requested. Open the file to review or print.';
 };
 
