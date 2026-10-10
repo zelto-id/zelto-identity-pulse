@@ -7,12 +7,10 @@
   <meta name="description" content="Explore Identity Pulse by Zelto: turn identity-security findings into action plans and supporting NIS2 / KSC evidence.">
   <title>Identity Pulse — From identity risk to NIS2 evidence</title>
   <link rel="icon" href="favicon.png">
-  <link rel="stylesheet" href="styles.css?v=293a31d35c89">
-  <link rel="stylesheet" href="entry.css?v=177ea93cf331">
-  <script defer src="gsap.min.js?v=5468a19b889d"></script>
+  <link rel="stylesheet" href="styles.css?v=00fe467ea6a1">
+  <link rel="stylesheet" href="entry.css?v=92f8bc0e6028">
   <script defer src="providers.js?v=9857b1f94381"></script>
-  <script defer src="entry.js?v=c164090aa8eb"></script>
-  <script defer src="landing-guide.js?v=e9cd9d47989b"></script>
+  <script defer src="entry.js?v=f46b74d6ac32"></script>
 </head>
 <body class="entry-page">
   <a class="entry-skip" href="#main">Skip to content</a>
@@ -26,27 +24,10 @@
         <p class="entry-explanation"><strong>Identity Pulse is Zelto’s identity-security assessment workspace.</strong> Explore how technical findings become business priorities, action plans and supporting evidence for NIS2 and Poland’s KSC.</p>
         <div class="entry-choice-slot">
           <div class="entry-twins" role="group" aria-label="Choose a starting point">
-            <button type="button" data-open-view="business" aria-expanded="false" aria-controls="view-panel"><strong>Business view</strong><small>Prioritize risks and prepare evidence</small></button>
-            <button type="button" data-open-view="tech" aria-expanded="false" aria-controls="view-panel"><strong>Technical view</strong><small>Trace findings to settings and fixes</small></button>
+            <a data-enter="business" href="workspace.html?audience=business"><strong>Business view</strong><small>Prioritize risks and prepare evidence</small></a>
+            <a data-enter="tech" href="workspace.html?audience=tech"><strong>Technical view</strong><small>Trace findings to settings and fixes</small></a>
           </div>
           <p class="entry-choice-note">Same example assessment. Different starting point.</p>
-          <div class="view-layer" data-mode="guide-coach" hidden>
-            <div class="view-backdrop" data-close-view></div>
-            <div class="view-panel" id="view-panel" role="dialog" aria-modal="true" aria-labelledby="view-title">
-              <div class="view-handle" aria-hidden="true"></div>
-              <div class="view-rail" aria-hidden="true"></div>
-              <div class="view-switch" role="tablist" aria-label="Starting point">
-                <button type="button" role="tab" data-switch-view="business" aria-selected="false">Business</button>
-                <button type="button" role="tab" data-switch-view="tech" aria-selected="false">Technical</button>
-              </div>
-              <button type="button" class="view-close" data-close-view aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" fill="none"/></svg></button>
-              <p class="view-label"></p>
-              <h2 id="view-title"></h2>
-              <p class="view-body"></p>
-              <ul class="view-points"></ul>
-              <a class="entry-cta" data-view-cta data-enter="business" href="workspace.html?audience=business">Open business workspace</a>
-            </div>
-          </div>
         </div>
         <ol class="entry-outcomes" aria-label="The assessment journey"><li><span>01</span> Find the gaps</li><li><span>02</span> Plan the work</li><li><span>03</span> Prepare evidence</li></ol>
       </div>
