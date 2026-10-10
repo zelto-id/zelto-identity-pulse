@@ -1,7 +1,8 @@
 (() => {
   'use strict';
   const el = id => document.getElementById(id);
-  const key = 'pulse-demo-architecture-guide-v1';
+  const key = 'pulse-demo-architecture-guide-v2';
+  const force = new URLSearchParams(location.search).get('guide') === '1';
   const steps = [
     ['Start with a question', 'Choose a provider, then select API collection, Failure handling or Local analysis & reports. Auth0 and Okta illustrate existing CLI behavior; Entra ID, Ping Identity and Keycloak show proposed designs.', 'Business users: start with Failure handling to understand what missing permissions mean for the assessment.'],
     ['Select an exchange', 'Click a message in the sequence, or use the next and previous controls. The inspector shows where information moves and what the local CLI does with it.', 'Technical users: inspect the protocol, authentication and state effect before reviewing the payload.'],
@@ -19,9 +20,13 @@
     el('guide-next').textContent = step === steps.length - 1 ? 'Explore architecture' : 'Next';
   }
   function open() {
+    const play = el('sequence-play');
     // Pause an existing sequence so it does not advance underneath the guide.
-    if (el('sequence-play').textContent.includes('Pause')) el('sequence-play').click();
-    step = 0; draw(); el('guide-dialog').showModal();
+    if (play && play.textContent.includes('Pause')) play.click();
+    step = 0; draw();
+    const dialog = el('guide-dialog');
+    if (!dialog || typeof dialog.showModal !== 'function' || dialog.open) return;
+    dialog.showModal();
   }
   el('open-guide').onclick = open;
   el('close-guide').onclick = () => el('guide-dialog').close();
@@ -31,8 +36,17 @@
     else { step++; draw(); }
   };
   el('guide-dialog').addEventListener('close', () => {
-    window.PulseExperience.write(key, 'seen');
-    el('open-guide').focus();
+    // A hidden document means the audience gate is redirecting; do not consume first-visit.
+    if (document.documentElement.style.visibility !== 'hidden') {
+      window.PulseExperience.write(key, 'seen');
+    }
+    el('open-guide')?.focus();
   });
-  if (window.PulseExperience.read(key) !== 'seen') open();
+  const hidden = document.documentElement.style.visibility === 'hidden';
+  const seen = !force && window.PulseExperience.read(key) === 'seen';
+  if (!hidden && !seen) {
+    requestAnimationFrame(() => {
+      try { open(); } catch { /* How to use this page remains the fallback. */ }
+    });
+  }
 })();
