@@ -426,8 +426,9 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
   .main{padding:22px 18px 40px}
   .nis2-focus{padding:22px 18px}
 }
+.guide-visual span.is-current{border-color:var(--primary);color:var(--primary)}
 
-</style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><img class="brand-logo" src="zelto-logo.png" width="155" height="44" alt="Zelto Pulse"></a><div class="workspace">Demo assessment workspace<small>Five identity providers</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business tech"><p class="navlabel">Business workspace</p></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="tech-deepdive" data-audience-only="tech"><p class="navlabel">Technical deep dive</p><nav class="sidenav" aria-label="Technical deep dive"><a href="data-flow.html"><span class="num">↗</span> Animated data flow</a><a href="technical-flow.html"><span class="num">↗</span> Technical architecture</a></nav></div><div class="sidefoot">Priorities, actions, and NIS2 material.</div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Know what needs your attention.</h1><p id="workspace-intro">Prioritize the risks, agree ownership and prepare the evidence for review.</p></div></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer" hidden></div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business tech"></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><dialog class="dialog explore-dialog" id="evidence-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Evidence item · NIS2 &amp; KSC requirement</span><button class="button" id="close-evidence">Close ×</button></div><div class="dialog-content" id="evidence-detail"></div></dialog><dialog class="dialog explore-dialog" id="explore-dialog" aria-labelledby="explore-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding &amp; action plan</span><button class="button" id="close-explore">Close ×</button></div><div class="dialog-content" id="explore-detail"></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
+</style></head><body><a class="skip" href="#main">Skip to assessment</a><div class="shell"><aside class="sidebar"><a class="brand" href="index.html"><img class="brand-logo" src="zelto-logo.png" width="155" height="44" alt="Zelto Pulse"></a><div class="workspace">Demo assessment workspace<small>Five identity providers</small></div><div id="business-navigation" class="business-navigation" data-audience-only="business tech"><p class="navlabel">Business workspace</p></div><details class="business-explore" data-audience-only="business"><summary>How the assessment works</summary><a href="data-flow.html">Assessment flow</a><a href="technical-flow.html">Technical detail</a></details><div class="tech-deepdive" data-audience-only="tech"><p class="navlabel">Technical deep dive</p><nav class="sidenav" aria-label="Technical deep dive"><a href="data-flow.html"><span class="num">↗</span> Animated data flow</a><a href="technical-flow.html"><span class="num">↗</span> Technical architecture</a></nav></div><div class="sidefoot">Priorities, actions, and NIS2 material.</div></aside><div class="main-wrap"><header class="topbar"><p>Workspace <span aria-hidden="true"> / </span> <b id="workspace-title">Identity posture assessment</b></p></header><main class="main" id="main"><div class="heading"><div><p class="eyebrow" id="workspace-eyebrow">Assessment workspace</p><h1 id="workspace-heading">Know what needs your attention.</h1><p id="workspace-intro">Prioritize the risks, agree ownership and prepare the evidence for review.</p></div><div class="actions"><button class="button" id="open-guide">How this workspace works</button></div></div><div class="contextbar"><label>Identity provider<select id="provider" data-provider-select aria-describedby="provider-status"><option value="auth0">Auth0 · Customer identity</option><option value="okta">Okta · Workforce identity</option></select></label><label>Demo scenario<select id="scenario" aria-describedby="demo-explainer scenario-description"><option value="risk">Security gaps found</option><option value="healthy">Stronger controls</option><option value="partial">Incomplete assessment</option></select></label><div class="context-note" id="sample-context"></div><div class="demo-explainer" id="demo-explainer" hidden></div><p class="scenario-description" id="scenario-description" aria-live="polite"></p></div><div id="provider-status"></div><div id="coverage-notice"></div><section id="business-summary" class="business-summary" aria-label="Business priorities" data-audience-only="business tech"></section><div class="tabs" id="assessment-tabs" role="tablist" aria-label="Assessment views"></div><section id="assessment-view" role="tabpanel" aria-labelledby="tab-findings"></section><footer class="footer"><span id="report-origin"></span><button class="textlink" data-audience-only="tech" id="export-json">Download sample report JSON ↓</button></footer></main></div></div><dialog class="dialog pack-dialog" id="pack-dialog" aria-labelledby="pack-title"><div class="dialog-header"><div><span class="eyebrow">Auditor-supporting material</span><h2 id="pack-title">Sample evidence pack</h2></div><button class="button" id="close-pack">Close preview</button></div><div class="pack-actions"><a class="button primary" id="download-pack" download>Download sample pack (HTML)</a><p id="pack-download-status" role="status">Self-contained HTML · browser mockup</p></div><div class="dialog-content" id="pack-preview"></div></dialog><dialog class="dialog explore-dialog" id="evidence-dialog" aria-labelledby="evidence-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Evidence item · NIS2 &amp; KSC requirement</span><button class="button" id="close-evidence">Close ×</button></div><div class="dialog-content" id="evidence-detail"></div></dialog><dialog class="dialog explore-dialog" id="explore-dialog" aria-labelledby="explore-title"><div class="dialog-header"><span class="eyebrow" style="margin:0">Finding &amp; action plan</span><button class="button" id="close-explore">Close ×</button></div><div class="dialog-content" id="explore-detail"></div></dialog><dialog class="dialog guide-dialog" id="guide-dialog" aria-labelledby="guide-title"><div class="dialog-header"><span class="eyebrow" id="guide-eyebrow">Workspace · quick guide</span><button class="button" id="close-guide">Skip guide</button></div><div class="dialog-content"><p class="guide-count" id="guide-count" role="status"></p><div class="guide-visual" aria-hidden="true"><span id="guide-visual-1">Find</span><b>→</b><span id="guide-visual-2">Plan</span><b>→</b><span id="guide-visual-3">Evidence</span></div><h2 id="guide-title"></h2><p id="guide-text"></p><div class="guide-tip" id="guide-tip"></div><div class="guide-actions"><button class="button" id="guide-back">Back</button><button class="button primary" id="guide-next">Next</button></div></div></dialog><noscript><p>Enable JavaScript to explore the sample assessment. No live systems are connected.</p></noscript><script>
 /* Presentation catalog only. This does not register production CLI connectors. */
 (() => {
   'use strict';
@@ -459,7 +460,9 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
   const write = (key, value) => { try { localStorage.setItem(key, value); } catch { /* URL navigation works without storage. */ } };
   const params = new URLSearchParams(location.search);
   const validAudience = value => ['business', 'tech'].includes(value);
-  const audience = validAudience(params.get('audience')) ? params.get('audience') : read('pulse-demo-audience');
+  const page = location.pathname.split('/').pop() || '';
+  const diagramFallback = /^(technical-flow|data-flow)\.html$/.test(page) ? 'tech' : null;
+  const audience = [params.get('audience'), read('pulse-demo-audience'), diagramFallback].find(validAudience);
   const context = {
     provider: window.PulseProviders.resolve(params.get('provider')),
     sample: ['risk', 'healthy', 'partial'].includes(params.get('sample')) ? params.get('sample') : 'risk',
@@ -504,6 +507,13 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
   header.querySelector(':scope > .pill')?.remove();
   header.append(bar);
   syncLinks();
+  if (!validAudience(params.get('audience'))) {
+    try {
+      const url = new URL(location.href);
+      url.searchParams.set('audience', audience);
+      history.replaceState(null, '', url);
+    } catch { /* Optional for local files. */ }
+  }
 })();
 
 </script>
@@ -7231,6 +7241,89 @@ $('explore-detail').addEventListener('change',e=>{
 // Applications tab: choose which application's login journey to show.
 $('assessment-view').addEventListener('click',e=>{const a=e.target.closest('[data-app-select]');if(!a||e.target.closest('[data-explore],[data-finding]'))return;state.appId=a.dataset.appSelect;const y=scrollY;renderView();scrollTo(0,y);});
 $('assessment-view').addEventListener('keydown',e=>{const a=e.target.closest('tr[data-app-select]');if(a&&e.target===a&&(e.key==='Enter'||e.key===' ')){e.preventDefault();a.click();}});
+
+</script>
+<script>
+(() => {
+  'use strict';
+  const el = id => document.getElementById(id);
+  if (!el('guide-dialog') || !window.PulseExperience) return;
+  if (document.documentElement.style.visibility === 'hidden') return;
+  const key = 'pulse-demo-workspace-guide-v1';
+  const force = new URLSearchParams(location.search).get('guide') === '1';
+  const tech = window.PulseExperience?.audience === 'tech';
+  const tours = {
+    business: {
+      eyebrow: 'Business workspace · quick guide',
+      visual: ['Find', 'Plan', 'Evidence'],
+      steps: [
+        ['You are in the example assessment', 'This is the business starting point for the same sample as Technical view. Findings, action plans and NIS2 material are already here.', 'Change view returns to the landing if you want the technical path instead.'],
+        ['Find the gaps', 'Start with Findings for what needs a decision. NIS2 Material shows which evidence items are already available.', 'Open a finding when you want the full story and recommended next step.'],
+        ['Plan the work', 'Action Plans is where ownership, dates and status live for this example.', 'Nothing here is written back to a provider.'],
+        ['Prepare the evidence', 'When you are ready, generate the sample pack from NIS2 Material. It is one record for review.', 'Reopen this guide with “How this workspace works” whenever you need it.']
+      ]
+    },
+    tech: {
+      eyebrow: 'Technical workspace · quick guide',
+      visual: ['Trace', 'Coverage', 'Architecture'],
+      steps: [
+        ['You are in the example assessment', 'This is the technical starting point for the same sample. Every finding still has the rule, collector and observed setting behind it.', 'Change view returns to the landing if you want the business path instead.'],
+        ['Trace a finding', 'Open a row to see the rule, collector, API scope and observed JSON.', 'Coverage shows what was collected and what was missing.'],
+        ['Applications and fixes', 'Token lifetimes, login journeys and recommended validation steps sit with the finding.', 'Remediation examples stay on this page.'],
+        ['How collection works', 'Animated flow and Technical architecture show the read-only path from provider to local report.', 'The architecture page has its own four-step guide the first time you open it.']
+      ]
+    }
+  };
+  const tour = tours[tech ? 'tech' : 'business'];
+  let step = 0;
+
+  function draw() {
+    const [title, text, tip] = tour.steps[step];
+    el('guide-count').textContent = `Step ${step + 1} of ${tour.steps.length}`;
+    el('guide-title').textContent = title;
+    el('guide-text').textContent = text;
+    el('guide-tip').textContent = tip;
+    el('guide-back').disabled = step === 0;
+    el('guide-next').textContent = step === tour.steps.length - 1 ? 'Start exploring' : 'Next';
+    [el('guide-visual-1'), el('guide-visual-2'), el('guide-visual-3')].forEach((node, index) => {
+      if (!node) return;
+      node.textContent = tour.visual[index];
+      node.classList.toggle('is-current', index === Math.min(step, tour.visual.length - 1));
+    });
+  }
+
+  function open() {
+    step = 0;
+    draw();
+    const dialog = el('guide-dialog');
+    if (!dialog || typeof dialog.showModal !== 'function' || dialog.open) return;
+    dialog.showModal();
+  }
+
+  const eyebrow = el('guide-eyebrow');
+  if (eyebrow) eyebrow.textContent = tour.eyebrow;
+  el('open-guide').onclick = open;
+  el('close-guide').onclick = () => el('guide-dialog').close();
+  el('guide-back').onclick = () => { step = Math.max(0, step - 1); draw(); };
+  el('guide-next').onclick = () => {
+    if (step === tour.steps.length - 1) el('guide-dialog').close();
+    else { step++; draw(); }
+  };
+  el('guide-dialog').addEventListener('close', () => {
+    if (document.documentElement.style.visibility !== 'hidden') {
+      window.PulseExperience.write(key, 'seen');
+    }
+    el('open-guide')?.focus();
+  });
+
+  const hidden = document.documentElement.style.visibility === 'hidden';
+  const seen = !force && window.PulseExperience.read(key) === 'seen';
+  if (!hidden && !seen) {
+    requestAnimationFrame(() => {
+      try { open(); } catch { /* How this workspace works remains the fallback. */ }
+    });
+  }
+})();
 
 </script>
 </body></html>

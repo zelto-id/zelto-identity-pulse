@@ -117,7 +117,7 @@
 
   document.addEventListener('click', event => {
     if (!paused || reducedMotion.matches) return;
-    if (event.target.closest('#radar-motion, .entry-radar-node, .view-panel, [data-open-view]')) return;
+    if (event.target.closest('#radar-motion, .entry-radar-node, [data-enter]')) return;
     if (event.target.closest('.entry-radar-card')) return;
     setPaused(false);
   });

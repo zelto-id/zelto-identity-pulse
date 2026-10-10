@@ -425,3 +425,4 @@ code.src{font-size:12px;color:var(--primary);background:#7addc614;padding:2px 6p
   .main{padding:22px 18px 40px}
   .nis2-focus{padding:22px 18px}
 }
+.guide-visual span.is-current{border-color:var(--primary);color:var(--primary)}

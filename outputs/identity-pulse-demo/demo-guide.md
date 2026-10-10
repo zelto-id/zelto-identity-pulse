@@ -6,7 +6,7 @@ Identity Pulse turns identity-provider configuration into a local assessment tha
 
 ## Three-minute walkthrough
 
-1. **Choose Business User on the entry page.** Open Business view, then start the journey from the coach panel. This is the only audience-selection screen. Read the one-line introduction, then start with Auth0 and **Demo scenario → Security gaps found**. The explanation beneath the selectors makes clear that this is a fictional assessment, not a live scan.
+1. **Choose Business view on the entry page.** That opens the workspace and the first-visit guide. This is the only audience-selection screen. Read the one-line introduction, then start with Auth0 and **Demo scenario → Security gaps found**. The explanation beneath the selectors makes clear that this is a fictional assessment, not a live scan.
 2. **Start with NIS2 Material.** Show the prominent evidence-pack action and available/missing evidence checklist. Generate the sample pack and expand its sections. Approved organizational policies and completed remediation are not supplied; the pack does not certify compliance.
 3. **Explain the business decisions.** Show priority findings, recommended actions and collection gaps. Open a leading decision card: the business impact and next decision come first, with original technical evidence available on demand.
 4. **Open Action Plans and the **Incomplete assessment** scenario.** Owners and target dates are not recorded. Show how missing collection changes what can be concluded, even when the score in the technical report is high. The business workspace keeps the collection date visible.

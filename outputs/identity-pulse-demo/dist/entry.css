@@ -176,44 +176,14 @@
 
 .entry-choice-note{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.6;max-width:42ch}
 .entry-twins{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;max-width:520px}
-.entry-twins button{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:56px;padding:14px 16px;border:1px solid #7addc655;border-radius:8px;background:var(--panel);color:var(--ink);text-align:left;width:100%}
-.entry-twins button:hover,.entry-twins button[aria-expanded=true]{border-color:var(--primary);background:#7addc614}
+.entry-twins a{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:56px;padding:14px 16px;border:1px solid #7addc655;border-radius:8px;background:var(--panel);color:var(--ink);text-align:left;width:100%}
+.entry-twins a:hover{border-color:var(--primary);background:#7addc614}
 .entry-twins strong{font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--primary)}
 .entry-twins small{font-size:12px;line-height:1.45;color:var(--muted);font-weight:400}
 .entry-choice-slot{position:relative;max-width:520px}
 .entry-story{overflow:visible}
-.view-layer{position:fixed;inset:0;z-index:70;display:none}
-.view-layer.is-open{display:block}
-.view-backdrop{position:absolute;inset:0;background:transparent;pointer-events:auto}
-.view-panel{position:fixed;display:flex;flex-direction:column;background:#1c1c38;border:1px solid #ffffff14;border-radius:16px;padding:26px 26px 22px 36px;color:var(--ink);box-shadow:0 22px 70px #080815aa;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-.view-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:transparent;color:var(--muted);display:grid;place-items:center;z-index:2;border:0}
-.view-close:hover{color:var(--ink);background:#ffffff10}
-.view-close svg{width:14px;height:14px}
-.view-label{color:var(--primary);font-size:11px;letter-spacing:1.4px;font-weight:700;text-transform:uppercase;margin:0 44px 10px 0;line-height:1.4}
-.view-panel h2{font-size:28px;font-weight:900;letter-spacing:-.04em;margin:0 0 10px;color:var(--primary)}
-.view-panel .view-body{color:var(--ink);font-size:15px;line-height:1.65;margin:0 0 18px}
-.view-points{list-style:none;padding:0;margin:0 0 24px;display:grid;gap:12px;flex:1 1 auto;min-height:0;overflow:auto;counter-reset:step}
-.view-points li{font-size:13px;line-height:1.55;color:var(--muted);padding-left:38px;position:relative}
-.view-points li:before{counter-increment:step;content:counter(step, decimal-leading-zero);position:absolute;left:0;top:0;font-size:10px;letter-spacing:.12em;font-weight:700;color:var(--primary)}
-.view-panel .entry-cta{display:block;text-align:center;flex:0 0 auto;margin-top:4px;background:var(--primary);color:var(--canvas);border-radius:8px}
-.view-handle{display:none}
-.view-rail{display:block;position:absolute;left:16px;top:28px;bottom:28px;width:2px;border-radius:2px;background:linear-gradient(#7addc6,#7addc622);transform-origin:50% 0;box-shadow:0 0 12px #7addc655}
-.view-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:0 44px 16px 0;padding:4px;border-radius:999px;background:#ffffff0a;border:1px solid #ffffff14}
-.view-switch button{min-height:32px;border:0;border-radius:999px;background:transparent;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.02em}
-.view-switch button[aria-selected=true]{background:#7addc61f;color:var(--primary)}
-.view-switch button:hover{color:var(--ink)}
-.entry-choice-slot.is-guiding .entry-twins,.entry-choice-slot.is-guiding .entry-choice-note{visibility:hidden;pointer-events:none}
-.entry-story:has(.is-guiding .view-layer.is-open) .entry-outcomes{opacity:.4}
 @media(max-width:700px){
   .entry-twins{grid-template-columns:1fr;max-width:none}
-  .entry-twins button{min-height:44px}
+  .entry-twins a{min-height:44px}
   .entry-choice-slot{max-width:none}
-  .view-layer.is-open .view-backdrop{background:#08081599}
-  .view-handle{display:block;width:36px;height:4px;border-radius:4px;background:#ffffff30;margin:2px auto 14px}
-  .view-panel{border-radius:20px 20px 16px 16px;padding:10px 20px max(16px, env(safe-area-inset-bottom)) 28px}
-  .view-rail{left:12px;top:22px;bottom:22px}
-  .view-panel h2{font-size:24px}
-  .view-panel .view-body{font-size:14px;margin-bottom:14px}
-  .view-points{margin-bottom:16px}
-  .entry-story:has(.is-guiding .view-layer.is-open) .entry-outcomes{opacity:1}
 }
