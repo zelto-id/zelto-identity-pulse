@@ -5,7 +5,9 @@
   const write = (key, value) => { try { localStorage.setItem(key, value); } catch { /* URL navigation works without storage. */ } };
   const params = new URLSearchParams(location.search);
   const validAudience = value => ['business', 'tech'].includes(value);
-  const audience = validAudience(params.get('audience')) ? params.get('audience') : read('pulse-demo-audience');
+  const page = location.pathname.split('/').pop() || '';
+  const diagramFallback = /^(technical-flow|data-flow)\.html$/.test(page) ? 'tech' : null;
+  const audience = [params.get('audience'), read('pulse-demo-audience'), diagramFallback].find(validAudience);
   const context = {
     provider: window.PulseProviders.resolve(params.get('provider')),
     sample: ['risk', 'healthy', 'partial'].includes(params.get('sample')) ? params.get('sample') : 'risk',
@@ -50,4 +52,11 @@
   header.querySelector(':scope > .pill')?.remove();
   header.append(bar);
   syncLinks();
+  if (!validAudience(params.get('audience'))) {
+    try {
+      const url = new URL(location.href);
+      url.searchParams.set('audience', audience);
+      history.replaceState(null, '', url);
+    } catch { /* Optional for local files. */ }
+  }
 })();
