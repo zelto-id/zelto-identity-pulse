@@ -3,9 +3,9 @@
   const el = id => document.getElementById(id);
   if (!el('guide-dialog') || !window.PulseExperience) return;
   if (document.documentElement.style.visibility === 'hidden') return;
+  const tech = window.PulseExperience.audience === 'tech';
   const key = `pulse-demo-workspace-guide-v1-${tech ? 'tech' : 'business'}`;
   const force = new URLSearchParams(location.search).get('guide') === '1';
-  const tech = window.PulseExperience?.audience === 'tech';
   const tours = {
     business: {
       eyebrow: 'Business workspace · quick guide',
