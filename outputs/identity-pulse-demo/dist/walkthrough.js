@@ -1,23 +1,28 @@
 (() => {
   'use strict';
   const el = id => document.getElementById(id);
-  const key = 'pulse-demo-architecture-guide-v2';
+  const key = 'pulse-demo-architecture-guide-v3';
   const force = new URLSearchParams(location.search).get('guide') === '1';
   const steps = [
-    ['Start with a question', 'Choose a provider, then select API collection, Failure handling or Local analysis & reports. Auth0 and Okta illustrate existing CLI behavior; Entra ID, Ping Identity and Keycloak show proposed designs.', 'Business users: start with Failure handling to understand what missing permissions mean for the assessment.'],
-    ['Select an exchange', 'Click a message in the sequence, or use the next and previous controls. The inspector shows where information moves and what the local CLI does with it.', 'Technical users: inspect the protocol, authentication and state effect before reviewing the payload.'],
-    ['Compare request and response', 'Use Request / input and Response / output to see both sides of the selected exchange. Authentication uses placeholders; nothing is sent to a provider.', 'Read Handling & limitations for permission gaps, retry behavior and other boundaries.'],
-    ['Know what to take away', 'Business users can focus on where evidence comes from, what remains unknown and which decisions need technical review. Technical users can trace scopes, payloads, failure states and implementation references.', 'Reopen this guide with “How to use this page” whenever you need it. The assessment workspace keeps the findings and action plans together.'],
+    { visual: 'Choose', title: 'Start with a question', text: 'Choose a provider, then select API collection, Failure handling or Local analysis & reports. Auth0 and Okta illustrate existing CLI behavior; Entra ID, Ping Identity and Keycloak show proposed designs.', tip: 'Business users: start with Failure handling to understand what missing permissions mean for the assessment.' },
+    { visual: 'Inspect', title: 'Inspect an exchange', text: 'Click a message in the sequence, or use the next and previous controls. Use Request / input and Response / output to see both sides of the selected exchange. Authentication uses placeholders; nothing is sent to a provider.', tip: 'Technical users: inspect the protocol, authentication and state effect before reviewing the payload.' },
+    { visual: 'Review', title: 'Know what to take away', text: 'Business users can focus on where evidence comes from, what remains unknown and which decisions need technical review. Technical users can trace scopes, payloads, failure states and implementation references.', tip: 'Reopen this guide with “How to use this page” whenever you need it. The assessment workspace keeps the findings and action plans together.' }
   ];
   let step = 0;
   function draw() {
-    const [title, text, tip] = steps[step];
+    const current = steps[step];
     el('guide-count').textContent = `Step ${step + 1} of ${steps.length}`;
-    el('guide-title').textContent = title;
-    el('guide-text').textContent = text;
-    el('guide-tip').textContent = tip;
+    el('guide-title').textContent = current.title;
+    el('guide-text').textContent = current.text;
+    el('guide-tip').textContent = current.tip;
     el('guide-back').disabled = step === 0;
     el('guide-next').textContent = step === steps.length - 1 ? 'Explore architecture' : 'Next';
+    steps.forEach((item, index) => {
+      const node = el(`guide-visual-${index + 1}`);
+      if (!node) return;
+      node.textContent = item.visual;
+      node.classList.toggle('is-current', index === step);
+    });
   }
   function open() {
     const play = el('sequence-play');
