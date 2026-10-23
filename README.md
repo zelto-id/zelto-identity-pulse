@@ -38,7 +38,7 @@ Open [the offline entry page](outputs/identity-pulse-demo/offline/index.html) in
 
 ## Installation
 
-Requirements: Node.js >= 20 and npm.
+Requirements: Node.js 22.23.4+ (22.x) or 24.22.1+ (24.x), and npm. `.nvmrc` selects Node 22.23.4.
 
 ```bash
 git clone https://github.com/<your-org>/zelto-identity-pulse.git
